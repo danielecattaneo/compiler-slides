@@ -1,7 +1,9 @@
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{cmbright}
+\usepackage{helvet}
+\usepackage{nimbusmononarrow}
+\usepackage{euler}
 \usepackage{tikz}
 \usepackage{listings}
 \usepackage{relsize}
@@ -18,18 +20,31 @@
 \usetikzlibrary{positioning}
 \usetikzlibrary{shapes.multipart}
 
-\usetheme{Warsaw}
-\useoutertheme{essential}
+\usetheme{boxes}
+%\useoutertheme{essential}
+\usecolortheme{seagull}
+\usefonttheme{structurebold}
 \setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{frametitle}
+{
+	\begin{centering}
+		\vspace{1.5em}
+		\LARGE
+    \insertframetitle
+    \par
+    \vspace{0.5em}
+  \end{centering}
+}
+\setbeamerfont{title}{size=\huge}
+\setbeamerfont{subtitle}{size=\Large}
 
-\renewcommand{\ttdefault}{pxtt}
 \lstset{basicstyle=\ttfamily\scriptsize}
-\newcommand{\cinput}[1]{\lstinputlisting[language=C]{#1}}
-\newcommand{\cinline}[1]{\lstinline[language=C]!#1!}
-\newcommand{\cppinput}[1]{\lstinputlisting[language=C++]{#1}}
-\newcommand{\cppinline}[1]{\lstinline[language=C++]!#1!}
-\newcommand{\llvminput}[1]{\lstinputlisting[language=LLVM]{#1}}
-\newcommand{\llvminline}[1]{\lstinline[language=LLVM]!#1!}
+\newcommand{\cinput}[1]{\lstinputlisting[language=C,basicstyle=\ttfamily]{#1}}
+\newcommand{\cinline}[1]{\lstinline[language=C,basicstyle=\ttfamily]!#1!}
+\newcommand{\cppinput}[1]{\lstinputlisting[language=C++,basicstyle=\ttfamily]{#1}}
+\newcommand{\cppinline}[1]{\lstinline[language=C++,basicstyle=\ttfamily]!#1!}
+\newcommand{\llvminput}[1]{\lstinputlisting[language=LLVM,basicstyle=\ttfamily]{#1}}
+\newcommand{\llvminline}[1]{\lstinline[language=LLVM,basicstyle=\ttfamily]!#1!}
 \lstdefinelanguage{LLVM}%
   {morekeywords={define,declare,global,constant,internal,external,private,%
       linkonce,linkonce_odr,weak,weak_odr,appending,common,extern_weak,%
