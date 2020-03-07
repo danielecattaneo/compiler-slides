@@ -1,0 +1,53 @@
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{cmbright}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{relsize}
+\usepackage{booktabs}
+
+\usetikzlibrary{arrows}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{chains}
+\usetikzlibrary{fit}
+\usetikzlibrary{positioning}
+\usetikzlibrary{scopes}
+\usetikzlibrary{trees}
+\usetikzlibrary{automata}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes.multipart}
+
+\usetheme{Warsaw}
+\useoutertheme{essential}
+\setbeamertemplate{navigation symbols}{}
+
+\renewcommand{\ttdefault}{pxtt}
+\lstset{basicstyle=\ttfamily\scriptsize}
+\newcommand{\cinput}[1]{\lstinputlisting[language=C]{#1}}
+\newcommand{\cinline}[1]{\lstinline[language=C]!#1!}
+\newcommand{\cppinput}[1]{\lstinputlisting[language=C++]{#1}}
+\newcommand{\cppinline}[1]{\lstinline[language=C++]!#1!}
+\newcommand{\llvminput}[1]{\lstinputlisting[language=LLVM]{#1}}
+\newcommand{\llvminline}[1]{\lstinline[language=LLVM]!#1!}
+\lstdefinelanguage{LLVM}%
+  {morekeywords={define,declare,global,constant,internal,external,private,%
+      linkonce,linkonce_odr,weak,weak_odr,appending,common,extern_weak,%
+      thread_local,dllimport,dllexport,hidden,protected,default,except,deplibs,%
+      volatile,fastcc,coldcc,cc,ccc,x86_stdcallcc,x86_fastcallcc,ptx_kernel,%
+      ptx_device,signext,zeroext,inreg,sret,nounwind,noreturn,nocapture,byval,%
+      nest,readnone,readonly,noalias,uwtable,inlinehint,noinline,alwaysinline,%
+      optsize,ssp,sspreq,noredzone,noimplicitfloat,naked,alignstack,module,asm,%
+      align,tail,to,addrspace,section,alias,sideeffect,c,gc,target,datalayout,%
+      triple,blockaddress},%
+  morekeywords=[2]{add,fadd,sub,fsub,mul,fmul,sdiv,udiv,fdiv,srem,urem,frem,%
+     and,or,xor,icmp,fcmp,eq,ne,ugt,uge,ult,ule,sgt,sge,slt,sle,oeq,ogt,oge,%
+     olt,ole,one,ord,ueq,ugt,uge,ult,ule,une,uno,nuw,nsw,exact,inbounds,phi,%
+     call,select,shl,lshr,ashr,va_arg,trunc,zext,sext,fptrunc,fpext,fptoui,%
+     fptosi,uitofp,sitofp,ptrtoint,inttoptr,bitcast,ret,br,indirectbr,switch,%
+     invoke,unwind,unreachable,malloc,alloca,free,load,store,getelementptr,%
+     extractelement,insertelement,shufflevector,extractvalue,insertvalue},%
+  sensitive=t,%
+  morestring=[b]",%
+  morecomment=[l];%
+  }[keywords,comments,strings]
