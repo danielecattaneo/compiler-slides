@@ -1,12 +1,12 @@
 \documentclass[10pt,mathserif]{beamer}
 \input{packages}
 
-\author{Stefano Cherubin}
+\author{Daniele Cattaneo}
 \institute{Politecnico di Milano}
 \date{03-05-2019}
-\title{Introduction to LLVM compiler framework}
-\subtitle{Course outline}
-\newcommand{\customdata}{Stefano Cherubin <stefano.cherubin@polimi.it>}
+\title{Introduction to the LLVM compiler framework}
+\subtitle{Welcome \& Course Outline}
+\newcommand{\customdata}{Daniele Cattaneo <daniele.cattaneo@polimi.it>}
 
 \AtBeginSection[]
 {
@@ -20,9 +20,6 @@
 
 \begin{frame}
 \maketitle
-\begin{center}
-\itshape\scriptsize Welcome slides
-\end{center}
 \end{frame}
 
 \begin{frame}[plain]{}
@@ -36,112 +33,135 @@
 \begin{frame}[t]{About the dragon}
   \begin{itemize}
     \item The \textbf{LLVM logo} \cite{LOCAL:www/LLVMlogo} is a stylized
-          wyvern (a kind of dragon).
+          wyvern (a kind of dragon). \\ \smallskip
           Dragons have connotations of power, speed and intelligence,
           and can also be sleek, elegant, and modular (err, maybe not).
     \pause
-    \item There is a series of \textbf{compiler books} dating back to the 1970s
-          showing illustrations with dragons and knights
+    \item There is a famous \textbf{compiler book} dating back to the 1970s
+          with cover art featuring a knight fighting a dragon. 
           \cite{Aho:1977:PCD:1095594}
-          \cite{Aho:1986:CPT:6448}
-          \cite{Aho:2006:CPT:1177220}
+          \\ \smallskip After all, compilers are also \textbf{scary}...
   \end{itemize}
   \begin{center}
-    \includegraphics[width=.25\textwidth]{img/00/red_dragon_book.jpg}
-    \hfill
-    \includegraphics[width=.25\textwidth]{img/00/green_dragon_book.jpg}
-    \hfill
-    \includegraphics[width=.25\textwidth]{img/00/purple_dragon_book.jpg}
+    \includegraphics[height=.3\paperheight]{img/00/red_dragon_book.jpg}
+    \hspace{2em}
+    \includegraphics[height=.3\paperheight]{img/00/green_dragon_book.jpg}
+    \hspace{2em}
+    \includegraphics[height=.3\paperheight]{img/00/purple_dragon_book.jpg}
+  \end{center}
+\end{frame}
+%--- Next Frame ---%
+
+\begin{frame}[t]{About LLVM}
+  \begin{center}
+  	\vfill
+  	\large
+  	The idea behind LLVM is that \\ compilers should \textbf{NOT} be scary! \\
+		\bigskip
+		Instead, they should be \textbf{easy} \\ to extend and hack at your leisure. \\
+		\bigskip
+		In this course we will see how to have fun with compilers, \\instead of being scared of them.
+		\vfill
   \end{center}
 \end{frame}
 %--- Next Frame ---%
 
 \begin{frame}[t]{About me}
-  \begin{huge}
-    \texttt{Stefano Cherubin}
-  \end{huge}
-  \begin{itemize}
-    \item \texttt{stefano.cherubin@polimi.it}
-    \item PhD candidate @ Politecnico di Milano (Italy)
-    \item working on compilers since not so long time
-    \item definitly not an experienced knight...
-    \pause
-    \item ...I'm more like a lazy Hobbit
-  \end{itemize}
+	\vspace{\stretch{1}}
+  \begin{large}
   \begin{center}
-    \includegraphics[height=.35\textheight]{img/00/lazy_hobbit.jpg}
-    \hspace{.1\textwidth}
-    \includegraphics[height=.35\textheight]{img/00/lazy_hobbit_2.jpg}
+    Daniele Cattaneo
   \end{center}
+  \end{large}
+  \vspace{0.5em}
+  \begin{center}
+  \begin{varwidth}{8cm}
+    \begin{itemize}
+    \item \texttt{daniele.cattaneo@polimi.it}
+    \item PhD candidate @ Politecnico di Milano (Italy)
+    \item Obsessed with compilers for a long time...
+    \item ...now working on research projects with LLVM!
+    \item (yes I have strange tastes, I know)
+  \end{itemize}
+  \end{varwidth}
+  \end{center}
+  \vspace{\stretch{3}}
 \end{frame}
 %--- Next Frame ---%
 
 \begin{frame}[t]{About you}
-  In order to fully understand the content of this course you should have:
+	\vspace{\fill}
+	\begin{center}
+  \begin{varwidth}{8.5cm}
+  In order to fully understand the content of this course,
+  you should have:
+  \smallskip
   \begin{itemize}
-    \vfill
     \item knowledge of what a compiler is
-    \vfill
-    \item proficiency in most common data structures
-    \vfill
+    \item proficiency in the most common data structures
     \item proficiency in Object-Oriented Programming
-    \vfill
     \item at least some experience with C++
   \end{itemize}
+  \end{varwidth}
+  \medskip
+  \end{center}
+   \begin{center}
+  \textbf{\large That's it!}
+  \end{center}
+  \vspace{\fill}
 \end{frame}
 %--- Next Frame ---%
 
 \begin{frame}[t]{About the course}
+\begin{center}
+\begin{varwidth}{8.5cm}
   \begin{Large}
-  \vfill
   \begin{enumerate}
-    \item First part
+  	\setlength\itemsep{8pt}
+    \item First part \vspace{6pt}
       \begin{itemize}
-        \vfill
+      	\normalsize \setlength\itemsep{4pt}
         \item Compiler design
-        \vfill
         \item LLVM structure overview
-        \vfill
         \item LLVM-IR language
-    \end{itemize}
-    \vfill
-    \item Second part
+    	\end{itemize}
+    \item Second part \vspace{6pt}
       \begin{itemize}
+      \normalsize \setlength\itemsep{4pt}
         \item LLVM Documentation
-        \vfill
         \item Available middle-end passes (overview)
-        \vfill
         \begin{itemize}
+        	\normalsize
           \item Normalization
-        \vfill
           \item Analysis
         \end{itemize}
-        \vfill
         \item LLVM quick start tutorial (depending on time)
       \end{itemize}
   \end{enumerate}
-  \vfill
-\end{Large}
+	\end{Large}
+\end{varwidth}
+\end{center}
 \end{frame}
 %--- Next Frame ---%
 
 \begin{frame}[t]{Goal of the course}
-  At the end of these lectures you should:
+	\vspace{\stretch{1}}
+	\begin{center}
+	\begin{varwidth}{8.5cm}
+  At the end of these lectures you will (hopefully)\\ be able to:
+  \medskip
   \begin{itemize}
-    \vfill
     \item understand the LLVM compiler infrastructure
-    \vfill
-    \item be able to read a .ll file (LLVM-IR)
-    \vfill
+    \item read a .ll file (LLVM-IR)
     \item know where to look for documentation
-    \vfill
-    \item know which are the main middle-end weapons
-          LLVM provides you out of the box
-    \vfill
+    \item know which middle-end weapons
+          LLVM provides you, out of the box
     \item know how to implement a simple analysis / transformation
-    \vfill
     \item know how to test your code
   \end{itemize}
+  \end{varwidth}
+  \end{center}
+  \vspace{\stretch{3}}
 \end{frame}
 %--- Next Frame ---%
 
