@@ -1,0 +1,1 @@
+AU.addRequiredTransitive<llvm::AliasAnalysis>();

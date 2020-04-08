@@ -1,5 +1,5 @@
 \documentclass[10pt,mathserif]{beamer}
-\input{packages}
+\input{../packages}
 
 \author{Stefano Cherubin}
 \institute{Politecnico di Milano}
@@ -127,7 +127,7 @@ One of the most difficult things in compiler is:
 \vfill
 \begin{block}{Plain SAXPY}
 \centering
-\llvminput{snippet/02/plain-saxpy.ll}
+\llvminput{snippet/plain-saxpy.ll}
 \end{block}
 \end{frame}
 
@@ -193,7 +193,7 @@ Also available as utility:
 \column{.45\textwidth}
 \begin{block}{Starting Point}
 \centering
-\llvminput{snippet/02/saxpy.ll}
+\llvminput{snippet/saxpy.ll}
 \end{block}
 
 Copy propagation performed transparently by the compiler
@@ -201,12 +201,12 @@ Copy propagation performed transparently by the compiler
 \column{.45\textwidth}
 \begin{block}{Promoting \llvminline{alloca}}
 \centering
-\llvminput{snippet/02/mem2reg-saxpy.ll}
+\llvminput{snippet/mem2reg-saxpy.ll}
 \end{block}
 
 \begin{block}{After Copy-propagation}
 \centering
-\llvminput{snippet/02/mem2reg-copy-saxpy.ll}
+\llvminput{snippet/mem2reg-copy-saxpy.ll}
 \end{block}
 
 \end{columns}
@@ -219,19 +219,19 @@ Different kind of loops:
 \column{.30\textwidth}
 \begin{block}{\cinline{do}-\cinline{while} Loops}
 \centering
-\input{img/02/do-while-loop.tex}
+\input{img/do-while-loop.tex}
 \end{block}
 
 \column{.30\textwidth}
 \begin{block}{\cinline{while} Loops}
 \centering
-\input{img/02/while-loop.tex}
+\input{img/while-loop.tex}
 \end{block}
 
 \column{.30\textwidth}
 \begin{block}{Irreducible Loops}
 \centering
-\input{img/02/irreducible-loop.tex}
+\input{img/irreducible-loop.tex}
 \end{block}
 \end{columns}
 
@@ -281,7 +281,7 @@ Loops defined starting from back-edges:
 \vspace*{-1em}
 \begin{block}{\small A loop}
 \vspace*{-1em}
-\input{img/02/loop-nodes.tex}
+\input{img/loop-nodes.tex}
 \end{block}
 
 
@@ -314,7 +314,7 @@ The \texttt{loop-simplify} pass normalize natural loops:
 \column{.40\textwidth}
 \begin{block}{Pre-header Insertion}
 \centering
-\input{img/02/pre-header.tex}
+\input{img/pre-header.tex}
 \end{block}
 \end{columns}
 \end{frame}
@@ -324,13 +324,13 @@ The \texttt{loop-simplify} pass normalize natural loops:
 \column{.45\textwidth}
 \begin{block}{Latch Insertion}
 \centering
-\input{img/02/latch.tex}
+\input{img/latch.tex}
 \end{block}
 
 \column{.45\textwidth}
 \begin{block}{Exit-block Insertion}
 \centering
-\input{img/02/exit-block.tex}
+\input{img/exit-block.tex}
 \end{block}
 \end{columns}
 
@@ -365,7 +365,7 @@ Keeping SSA form is expensive with loops:
 \begin{frame}{Loop-closed SSA}{Example}
 \begin{block}{Linear Search}
 \centering
-\cinput{snippet/02/lcssa.c}
+\cinput{snippet/lcssa.c}
 \end{block}
 
 \vfill
@@ -380,7 +380,7 @@ The example is trivial:
 \begin{frame}{Loop-closed SSA}{Example}
 \begin{block}{Before LCSSA}
 \centering
-\llvminput{snippet/02/before-lcssa.ll}
+\llvminput{snippet/before-lcssa.ll}
 \end{block}
 \vspace{\baselineskip}
 \vfill
@@ -389,7 +389,7 @@ The example is trivial:
 \begin{frame}{Loop-closed SSA}{Example}
 \begin{block}{After LCSSA}
 \centering
-\llvminput{snippet/02/after-lcssa.ll}
+\llvminput{snippet/after-lcssa.ll}
 \end{block}
 \vfill
 \end{frame}
@@ -873,13 +873,13 @@ Loops are represented in a \alert{nesting tree}:
 \column{.45\textwidth}
 \begin{block}{Source}
 \centering
-\cinput{snippet/02/loop-nest.c}
+\cinput{snippet/loop-nest.c}
 \end{block}
 
 \column{.45\textwidth}
 \begin{block}{Loop Nest}
 \centering
-\input{img/02/loop-nest.tex}
+\input{img/loop-nest.tex}
 \end{block}
 \end{columns}
 
@@ -931,7 +931,7 @@ The \alert{SC}alar \alert{EV}olution framework:
 \begin{columns}\column{.64\textwidth}
 \begin{block}{Example}
 \centering
-\llvminput{snippet/02/basic-scev.ll}
+\llvminput{snippet/basic-scev.ll}
 \end{block}
 
 \column{.30\textwidth}
@@ -951,7 +951,7 @@ SCEV for \llvminline{\%i.0}:
 \column{.55\textwidth}
 \begin{block}{Source}
 \centering
-\cinput{snippet/02/nested-scev.c}
+\cinput{snippet/nested-scev.c}
 \end{block}
 
 \column{.35\textwidth}
@@ -968,7 +968,7 @@ SCEV \llvminline{\{A,B,C\}<\%D>}:
 \vfill
 \begin{block}{Induction Variables}
 \centering
-\llvminput{snippet/02/nested-scev-induction.ll}
+\llvminput{snippet/nested-scev-induction.ll}
 \end{block}
 \end{frame}
 
@@ -977,7 +977,7 @@ The scalar evolution framework manages \alert{any scalar expression}:
 
 \begin{block}{Pointer SCEVs}
 \centering
-\llvminput{snippet/02/nested-scev-pointer.ll}
+\llvminput{snippet/nested-scev-pointer.ll}
 \end{block}
 
 \vfill
@@ -1070,7 +1070,7 @@ Different algorithms for alias analysis:
 
 \begin{block}{Requiring Alias Analysis}
 \centering
-\cppinput{snippet/02/requiring-alias-analysis.cpp}
+\cppinput{snippet/requiring-alias-analysis.cpp}
 \end{block}
 \end{frame}
 
@@ -1079,13 +1079,13 @@ Different algorithms for alias analysis:
 \column{.45\textwidth}
 \begin{block}{Source}
 \centering
-\llvminput{snippet/02/memory-locations.ll}
+\llvminput{snippet/memory-locations.ll}
 \end{block}
 
 \column{.45\textwidth}
 \begin{block}{Distinct Locations}
 \centering
-\input{img/02/alias-analysis-distinct.tex}
+\input{img/alias-analysis-distinct.tex}
 \end{block}
 \end{columns}
 
@@ -1093,13 +1093,13 @@ Different algorithms for alias analysis:
 \column{.45\textwidth}
 \begin{block}{Same Location}
 \centering
-\input{img/02/alias-analysis-same.tex}
+\input{img/alias-analysis-same.tex}
 \end{block}
 
 \column{.45\textwidth}
 \begin{block}{Overlapping Locations}
 \centering
-\input{img/02/alias-analysis-overlapping.tex}
+\input{img/alias-analysis-overlapping.tex}
 \end{block}
 \end{columns}
 

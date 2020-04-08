@@ -1,5 +1,5 @@
 \documentclass[10pt,mathserif]{beamer}
-\input{packages}
+\input{../packages}
 
 \author{Daniele Cattaneo}
 \institute{Politecnico di Milano}
@@ -124,7 +124,7 @@ Complexity lies on \alert{chaining} together stages.
 High-level pipeline structure of a compiler:\\
 \begin{figure}
 \centering
-\input{img/01/compiler-structure.tex}
+\input{img/compiler-structure.tex}
 \end{figure}
 \medskip
 There are three main components:
@@ -237,13 +237,13 @@ It is a transformation that:
 \column{.45\textwidth}
 \begin{block}{Loop Hoisting -- Before}
 \centering
-\cinput{snippet/01/loop-hoisting-before.c}
+\cinput{snippet/loop-hoisting-before.c}
 \end{block}
 
 \column{.45\textwidth}
 \begin{block}{Loop Hoisting -- After}
 \centering
-\cinput{snippet/01/loop-hoisting-after.c}
+\cinput{snippet/loop-hoisting-after.c}
 \end{block}
 \end{columns}
 \end{frame}
@@ -435,7 +435,7 @@ LLVM provides a lot of passes:
 For performance reasons there are different kind of passes:
 
 \begin{block}{LLVM Passes}
-\input{img/01/llvm-passes.tex}
+\input{img/llvm-passes.tex}
 \centering
 \end{block}
 \end{frame}
@@ -550,7 +550,7 @@ Local variables are defined by statements
 \begin{frame}{LLVM IR}{Example: factorial}
 
 \begin{center}
-\llvminput{snippet/01/fact.ll}
+\llvminput{snippet/fact.ll}
 \end{center}
 \end{frame}
 
@@ -579,12 +579,12 @@ Static is different from dynamic:
 \begin{frame}{Static Single Assignment}{Examples}
 \begin{block}{Scalar SAXPY}
 \centering
-\cinput{snippet/02/scalar-saxpy.c}
+\cinput{snippet/scalar-saxpy.c}
 \end{block}
 
 \begin{block}{Scalar LLVM SAXPY}
 \centering
-\llvminput{snippet/02/scalar-saxpy.ll}
+\llvminput{snippet/scalar-saxpy.ll}
 \end{block}
 
 Temporary \llvminline{\%1} not reused! \llvminline{\%2} is used for the second
@@ -594,12 +594,12 @@ assignment!
 \begin{frame}{Static Single Assignment}{Examples}
 \begin{block}{Array SAXPY}
 \centering
-\cinput{snippet/02/array-saxpy.c}
+\cinput{snippet/array-saxpy.c}
 \end{block}
 
 \begin{block}{Array LLVM SAXPY}
 \centering
-\llvminput{snippet/02/array-saxpy.ll}
+\llvminput{snippet/array-saxpy.ll}
 \end{block}
 
 One assignment for loop counter \llvminline{\%i.0}
@@ -608,12 +608,12 @@ One assignment for loop counter \llvminline{\%i.0}
 \begin{frame}{Static Single Assignment}{Handling Multiple Assignments}
 \begin{block}{Max}
 \centering
-\cinput{snippet/02/max.c}
+\cinput{snippet/max.c}
 \end{block}
 
 \begin{block}{LLVM Max -- Bad}
 \centering
-\llvminput{snippet/02/bad-max.ll}
+\llvminput{snippet/bad-max.ll}
 \end{block}
 
 Why is it bad?
@@ -624,7 +624,7 @@ The \llvminline{\%2} variable must be statically set once
 
 \begin{block}{LLVM Max}
 \centering
-\llvminput{snippet/02/good-max.ll}
+\llvminput{snippet/good-max.ll}
 \end{block}
 
 The \llvminline{phi} instruction is a \emph{conditional move}:
