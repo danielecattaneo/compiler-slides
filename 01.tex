@@ -250,20 +250,22 @@ It is a transformation that:
 
 
 \begin{frame}{Loop Hoisting}{Focus on the Transformation}
-\begin{block}{Transformation}
-The transformation is trivial:
+\begin{block}{The general idea:}
 \begin{itemize}
 \item move ``good'' statement outside of the loop
 \end{itemize}
 \end{block}
-This is the \alert{optimization pass}. It needs to know:
 
+This \alert{pass} modifies the code: \\
+thus it is an \alert{optimization pass}.
+
+It needs to know:
 \begin{itemize}
 \item which pieces of code are loops
 \item which statements are ``good'' statements
 \end{itemize}
 
-They are \alert{analysis}, which have to be implemented by other passes:
+These are the \alert{analyses}, which belong to their own passes:
 
 \begin{itemize}
 \item detecting loops in the program
@@ -276,6 +278,7 @@ When registering loop hoisting, also declare needed analysis:
 \item pipeline automatically built: \alert{analysis $\rightarrow$ optimization}
 \end{itemize}
 \end{frame}
+
 
 \begin{frame}{Loop Hoisting}{Proving Program Semantic Preservation}
 The \alert{proof} is trivial:
