@@ -1,11 +1,11 @@
 \documentclass[10pt,mathserif]{beamer}
 \input{packages}
 
-\author{Stefano Cherubin}
+\author{Daniele Cattaneo}
 \institute{Politecnico di Milano}
 \date{03-05-2019}
-\title{Introduction to LLVM compiler framework}
-\newcommand{\customdata}{Stefano Cherubin <stefano.cherubin@polimi.it>}
+\title{Introduction to the LLVM compiler framework}
+\newcommand{\customdata}{Daniele Cattaneo <daniele.cattaneo@polimi.it>}
 
 \AtBeginSection[]
 {
@@ -20,145 +20,176 @@
 \begin{frame}
 \maketitle
 \begin{center}
-\itshape\scriptsize This material is strongly based on material produced by
-                    Michele Scandale and Ettore Speziale for the course
-                    `Code Optimizations and Transformations`.
+\itshape\scriptsize These slides were originally written by
+                    Michele Scandale, Ettore Speziale and Stefano Cherubin for the 
+                    ``Code Transformation and Optimization'' course.
 \end{center}
 \end{frame}
 
+
 \section{Introduction}
+
+
 \begin{frame}{Compilers and compilers}
-Approaching to compilers, we need to understand the difference between a
-\emph{toy-compiler} and \emph{production-quality compiler}.
+\begin{center}
+Not all compilers are the same... The traditional distinction was:
+
 \begin{columns}[t]
+
 \column{.40\textwidth}
 \begin{block}{Toy Compiler}
 \begin{itemize}
-\item small code-base
-\item easy doing tiny edits
-\item impossible doing normal/big edits
+\item small codebase
+\item easy to modify
+\item limited capabilities
 \end{itemize}
 \end{block}
 
 \column{.50\textwidth}
 \begin{block}{Production-Quality Compiler}
 \begin{itemize}
-\item huge code-base
-\item difficult performing any kind of edits
-\item compiler-code extremely optimized
+\item huge codebase
+\item hard to modify
+\item produces high-quality code
 \end{itemize}
 \end{block}
+
 \end{columns}
-
-\vfill
-Key concepts:
-
-\begin{itemize}
-\item working with a production-quality compiler is \emph{initially} \alert{hard},
-      but \ldots
-\item \ldots an huge set of tools for analyzing/transforming/testing code
-      is provided -- toy compilers \alert{miss these things}!
-\end{itemize}
+\bigskip
+Working with a production-quality compiler is \emph{initially} \alert{hard}...\\
+\medskip
+...however it provides a huge set of tools that toy compilers \alert{miss}!
+\end{center}
 \end{frame}
+
 
 \begin{frame}{LLVM: Low Level Virtual Machine}
-Initially started as a research project at Urbana-Champaign:
+\begin{center}
+Initially started as a small research project at Urbana-Champaign.\\
+\medskip
+Now it has grown to a huge size...
+\end{center}
 
 \begin{itemize}
-\item now intensively used for \alert{researches} involving compilers
-\item key technology for \alert{leading industries} -- AMD, Apple, Intel,
-      NVIDIA
-\end{itemize}
-
-\vfill
-If you are there, then it is \alert{your key-technology}:
-
-\begin{itemize}
-\item open-source compilers: GCC~\cite{LOCAL:www/gcc}, LLVM~\cite{LOCAL:www/llvm}
-\item LLVM is relatively \alert{young} -- GCC performances may be better -- \ldots
-\item \ldots LLVM is more modular, well written, kept \emph{clean} by developers.
+\item Key technology in the \alert{industry}: AMD, Apple, Google, Intel, NVIDIA...
+\item Still intensively used in \alert{research} about compilers
 \end{itemize}
 \end{frame}
+
+
+\begin{frame}{GCC vs LLVM}
+\begin{center}
+\textbf{LLVM}~\cite{LOCAL:www/llvm} is Open Source\\
+\medskip
+If you are familiar with Linux you might have used \textbf{GCC}~\cite{LOCAL:www/gcc}...\\
+\bigskip
+GCC is older than LLVM\\
+\bigskip
+\bigskip
+\vbox{
+\begin{varwidth}{6cm}
+\begin{itemize}
+\item[$\Rightarrow$] GCC produces better code
+\item[$\Rightarrow$] LLVM is generally faster
+\item[$\Rightarrow$] LLVM is more modular and \emph{clean}
+\end{itemize}
+\end{varwidth}
+}
+\end{center}
+\end{frame}
+
 
 \section{Compiler organization}
 \begin{frame}{Compiler pipeline}
-Typically a compiler is a \alert{pipeline}:
+\begin{center}
+Typically a compiler is a \alert{pipeline}.\\
+\bigskip
+Advantages of the pipeline model:\\
+\medskip
+\begin{varwidth}{0.8\textwidth}
+\begin{itemize}
+\item \alert{simplicity} -- read something, produce something
+\item \alert{locality} -- no superfluous state
+\end{itemize}
+\end{varwidth}
+\\
+\bigskip
+Complexity lies on \alert{chaining} together stages.
+\end{center}
+\end{frame}
 
+
+\begin{frame}{Compiler pipeline}{Internal pipelines}
+\begin{center}
+High-level pipeline structure of a compiler:\\
 \begin{figure}
 \centering
 \input{img/01/compiler-structure.tex}
 \end{figure}
-
-\vfill
+\medskip
 There are three main components:
+
 \begin{description}
 \item[Front-end] \alert{translate} a source file into the intermediate representation
-\item[Middle-end] \alert{analyze} intermediate representation, \alert{optimize}
+\item[Middle-end] \alert{analyze} the intermediate representation, \alert{optimize}
                   it
 \item[Back-end] \alert{generate} target machine assembly from the intermediate
                 representation
 \end{description}
+\end{center}
 \end{frame}
 
-\begin{frame}{Compiler pipeline}{Internal pipelines}
-Each component is composed internally by pipelines:
 
-\begin{itemize}
-\item simple model -- read something, produce something
-\item specify only how to transform input data into output data
-\end{itemize}
-\vfill
-Complexity lies on \alert{chaining} together stages.
-\vfill
-\end{frame}
-
-\begin{frame}{Compiler pipeline}
-We will consider only the \emph{middle-end}: same concepts are
-valid also for \{front,back\}-end.
-
-\vfill
-Technical terms:
-\begin{description}
-\item[Pass] a pipeline stage
-\item[IR] (a.k.a. Intermediate Representation) is the language used in the
-          middle-end.
+\begin{frame}{The LLVM compiler pipeline}
+\begin{center}
+We will consider only the \emph{middle-end}.\\
+{\small Same concepts are valid also for \{front,back\}-end.}\\
+\bigskip
+\begin{description}[Pass Manager]
+\item[IR] (a.k.a. Intermediate Representation) the \alert{language} used in the
+          middle-end
+\item[Pass] a \alert{pipeline stage}\\
+a Pass may have \alert{dependencies} on other Passes.
+\item[Pass Manager] component that \alert{schedules} passes according to their \alert{dependencies} and \alert{executes} them\\
+\emph{(builds the pipeline)}
 \end{description}
-
-\vfill
-The \alert{pass manager} manages a set of passes:
-\begin{itemize}
-\item build the compilation pipeline: \alert{schedule} passes together
-      according to \alert{dependencies}.
-\end{itemize}
-
-\vfill
-Dependencies are \alert{hints} used by the pass manager in order to schedule passes.
+\end{center}
 \end{frame}
+
 
 \begin{frame}{First insights}
 A compiler is \alert{complex}:
 
 \begin{itemize}
 \item passes are the \alert{elementary unit of work}
-\item pass manager must be \alert{advisee} about pass chaining
-\item pipeline shapes are \alert{not fixed} -- it can change from one compiler
-      execution to another~\footnote{e.g. optimized/not optimized builds, compiler options, ...}
+\item Pass Manager must be \alert{advised} about pass chaining
+\item pipeline shapes are \alert{not fixed} -- they can change from one compiler
+      execution to another\\
+      {\small e.g. optimized/not optimized builds, compiler options, ...}
 \end{itemize}
-
-\vfill
-Moreover, compilers must be \alert{conservative}:
-
-\begin{itemize}
-\item apply a transformation only if program \alert{semantic is preserved}
-\end{itemize}
-
-\vfill
-Compiler algorithms are designed differently w.r.t. standard algorithms!
 \end{frame}
+
+
+\begin{frame}{A word of warning!}
+\begin{center}
+{\large 
+Compilers must be \alert{conservative}:\\
+\smallskip
+$\Downarrow$\\
+\smallskip
+All passes \alert{must preserve the program semantics}\\
+\smallskip
+$\Downarrow$\\
+\smallskip
+Compiler passes must be designed \alert{very carefully}!\\
+}
+\end{center}
+\end{frame}
+
 
 \section{Algorithm design}
 \begin{frame}{Classical Algorithm Design}
-Dealing with algorithm design, a good approach is the following:
+In algorithm design, a good approach is the following:
 \begin{enumerate}
 \item study the problem
 \item make some example
@@ -175,26 +206,25 @@ Weakness of the approach:
 \end{itemize}
 \end{frame}
 
+
 \begin{frame}{Compiler Algorithm Design}{Be Conservative}
-Corner cases are difficult to handle:
-
-\begin{itemize}
-\item compiler algorithms must be \alert{proved} to preserve program semantic
-\item having a common methodology helps on that
-\end{itemize}
-\vfill
-Compiler algorithms are built combining three kind of \alert{passes}:
-
-\begin{itemize}
-\item analysis
-\item optimization
-\item (normalization)
-\end{itemize}
-
+\begin{center}
+Corner cases are difficult to handle, but they cannot be ignored\\
+\smallskip
+{\small Compiler algorithms must be \alert{proven} to preserve\\
+program semantic \alert{at all times}}\\
+\bigskip
+As an aid, a \emph{standard methodology} is employed.\\
+\bigskip
+Compiler algorithms are built combining \alert{three} kinds of passes:\\
+\medskip
+Analysis, Optimization, Normalization\\
+\bigskip
 \pause
-\vfill
 We now consider a simple example: \emph{loop hoisting}.
+\end{center}
 \end{frame}
+
 
 \begin{frame}{Loop Hoisting}
 It is a transformation that:
