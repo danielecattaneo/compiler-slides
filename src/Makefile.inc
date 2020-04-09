@@ -1,7 +1,8 @@
 LATEX = pdflatex
 DESTDIR ?= .
+OUTPUT := $(DESTDIR)/$(NAME).pdf
 
-DATE = `date +%y%m%d-%H%M`
+DATE = `git log -1 --date=short --pretty=format:%cd`
 
 ifeq ($(shell uname -s),Darwin)
 PDF_READER=open
@@ -17,13 +18,17 @@ VERSION := $(shell \
     printf '?'; \
   fi)
 
+LATEXPARAM := -jobname $(NAME) -output-directory $(DESTDIR) \
+              "\def\VERSION{$(VERSION)} \def\DATE{$(DATE)} \input{$(MAIN)}"
 
-LATEXPARAM := -jobname $(NAME) -output-directory $(DESTDIR) "\def\VERSION{$(VERSION)} \input{$(MAIN)}"
 
-paper: $(MAIN).tex
+all: $(OUTPUT)
+.PHONY: all
+
+$(OUTPUT)
 	@rm -f *.aux *.bbl *.blg
 	$(LATEX) $(LATEXPARAM)
-	@if [[ ( -f $(NAME).aux ) && ( `grep citation $(NAME).aux | wc -l` -ge 1) ]]; then \
+	@if [[ ( -f $(NAME).aux ) && ( `grep citation $(NAME).aux | wc -l` -ge 1 ) ]]; then \
 	  bibtex $(NAME); \
 	fi
 	$(LATEX) $(LATEXPARAM)
@@ -39,8 +44,9 @@ paper: $(MAIN).tex
 	  echo '\033[32mXRefs are satisfied\033[39m'; \
 	fi
 
-view:
+view:	$(OUTPUT)
 	@$(PDF_READER) $(DESTDIR)/$(NAME).pdf &
+.PHONY: view
 
 clean:
 	rm -f $(DESTDIR)/$(NAME).aux $(DESTDIR)/$(NAME).bbl
@@ -52,3 +58,5 @@ clean:
 	rm -f $(DESTDIR)/$(NAME).synctex.gz $(DESTDIR)/$(NAME).nav
 	rm -f $(DESTDIR)/$(NAME).out $(DESTDIR)/$(NAME).snm
 	rm -f $(DESTDIR)/$(NAME).pdf
+.PHONY: clean
+
