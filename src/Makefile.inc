@@ -25,7 +25,7 @@ LATEXPARAM := -jobname $(NAME) -output-directory $(DESTDIR) \
 all: $(OUTPUT)
 .PHONY: all
 
-$(OUTPUT)
+$(OUTPUT):
 	@rm -f *.aux *.bbl *.blg
 	$(LATEX) $(LATEXPARAM)
 	@if [[ ( -f $(NAME).aux ) && ( `grep citation $(NAME).aux | wc -l` -ge 1 ) ]]; then \
