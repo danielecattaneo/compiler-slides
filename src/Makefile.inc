@@ -18,13 +18,14 @@ VERSION := $(shell \
     printf '?'; \
   fi)
 
-LATEXPARAM := -jobname $(NAME) -output-directory $(DESTDIR) \
+LATEXPARAM := -jobname $(NAME) \
               "\def\VERSION{$(VERSION)} \def\DATE{$(DATE)} \input{$(MAIN)}"
 
 
-all: $(OUTPUT)
 .PHONY: all
+all: $(OUTPUT)
 
+.PHONY: $(OUTPUT)
 $(OUTPUT):
 	@rm -f *.aux *.bbl *.blg
 	$(LATEX) $(LATEXPARAM)
@@ -43,20 +44,18 @@ $(OUTPUT):
 	else \
 	  echo '\033[32mXRefs are satisfied\033[39m'; \
 	fi
+	mv -f $(NAME).pdf $(OUTPUT)
 
-view:	$(OUTPUT)
-	@$(PDF_READER) $(DESTDIR)/$(NAME).pdf &
 .PHONY: view
+view:	$(OUTPUT)
+	@$(PDF_READER) $(OUTPUT) &
 
-clean:
-	rm -f $(DESTDIR)/$(NAME).aux $(DESTDIR)/$(NAME).bbl
-	rm -f $(DESTDIR)/$(NAME).blg $(DESTDIR)/$(NAME).dvi
-	rm -f $(DESTDIR)/$(NAME).log $(DESTDIR)/$(NAME).toc 
-	rm -f $(DESTDIR)/$(NAME).fls $(DESTDIR)/$(NAME).lof
-	rm -f $(DESTDIR)/$(NAME).idx $(DESTDIR)/$(NAME).loa 
-	rm -f $(DESTDIR)/$(NAME).lot $(DESTDIR)/$(NAME).lolisting 
-	rm -f $(DESTDIR)/$(NAME).synctex.gz $(DESTDIR)/$(NAME).nav
-	rm -f $(DESTDIR)/$(NAME).out $(DESTDIR)/$(NAME).snm
-	rm -f $(DESTDIR)/$(NAME).pdf
 .PHONY: clean
+clean:
+	rm -f $(NAME).aux $(NAME).bbl $(NAME).blg $(NAME).dvi
+	rm -f $(NAME).log $(NAME).toc $(NAME).fls $(NAME).lof
+	rm -f $(NAME).idx $(NAME).loa $(NAME).lot $(NAME).lolisting 
+	rm -f $(NAME).synctex.gz $(NAME).nav $(NAME).out $(NAME).snm
+	rm -f $(OUTPUT)
+
 
