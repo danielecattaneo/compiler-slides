@@ -1,0 +1,47 @@
+\documentclass[10pt,mathserif]{beamer}
+\input{../packages}
+
+\author{Daniele Cattaneo}
+\institute{Politecnico di Milano}
+\date{03-05-2019}
+\title{Introduction to the LLVM compiler framework}
+\newcommand{\customdata}{Daniele Cattaneo <daniele.cattaneo@polimi.it>}
+
+\AtBeginSection[]
+{
+\begin{frame}{Contents}
+\tableofcontents[currentsection]
+\end{frame}
+}
+
+\begin{document}
+
+
+\begin{frame}
+\maketitle
+\begin{center}
+\itshape\scriptsize
+These slides were originally written by
+Michele Scandale, Ettore Speziale and Stefano Cherubin for the
+``Code Transformation and Optimization'' course.
+\end{center}
+\end{frame}
+
+
+\input{10-intro}
+\input{20-compiler-org}
+\input{30-algo-design}
+\input{40-inside}
+\input{50-lang}
+\input{60-conc}
+
+
+\section{Bibliography}
+\begin{frame}[allowframebreaks]{Bibliography}
+\nocite{*}
+\bibliographystyle{unsrt}
+\bibliography{bibliography}
+\end{frame}
+
+
+\end{document}

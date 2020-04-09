@@ -1,0 +1,156 @@
+% !TEX root = 01.tex
+
+\section{Inside LLVM}
+
+
+\begin{frame}{Terminology}{Speaking About LLVM IR}
+LLVM IR comes with 3 different flavours:
+
+\begin{description}
+\item[assembly] human-readable format
+\item[bitcode] binary on-disk machine-oriented format
+\item[in-memory] binary in-memory format, used during compilation process
+\end{description}
+
+All formats have the same expressiveness!
+
+\vfill
+File extensions:
+
+\begin{description}
+\item[.ll] for assembly files
+\item[.bc] for bitcode files
+\end{description}
+\end{frame}
+
+\begin{frame}{Tools}{C Language Family Front-end}
+Writing LLVM assembly by hand is unfeasible:
+
+\begin{itemize}
+\item different front-ends available for LLVM
+\item use Clang~\cite{LOCAL:www/clang} for the C family
+\end{itemize}
+
+The clang driver is compatible with GCC:
+
+\begin{itemize}
+\item $\approx$ same command line options
+\end{itemize}
+
+\vfill
+To generate LLVM IR:
+
+\begin{description}
+\item[assembly] \texttt{\smaller clang -emit-llvm -S -o out.ll in.c}
+\item[bitcode] \texttt{\smaller  clang -emit-llvm -o out.bc in.c}
+\end{description}
+
+It can also generate native code starting from LLVM assembly or LLVM bitcode --
+like compiling an assembly file with GCC
+\end{frame}
+
+\begin{frame}{Tools}{Playing with LLVM Passes}
+LLVM IR can be manipulated using \texttt{\smaller opt}:
+
+\begin{itemize}
+\item read an input file
+\item run specified LLVM passes on it
+\item respecting user-provided order
+\end{itemize}
+
+\vfill
+Useful passes:
+
+\begin{itemize}
+\item print CFG with \texttt{\smaller opt -view-cfg input.ll}
+\item print dominator tree with \texttt{\smaller opt -view-dom input.ll}
+\item \ldots
+\end{itemize}
+
+Pass chaining:
+
+\begin{itemize}
+\item run \emph{mem2reg}, then view the CFG with \\
+\texttt{\smaller opt -mem2reg -view-cfg input.ll}
+\item potentially different results using different option order (\alert{phase/stage ordering})
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Pass Hierarchy}
+LLVM provides a lot of passes:
+
+\begin{itemize}
+\item try \texttt{\smaller opt -help}
+\end{itemize}
+
+\vfill
+For performance reasons there are different kind of passes:
+
+\begin{block}{LLVM Passes}
+\input{img/llvm-passes.tex}
+\centering
+\end{block}
+\end{frame}
+
+\begin{frame}{LLVM Passes}
+Each pass kind visits particular elements of a module:
+
+\begin{description}[align=left, labelwidth=1cm]
+\item[ImmutablePass] compiler configuration -- never run
+\item[CallGraphSCCPass] post-order visit of CallGraph SCCs
+\item[ModulePass] visit the whole module
+\item[FunctionPass] visit functions
+\item[LoopPass] post-order visit of loop nests
+%\item[BasicBlockPass] visit basic blocks % DEPRECATED AND REMOVED
+\item[RegionPass] visit a custom-defined region of code
+\end{description}
+
+\vfill
+Specializations comes with restrictions:
+
+\begin{itemize}
+\item e.g. a \alert{FunctionPass} cannot add or delete functions
+\item refer to ``Writing a LLVM Pass''~\cite{LOCAL:www/llvmWritingAPass}
+      for accurate description of features and limitations of each kind of pass
+\end{itemize}
+\end{frame}
+
+% \begin{frame}{Examples}
+% Now we will see very simple passes:
+%
+% \begin{itemize}
+% \item some of them are meaningless
+% \item goal is to show you the LLVM API
+% \end{itemize}
+%
+% \vfill
+%
+% The passes are:
+% \begin{description}
+% \item[instruction-count] simple instruction counting analysis
+% \item[hello-llvm] optimization pass building an hello-world program
+% \item[function-eraser] optimization pass removing ``small'' functions
+% \end{description}
+%
+% \vfill
+% Hint: take the LLVM pass writing tutorial~\cite{LOCAL:www/llvmWritingAPass}
+% \end{frame}
+
+\begin{frame}{What is Available Inside LLVM?}
+LLVM provides passes performing basic transformations:
+
+\begin{itemize}
+\item variables promotion
+\item loops canonicalization
+\item \ldots
+\end{itemize}
+
+\vfill
+They can be used to \alert{normalize/canonicalize} the input
+
+\begin{itemize}
+\item transform into a form analyzable for further passes
+\item it is essential because keeps passes implementation manageable
+
+\end{itemize}
+\end{frame}

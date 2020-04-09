@@ -1,0 +1,90 @@
+% !TEX root = 01.tex
+
+\section{Compiler organization}
+
+
+\begin{frame}{Compiler pipeline}
+\begin{center}
+Typically a compiler is a \alert{pipeline}.\\
+\bigskip
+Advantages of the pipeline model:\\
+\medskip
+\begin{varwidth}{0.8\textwidth}
+\begin{itemize}
+\item \alert{simplicity} -- read something, produce something
+\item \alert{locality} -- no superfluous state
+\end{itemize}
+\end{varwidth}
+\\
+\bigskip
+Complexity lies on \alert{chaining} together stages.
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Compiler pipeline}{Internal pipelines}
+\begin{center}
+High-level pipeline structure of a compiler:\\
+\begin{figure}
+\centering
+\input{img/compiler-structure.tex}
+\end{figure}
+\medskip
+There are three main components:
+
+\begin{description}
+\item[Front-end] \alert{translate} a source file into the intermediate representation
+\item[Middle-end] \alert{analyze} the intermediate representation, \alert{optimize}
+                  it
+\item[Back-end] \alert{generate} target machine assembly from the intermediate
+                representation
+\end{description}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{The LLVM compiler pipeline}
+\begin{center}
+We will consider only the \emph{middle-end}.\\
+{\small Same concepts are valid also for \{front,back\}-end.}\\
+\bigskip
+\begin{description}[Pass Manager]
+\item[IR] (a.k.a. Intermediate Representation) the \alert{language} used in the
+          middle-end
+\item[Pass] a \alert{pipeline stage}\\
+a Pass may have \alert{dependencies} on other Passes.
+\item[Pass Manager] component that \alert{schedules} passes according to their \alert{dependencies} and \alert{executes} them\\
+\emph{(builds the pipeline)}
+\end{description}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{First insights}
+A compiler is \alert{complex}:
+
+\begin{itemize}
+\item passes are the \alert{elementary unit of work}
+\item Pass Manager must be \alert{advised} about pass chaining
+\item pipeline shapes are \alert{not fixed} -- they can change from one compiler
+      execution to another\\
+      {\small e.g. optimized/not optimized builds, compiler options, ...}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{A word of warning!}
+\begin{center}
+{\large 
+Compilers must be \alert{conservative}:\\
+\smallskip
+$\Downarrow$\\
+\smallskip
+All passes \alert{must preserve the program semantics}\\
+\smallskip
+$\Downarrow$\\
+\smallskip
+Compiler passes must be designed \alert{very carefully}!\\
+}
+\end{center}
+\end{frame}

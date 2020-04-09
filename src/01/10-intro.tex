@@ -1,0 +1,73 @@
+% !TEX root = 01.tex
+
+\section{Introduction}
+
+
+\begin{frame}{Compilers and compilers}
+\begin{center}
+Not all compilers are the same... The traditional distinction was:
+
+\begin{columns}[t]
+
+\column{.40\textwidth}
+\begin{block}{Toy Compiler}
+\begin{itemize}
+\item small codebase
+\item easy to modify
+\item limited capabilities
+\end{itemize}
+\end{block}
+
+\column{.50\textwidth}
+\begin{block}{Production-Quality Compiler}
+\begin{itemize}
+\item huge codebase
+\item hard to modify
+\item produces high-quality code
+\end{itemize}
+\end{block}
+
+\end{columns}
+\bigskip
+Working with a production-quality compiler is \emph{initially} \alert{hard}...\\
+\medskip
+...however it provides a huge set of tools that toy compilers \alert{miss}!
+\end{center}
+\end{frame}
+
+
+\begin{frame}{LLVM: Low Level Virtual Machine}
+\begin{center}
+Initially started as a small research project at Urbana-Champaign.\\
+\medskip
+Now it has grown to a huge size...
+\end{center}
+
+\begin{itemize}
+\item Key technology in the \alert{industry}: AMD, Apple, Google, Intel, NVIDIA...
+\item Still intensively used in \alert{research} about compilers
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{GCC vs LLVM}
+\begin{center}
+\textbf{LLVM}~\cite{LOCAL:www/llvm} is Open Source\\
+\medskip
+If you are familiar with Linux you might have used \textbf{GCC}~\cite{LOCAL:www/gcc}...\\
+\bigskip
+GCC is older than LLVM\\
+\bigskip
+\bigskip
+\vbox{
+\begin{varwidth}{6cm}
+\begin{itemize}
+\item[$\Rightarrow$] GCC produces better code
+\item[$\Rightarrow$] LLVM is generally faster
+\item[$\Rightarrow$] LLVM is more modular and \emph{clean}
+\end{itemize}
+\end{varwidth}
+}
+\end{center}
+\end{frame}
+

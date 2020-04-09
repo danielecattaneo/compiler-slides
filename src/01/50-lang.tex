@@ -1,0 +1,184 @@
+% !TEX root = 01.tex
+
+\section{LLVM-IR language}
+
+
+\begin{frame}{LLVM IR}
+LLVM IR~\cite{LOCAL:www/llvmLanguageRef} language is RISC-based:
+
+\begin{itemize}
+\item instructions operates on \alert{variables}~\footnote{Virtual registers}
+\item only \llvminline{load} and \llvminline{store} access memory
+\item \llvminline{alloca} used to reserve memory on function stacks
+\end{itemize}
+\vfill
+There are also few \alert{high level instructions}:
+\begin{itemize}
+\item function call -- \llvminline{call}
+\item pointer arithmetics -- \llvminline{getelementptr}
+\item \ldots
+\end{itemize}
+\end{frame}
+
+\begin{frame}{LLVM IR}{Types \& Variables}
+LLVM IR is \alert{strongly typed}:
+
+\begin{itemize}
+\item e.g. you cannot assign a floating point value to an integer variable
+without an explicit cast
+\end{itemize}
+
+\alert{Almost everything} is \alert{typed} -- e.g.:
+
+\begin{description}
+\item[functions] \llvminline{@fact} -- \llvminline{i32 (i32)}
+\item[statements] \llvminline{\%3 = icmp eq i32 \%2, 0} -- \llvminline{i1}
+\end{description}
+
+A variable can be:
+
+\begin{description}
+\item[global] \llvminline{@var = common global i32 0, align 4}
+\item[function parameter] \llvminline{define i32 @fact(i32 \%n)}
+\item[local] \llvminline{\%2 = load i32, i32* \%1, align 4}
+\end{description}
+
+Local variables are defined by statements
+\end{frame}
+
+\begin{frame}{LLVM IR}{Example: factorial}
+
+\begin{center}
+\llvminput{snippet/fact.ll}
+\end{center}
+\end{frame}
+
+\begin{frame}{LLVM IR Language}{Static Single Assignment}
+LLVM IR is SSA-based:
+
+\begin{itemize}
+\item every variable is \alert{statically assigned} exactly \alert{once}
+\end{itemize}
+
+Statically means that:
+
+\begin{itemize}
+\item inside each function
+\item for each variable \llvminline{\%foo}
+\item there is only one statement in the form \llvminline{\%foo = ...}
+\end{itemize}
+
+Static is different from dynamic:
+
+\begin{itemize}
+\item a static assignment can be executed more than once
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Static Single Assignment}{Examples}
+\begin{block}{Scalar SAXPY}
+\centering
+\cinput{snippet/scalar-saxpy.c}
+\end{block}
+
+\begin{block}{Scalar LLVM SAXPY}
+\centering
+\llvminput{snippet/scalar-saxpy.ll}
+\end{block}
+
+Temporary \llvminline{\%1} not reused! \llvminline{\%2} is used for the second
+assignment!
+\end{frame}
+
+\begin{frame}{Static Single Assignment}{Examples}
+\begin{block}{Array SAXPY}
+\centering
+\cinput{snippet/array-saxpy.c}
+\end{block}
+
+\begin{block}{Array LLVM SAXPY}
+\centering
+\llvminput{snippet/array-saxpy.ll}
+\end{block}
+
+One assignment for loop counter \llvminline{\%i.0}
+\end{frame}
+
+\begin{frame}{Static Single Assignment}{Handling Multiple Assignments}
+\begin{block}{Max}
+\centering
+\cinput{snippet/max.c}
+\end{block}
+
+\begin{block}{LLVM Max -- Bad}
+\centering
+\llvminput{snippet/bad-max.ll}
+\end{block}
+
+Why is it bad?
+\end{frame}
+
+\begin{frame}{Static Single Assignment}{Use \llvminline{phi} to Avoid Troubles}
+The \llvminline{\%2} variable must be statically set once
+
+\begin{block}{LLVM Max}
+\centering
+\llvminput{snippet/good-max.ll}
+\end{block}
+
+The \llvminline{phi} instruction is a \emph{conditional move}:
+
+\begin{itemize}
+\item it takes $(variable_i, label_i)$ pairs
+\item if coming from predecessor identified by $label_i$, its value is $variable_i$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Static Single Assignment}{Definition and Uses}
+Each SSA variable is set only once:
+
+\begin{itemize}
+\item variable \alert{definition}
+\end{itemize}
+
+\vfill
+Each SSA variable can be used by multiple instructions:
+
+\begin{itemize}
+\item variable \alert{uses}
+\end{itemize}
+
+\vfill
+Algorithms and technical language abuse of these terms:
+
+\vfill
+\emph{
+Let \llvminline{\%foo} be a variable. If \llvminline{\%foo} definition has not
+side-effects, and no uses, dead-code elimination can be efficiently performed
+by erasing \llvminline{\%foo} definition from the CFG.
+}
+\end{frame}
+
+\begin{frame}{Static Single Assignment}{Rationale}
+Old compilers are not SSA-based:
+
+\begin{itemize}
+\item putting input into SSA-form is expensive
+\item cost must be amortized
+\end{itemize}
+
+\vfill
+New compilers are SSA-based:
+
+\begin{itemize}
+\item SSA easier to work with
+\item SSA-based analysis/optimizations faster
+\end{itemize}
+
+\vfill
+%All modern compilers are SSA-based:
+%
+%\begin{itemize}
+%\item exception are old version of the HotSpot Client compiler
+%\end{itemize}
+\end{frame}

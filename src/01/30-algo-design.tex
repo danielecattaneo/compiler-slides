@@ -1,0 +1,180 @@
+% !TEX root = 01.tex
+
+\section{Algorithm design}
+
+
+\begin{frame}{Classical Algorithm Design}
+In algorithm design, a good approach is the following:
+\begin{enumerate}
+\item study the problem
+\item make some example
+\item identify the \alert{common case}
+\item derive the algorithm for the common case
+\item add handling for \alert{corner cases}
+\item improve performancing \alert{optimizing the common case}
+\end{enumerate}
+
+\vfill
+Weakness of the approach:
+\begin{itemize}
+\item \alert{corner cases} -- a \emph{correct} algorithm \textbf{must} consider \emph{all the corner cases}!
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Compiler Algorithm Design}{Be Conservative}
+\begin{center}
+Corner cases are difficult to handle, but they cannot be ignored\\
+\smallskip
+{\small Compiler algorithms must be \alert{proven} to preserve\\
+program semantic \alert{at all times}}\\
+\bigskip
+As an aid, a \emph{standard methodology} is employed.\\
+\bigskip
+Compiler algorithms are built combining \alert{three} kinds of passes:\\
+\medskip
+Analysis, Optimization, Normalization\\
+\bigskip
+\pause
+We now consider a simple example: \emph{loop hoisting}.
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Loop Hoisting}
+It is a transformation that:
+\begin{itemize}
+\item looks for statements (inside a loop) not depending on the loop state
+\item move them outside the loop body
+\end{itemize}
+
+\begin{columns}[t]
+\column{.45\textwidth}
+\begin{block}{Loop Hoisting -- Before}
+\centering
+\cinput{snippet/loop-hoisting-before.c}
+\end{block}
+
+\column{.45\textwidth}
+\begin{block}{Loop Hoisting -- After}
+\centering
+\cinput{snippet/loop-hoisting-after.c}
+\end{block}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}{Loop Hoisting}{Focus on the Transformation}
+\begin{block}{The general idea:}
+\begin{itemize}
+\item move ``good'' statement outside of the loop
+\end{itemize}
+\end{block}
+
+This \alert{pass} modifies the code, thus it is an \alert{optimization pass}.
+
+It needs to know:
+\begin{itemize}
+\item which pieces of code are loops
+\item which statements are ``good'' statements
+\end{itemize}
+
+This information is computed by the the \alert{analysis} passes:
+
+\begin{itemize}
+\item detecting loops in the program
+\item detecting loop-independent statements
+\end{itemize}
+
+The loop hoisting pass declares which analyses it needs:
+
+\begin{itemize}
+\item pipeline automatically built: \alert{analysis $\rightarrow$ optimization}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Loop Hoisting}{Proving Program Semantic Preservation}
+The \alert{proof} is trivial:
+
+\begin{itemize}
+\item the transformation shall preserve program semantics
+\item the analyses shall be correct
+\end{itemize}
+
+Analysis passes are usually built starting from other analyses already
+implemented inside the compiler, or are already present in LLVM
+\begin{itemize}
+\item often, no proof is necessary for the analyses
+\end{itemize}
+
+\vfill
+\begin{center}
+\alert{However...}\\
+\smallskip
+You also have to prove that the combination of analysis + transformation is correct!\\
+\smallskip
+"Beware of bugs in the above code;\\I have only proved it correct, not tried it."\\--- Knuth
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Loop Hoisting}{More Loops}
+\begin{center} 
+We have spoken about loops, but which kind of loop?\\
+\medskip
+\cinline{do-while}? \cinline{while}? \cinline{for}?\\
+
+\bigskip
+All kinds of loop are different forms of the \alert{same exact thing}\\
+$\Downarrow$\\
+Any loop of a certain kind can\\always be converted to another kind of loop!\\
+
+\bigskip
+To account for all the different types of loop, we choose a \alert{normal}
+kind of loop, and then we write a \alert{normalization} pass.\\
+{\footnotesize Usually, \cinline{do-while} loops are chosen to be the \emph{normal} loops}\\
+
+\bigskip
+The more loops we recognize, the higher the potential
+\alert{optimization impact}!
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Compiler Algorithm Design}{A methodology}
+You have to:
+
+\begin{enumerate}
+\item analyze the problem
+\item make some examples
+\item detect the common case
+\item determine the \alert{input conditions}
+\item determine which \alert{analyses} you need
+\item design the \alert{optimization} pass
+\item proof its \alert{correctness}
+\item improve algorithm perfomance on the common case
+\item improve the effectiveness of the algorithm by adding
+      \alert{normalization passes}
+\end{enumerate}
+\end{frame}
+
+
+\begin{frame}{Compiler Algorithm Design}{Ignore corner cases!}
+\begin{center}
+Something is missing...\\
+\bigskip
+{\Large Corner Cases!}\\
+\bigskip
+Why?\\
+\end{center}
+\begin{enumerate}
+\item It makes no sense to optimize code that is seldom executed
+\item Your optimization will be based on \alert{properties of the code that are true only in the common case you are considering}
+\begin{itemize}
+\item If the code does not fit the common case, it shall stay as-is
+\item Otherwise you \alert{risk breaking program semantics}!
+\end{itemize}
+\end{enumerate}
+\end{frame}
+
