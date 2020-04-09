@@ -1,5 +1,5 @@
 NAME = 02
-MAIN = 00-main
+MAIN = 02
 XREFS = 
 
 include ../Makefile.inc
