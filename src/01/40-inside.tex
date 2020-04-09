@@ -3,84 +3,116 @@
 \section{Inside LLVM}
 
 
+\begin{frame}{Using LLVM}
+\begin{center}
+LLVM is a \alert{compiler construction framework}\\
+It operates on the \alert{LLVM-IR} language.\\
+\bigskip
+$\Downarrow$\\
+\bigskip
+Using LLVM \emph{by itself} does not make much sense!\\
+Writing LLVM-IR by hand is unfeasible.
+\end{center}
+\end{frame}
+
+
 \begin{frame}{Terminology}{Speaking About LLVM IR}
-LLVM IR comes with 3 different flavours:
-
+\begin{center}
+LLVM-IR comes in 3 different flavours:
+\end{center}
+\bigskip
 \begin{description}
-\item[assembly] human-readable format
-\item[bitcode] binary on-disk machine-oriented format
-\item[in-memory] binary in-memory format, used during compilation process
+\item[assembly] on-disk human-readable format\\(file extension: \texttt{.ll})
+\item[bitcode] on-disk machine-oriented binary format\\(file extension: \texttt{.bc})
+\item[in-memory] in-memory binary format\\(used during compilation process)
 \end{description}
-
+\bigskip
+\begin{center}
 All formats have the same expressiveness!
-
+\end{center}
 \vfill
-File extensions:
-
-\begin{description}
-\item[.ll] for assembly files
-\item[.bc] for bitcode files
-\end{description}
 \end{frame}
 
-\begin{frame}{Tools}{C Language Family Front-end}
-Writing LLVM assembly by hand is unfeasible:
 
+\begin{frame}{Frontends and Drivers}{C Language Family Front-end}
+The LLVM-IR input to LLVM is provided by \alert{frontends}.
+\begin{example}
+\alert{Clang}\cite{LOCAL:www/clang} is the frontend for the C language family
+\smallskip % why does \cite screw up the f*ing height of my block!?
+\end{example}
+
+The \alert{compiler driver} is the program that:
 \begin{itemize}
-\item different front-ends available for LLVM
-\item use Clang~\cite{LOCAL:www/clang} for the C family
+\item Provides the interface to the user
+\item Performs setup of the front end and LLVM itself. 
 \end{itemize}
 
-The clang driver is compatible with GCC:
-
-\begin{itemize}
-\item $\approx$ same command line options
-\end{itemize}
-
-\vfill
-To generate LLVM IR:
-
-\begin{description}
-\item[assembly] \texttt{\smaller clang -emit-llvm -S -o out.ll in.c}
-\item[bitcode] \texttt{\smaller  clang -emit-llvm -o out.bc in.c}
-\end{description}
-
-It can also generate native code starting from LLVM assembly or LLVM bitcode --
-like compiling an assembly file with GCC
+\begin{example}
+The driver of \emph{Clang} is the \texttt{clang} executable (compatible with GCC)
+\end{example}
 \end{frame}
+
+
+\begin{frame}{Frontends and Drivers}{Using the driver to produce LLVM-IR}
+\begin{center}
+\vfill
+We can generate LLVM-IR assembly using the \texttt{clang} driver:\\
+\bigskip
+\texttt{clang -emit-llvm -S -o out.ll in.c}\\
+\medskip
+{\footnotesize If you want to generate bitcode instead:\\
+\texttt{clang -emit-llvm -o out.bc in.c}\\
+}
+\bigskip
+The compiler driver can also generate native code starting from 
+LLVM-IR assembly\\
+\smallskip
+{\small(Like compiling an assembly file with GCC)}
+\vfill
+\end{center}
+\end{frame}
+
 
 \begin{frame}{Tools}{Playing with LLVM Passes}
-LLVM IR can be manipulated using \texttt{\smaller opt}:
+Run one or more passes on the LLVM-IR on-demand by using \texttt{opt}:
 
 \begin{itemize}
-\item read an input file
-\item run specified LLVM passes on it
-\item respecting user-provided order
+\item Syntax is like \texttt{clang} (supports even \texttt{-O1}, \texttt{-O2}...)
+\item One command line argument per pass to run
+\item Order of execution is the same as the argument order
+\begin{itemize}
+\item Different order, different results! (\alert{phase/stage ordering})
+\end{itemize}
 \end{itemize}
 
 \vfill
-Useful passes:
+Some useful passes for debugging (they do not transform anything):
 
+{\small
+\begin{description}[print dominator tree]
+\item[print CFG] \texttt{opt -view-cfg input.ll}
+\item[print dominator tree] \texttt{opt -view-dom input.ll}
+\item[print current IR] \texttt{opt -print-module input.ll}
+\end{description}
+}
+
+\vfill
+\begin{example}
 \begin{itemize}
-\item print CFG with \texttt{\smaller opt -view-cfg input.ll}
-\item print dominator tree with \texttt{\smaller opt -view-dom input.ll}
-\item \ldots
-\end{itemize}
-
-Pass chaining:
-
+\item Run \emph{mem2reg}, then view the CFG:
 \begin{itemize}
-\item run \emph{mem2reg}, then view the CFG with \\
-\texttt{\smaller opt -mem2reg -view-cfg input.ll}
-\item potentially different results using different option order (\alert{phase/stage ordering})
+\item \texttt{opt -mem2reg -view-cfg input.ll}
 \end{itemize}
+\end{itemize}
+\end{example}
 \end{frame}
 
+
 \begin{frame}{Pass Hierarchy}
-LLVM provides a lot of passes:
+LLVM provides a lot of passes...
 
 \begin{itemize}
-\item try \texttt{\smaller opt -help}
+\item Try \texttt{opt -help}!
 \end{itemize}
 
 \vfill
@@ -92,8 +124,9 @@ For performance reasons there are different kind of passes:
 \end{block}
 \end{frame}
 
+
 \begin{frame}{LLVM Passes}
-Each pass kind visits particular elements of a module:
+Each kind of pass visits particular elements of a module:
 
 \begin{description}[align=left, labelwidth=1cm]
 \item[ImmutablePass] compiler configuration -- never run
@@ -106,14 +139,15 @@ Each pass kind visits particular elements of a module:
 \end{description}
 
 \vfill
-Specializations comes with restrictions:
+Specializations come with restrictions:
 
 \begin{itemize}
 \item e.g. a \alert{FunctionPass} cannot add or delete functions
 \item refer to ``Writing a LLVM Pass''~\cite{LOCAL:www/llvmWritingAPass}
-      for accurate description of features and limitations of each kind of pass
+      for documentation on features and limitations of each kind of pass
 \end{itemize}
 \end{frame}
+
 
 % \begin{frame}{Examples}
 % Now we will see very simple passes:
@@ -136,21 +170,16 @@ Specializations comes with restrictions:
 % Hint: take the LLVM pass writing tutorial~\cite{LOCAL:www/llvmWritingAPass}
 % \end{frame}
 
-\begin{frame}{What is Available Inside LLVM?}
-LLVM provides passes performing basic transformations:
 
+\begin{frame}{Normalization passes in LLVM}
+LLVM provides several \alert{normalization/canonicalization} passes:
+\bigskip
 \begin{itemize}
-\item variables promotion
-\item loops canonicalization
+\item Variable-to-register promotion (\texttt{Mem2Reg})
+\item Loop canonicalization (\texttt{LoopSimplify})
+\item CFG canonicalization \& simplification (\texttt{SimplifyCFG})
 \item \ldots
 \end{itemize}
-
-\vfill
-They can be used to \alert{normalize/canonicalize} the input
-
-\begin{itemize}
-\item transform into a form analyzable for further passes
-\item it is essential because keeps passes implementation manageable
-
-\end{itemize}
+\bigskip
+They are useful to make your life easier!
 \end{frame}

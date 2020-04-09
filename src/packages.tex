@@ -1,12 +1,36 @@
 \usepackage[english]{babel}
 \usepackage{euler}
-\usepackage{fontspec}
+
+\usetheme{boxes}
+%\useoutertheme{essential}
+\usecolortheme{seagull}
+\usefonttheme{professionalfonts}
+\usefonttheme{structurebold}
+\usefonttheme[onlymath]{serif}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{frametitle}
+{
+	\begin{centering}
+		\vspace{1.5em}
+		\LARGE
+    \insertframetitle
+    \par
+    \vspace{0.5em}
+  \end{centering}
+}
+\setbeamerfont{title}{size=\huge}
+\setbeamerfont{subtitle}{size=\Large}
+
+\usepackage[no-math]{fontspec}
 
 \usepackage{tikz}
 \usepackage{listings}
 \usepackage{relsize}
+\usepackage{array}
 \usepackage{booktabs}
+\usepackage{ragged2e}
 \usepackage{varwidth}
+\usepackage{multicol}
 
 \setmainfont{texgyretermes}[
   Path=../fonts/,
@@ -40,31 +64,13 @@
 \usetikzlibrary{positioning}
 \usetikzlibrary{shapes.multipart}
 
-\usetheme{boxes}
-%\useoutertheme{essential}
-\usecolortheme{seagull}
-\usefonttheme{structurebold}
-\setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{frametitle}
-{
-	\begin{centering}
-		\vspace{1.5em}
-		\LARGE
-    \insertframetitle
-    \par
-    \vspace{0.5em}
-  \end{centering}
-}
-\setbeamerfont{title}{size=\huge}
-\setbeamerfont{subtitle}{size=\Large}
-
-\lstset{basicstyle=\ttfamily\scriptsize}
-\newcommand{\cinput}[1]{\lstinputlisting[language=C,basicstyle=\ttfamily]{#1}}
-\newcommand{\cinline}[1]{\lstinline[language=C,basicstyle=\ttfamily]!#1!}
-\newcommand{\cppinput}[1]{\lstinputlisting[language=C++,basicstyle=\ttfamily]{#1}}
-\newcommand{\cppinline}[1]{\lstinline[language=C++,basicstyle=\ttfamily]!#1!}
-\newcommand{\llvminput}[1]{\lstinputlisting[language=LLVM,basicstyle=\ttfamily]{#1}}
-\newcommand{\llvminline}[1]{\lstinline[language=LLVM,basicstyle=\ttfamily]!#1!}
+\lstset{basicstyle=\ttfamily}
+\newcommand{\cinput}[2][\ttfamily]{\lstinputlisting[language=C,basicstyle=#1]{#2}}
+\newcommand{\cinline}[2][\ttfamily]{\lstinline[language=C,basicstyle=#1]!#2!}
+\newcommand{\cppinput}[2][\ttfamily]{\lstinputlisting[language=C++,basicstyle=#1]{#2}}
+\newcommand{\cppinline}[2][\ttfamily]{\lstinline[language=C++,basicstyle=#1]!#2!}
+\newcommand{\llvminput}[2][\ttfamily]{\lstinputlisting[language=LLVM,basicstyle=#1]{#2}}
+\newcommand{\llvminline}[2][\ttfamily]{\lstinline[language=LLVM,basicstyle=#1]!#2!}
 \lstdefinelanguage{LLVM}%
   {morekeywords={define,declare,global,constant,internal,external,private,%
       linkonce,linkonce_odr,weak,weak_odr,appending,common,extern_weak,%

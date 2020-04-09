@@ -4,7 +4,8 @@
 \begin{tikzpicture}
 [
   every node/.style={
-    font=\scriptsize
+    font=\tt\scriptsize,
+    text depth=0pt
   },
   extends/.style={
     draw,
@@ -12,9 +13,10 @@
   },
   level distance=15mm,
   level 1/.style={
-    sibling distance=18mm
+    sibling distance=21mm
   },
-  level 3/.style={
+  level 2/.style={
+    level distance=11mm,
     sibling distance=20mm
   }
 ]
