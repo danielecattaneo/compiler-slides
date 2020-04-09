@@ -1,14 +1,33 @@
 \usepackage[english]{babel}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{helvet}
-\usepackage{nimbusmononarrow}
 \usepackage{euler}
+\usepackage{fontspec}
+
 \usepackage{tikz}
 \usepackage{listings}
 \usepackage{relsize}
 \usepackage{booktabs}
 \usepackage{varwidth}
+
+\setmainfont{texgyretermes}[
+  Path=../fonts/,
+  Extension=.otf,
+  UprightFont=*-regular,
+  BoldFont=*-bold,
+  ItalicFont=*-italic,
+  BoldItalicFont=*-bolditalic]
+\setsansfont{texgyreheros}[
+  Path=../fonts/,
+  Extension=.otf,
+  UprightFont=*-regular,
+  BoldFont=*-bold,
+  ItalicFont=*-italic,
+  BoldItalicFont=*-bolditalic]
+\setmonofont{RecMono-Casual}[
+  Path=../fonts/,
+  Extension=.ttf,
+  BoldFont=*Bold,
+  ItalicFont=*Italic,
+  BoldItalicFont=*BoldItalic]
 
 \usetikzlibrary{arrows}
 \usetikzlibrary{backgrounds}

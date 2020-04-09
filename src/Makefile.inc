@@ -1,4 +1,4 @@
-LATEX = pdflatex
+LATEX = xelatex
 DESTDIR ?= .
 OUTPUT := $(DESTDIR)/$(NAME).pdf
 
