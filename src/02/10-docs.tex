@@ -1,0 +1,55 @@
+% !TEX root = 02.tex
+
+\section{Documentation}
+\begin{frame}[t]{LLVM official documentation}
+  \begin{center}
+    \begin{Huge}
+      \vfill
+      \url{llvm.org/docs}
+      \vfill
+    \end{Huge}
+  \end{center}
+\end{frame}
+%--- Next Frame ---%
+
+\begin{frame}[t]{A lot of documentation...}
+  \url{llvm.org/docs} mentions:
+  \begin{itemize}
+    \item \texttt{\ 5} references about \textit{Design \& Overview}
+    \item \texttt{23} references about \textit{User Guides}
+    \item \texttt{15} references about \textit{Programming Documentation}
+    \item \texttt{42} references about \textit{Subsystem Documentation}
+    \item \texttt{\ 9} references about \textit{Development Process Documentation}
+    \item \texttt{\ 5} Mailing Lists
+    \item \texttt{\ 5} IRC bots
+  \end{itemize}
+  \vfill
+  Most of the above references are OUT-OF-DATE.
+  \vfill
+  You probably need documentation about the documentation itself.
+  \vfill
+\end{frame}
+%--- Next Frame ---%
+
+\begin{frame}[t]{Essential documentation}
+  \begin{description}
+    \item[Intro to LLVM] \cite{LOCAL:www/llvmIntro}
+          gives a quick and clear introduction to the compiler infrastructure.
+          It is mostly up-to-date.\footnote{at the time I am writing}
+    \vfill
+    \item[Writing an LLVM pass] \cite{LOCAL:www/llvmWritingAPass}
+          explains step by step how to implement a Pass
+          for those who never did anything like that.
+          We will see this tutorial later in the course.
+    \vfill
+    \item[Doxygen] \cite{LOCAL:www/llvmDoxygen}
+          \textit{The best code documentation is the code itself.}
+          Sometimes the generated doxygen documentation is enough.
+          It also contains links to the web version of the source code.
+          It is updated to the latest development branch.
+          Please refer to github branches for the documentation about the stable versions.
+    \vfill
+    \item[llvm-dev] Mailing List. Last resource: ask other developers.
+          Warning: 24/7 many people are posting in this ML.
+  \end{description}
+\end{frame}
