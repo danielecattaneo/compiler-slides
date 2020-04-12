@@ -1,11 +1,12 @@
-\documentclass[10pt,mathserif]{beamer}
+\documentclass[10pt]{beamer}
 \input{../packages}
 
-\author{Stefano Cherubin}
+\author{Daniele Cattaneo}
 \institute{Politecnico di Milano}
 \date{\DATE}
-\title{Exploring LLVM}
-\newcommand{\customdata}{Stefano Cherubin <stefano.cherubin@polimi.it>}
+\title{The LLVM compiler framework}
+\subtitle{Exploring LLVM}
+\newcommand{\customdata}{Daniele Cattaneo <daniele.cattaneo@polimi.it>}
 
 \AtBeginSection[]
 {
@@ -14,17 +15,19 @@
 \end{frame}
 }
 
-
 \begin{document}
+
 
 \begin{frame}
 \maketitle
 \begin{center}
-\itshape\scriptsize This material is strongly based on material produced by
-                    Michele Scandale and Ettore Speziale for the course
-                    `Code Optimizations and Transformations`.
+\itshape\scriptsize
+These slides were originally written by
+Michele Scandale, Ettore Speziale and Stefano Cherubin for the
+``Code Transformation and Optimization'' course.
 \end{center}
 \end{frame}
+
 
 \input{10-docs}
 \input{20-normalization}
