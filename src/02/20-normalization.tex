@@ -1,6 +1,8 @@
 % !TEX root = 02.tex
 
 \section{Normalization Passes}
+
+
 \begin{frame}{Canonicalize Pass Input}
 We will see the following passes:
 
@@ -33,104 +35,98 @@ Induction variable simplification  &
 They are \alert{normalization} passes:
 
 \begin{itemize}
-\item put data into a canonical form
+\item they convert the code into a canonical form
 \end{itemize}
 \end{frame}
 
+
 \begin{frame}{Variable Promotion}
-One of the most difficult things in compiler is:
-
-\begin{itemize}
-\item considering memory accesses
-\end{itemize}
-
+\begin{center}
+One of the most difficult things in compilers is\\\alert{handling memory accesses}.
+\end{center}
 \vfill
-\begin{block}{Plain SAXPY}
+\begin{block}{Plain SAXPY (Scalar $ax + y$)}
 \centering
-\llvminput{snippet/plain-saxpy.ll}
+\llvminput[\tt\footnotesize]{snippet/plain-saxpy.ll}
 \end{block}
 \end{frame}
 
+
 \begin{frame}{Variable Promotion}{Simplifying Representation}
-In the SAXPY kernel some \llvminline{alloca} are generated:
-
+In the SAXPY kernel all the variables are \llvminline{alloca}ted on the stack!
 \begin{itemize}
-\item represent \alert{local variables}~\footnote{Arguments are considered local variables}
+\item Function arguments included!
 \end{itemize}
 
 \vfill
-They are generated due to compiler \alert{conservative} approach:
-
+They are allocated like that because the compiler follows a \alert{conservative} approach:
 \begin{itemize}
-\item maybe some instruction can take the addresses of such variables, hence a
-      memory location is needed
+\item an instruction could take the address of one of the variables...
 \end{itemize}
 
 \vfill
-Complex representations makes hard performing further actions:
-
+However, complex representations make optimizations more difficult:
 \begin{itemize}
-\item suppose you want to compute \cinline{a * x + y} using only one
-      instruction~\footnote{e.g. FMA4}
+\item suppose you want to compute the \cinline{a * x + y} expression using only \alert{one}
+      instruction (aka FMA4)
 \item hard to detect due to \llvminline{load} and \llvminline{store}
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Variable Promotion}{Using Memory Only When Necessary}
-To limit the number of instruction accessing memory:
 
+\begin{frame}{Variable Promotion}{Using Memory Only When Necessary}
+To limit the number of instruction accessing memory we need to eliminate \llvminline{load} and \llvminline{store}
 \begin{itemize}
-\item we need to eliminate \llvminline{load} and \llvminline{store}
 \item achieved by \alert{promoting} variables from memory to registers
 \end{itemize}
 
 \vfill
-Inside LLVM SSA-based representation:
-
+Inside the LLVM-IR:
 \begin{description}
-\item[memory] Stack allocations --
-              e.g \llvminline{\%1 = alloca float, align 4}
-\item[register] SSA variables -- e.g. \llvminline{\%a}
+\item[memory] Stack allocations \\
+              \llvminline{\%1 = alloca float, align 4}
+\item[register] SSA variables \\
+							\llvminline{\%a}
 \end{description}
 
 \vfill
 The \texttt{mem2reg} pass focus on:
-
 \begin{itemize}
-\item eliminating \llvminline{alloca} with only \llvminline{load} and
-      \llvminline{store} uses
+\item eliminating \llvminline{alloca} used only by \llvminline{load} and
+      \llvminline{store} instructions
 \end{itemize}
 
-Also available as utility:
-
+Also available as a utility function:
 \begin{itemize}
-\item \cppinline{llvm::PromoteMemToReg}\footnote{see lib/Transforms/Utils/PromoteMemoryToRegister.cpp}
+\item \cppinline{llvm::PromoteMemToReg}\\
+\begin{itemize}
+\item see \texttt{llvm/Transforms/Utils/PromoteMemToReg.h}
+\end{itemize}
 \end{itemize}
 \end{frame}
+
 
 \begin{frame}{Variable Promotion}{Example on simplified code}
 \begin{columns}[t]
 \column{.45\textwidth}
 \begin{block}{Starting Point}
-\centering
-\llvminput{snippet/saxpy.ll}
+\llvminput[\tt\footnotesize]{snippet/saxpy.ll}
 \end{block}
 
-Copy propagation performed transparently by the compiler
+(copy propagation is performed transparently by the compiler)
 
 \column{.45\textwidth}
 \begin{block}{Promoting \llvminline{alloca}}
-\centering
-\llvminput{snippet/mem2reg-saxpy.ll}
+\llvminput[\tt\footnotesize]{snippet/mem2reg-saxpy.ll}
 \end{block}
 
 \begin{block}{After Copy-propagation}
-\centering
-\llvminput{snippet/mem2reg-copy-saxpy.ll}
+\llvminput[\tt\footnotesize]{snippet/mem2reg-copy-saxpy.ll}
 \end{block}
 
 \end{columns}
 \end{frame}
+
 
 \begin{frame}{Loops}
 Different kind of loops:
