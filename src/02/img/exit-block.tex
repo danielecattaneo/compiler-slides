@@ -44,16 +44,16 @@
 
 \node (exit-0) [bb,below=4mm of body-1,fill=blue!30] {$7$};
 \node (exit-1) [bb,entry left,exit below,below=4mm of entry] {$4$};
-\node (exit-2) [bb,exit below,below=4mm of body-2] {$5$};
+\node (exit-2) [bb,exit below,below=4mm of body-2, fill=blue!30] {$5$};
 
 \path [tip,color=red] (pre-header) edge (entry);
 
 \path [tip,bend left] (entry) edge (body-1);
 \path [tip,bend left] (body-1) edge (body-2);
 
-\path [tip,color=green]            (body-1) edge (latch);
-\path [tip,color=green,bend right] (body-2) edge (latch);
-\path [tip,color=green,bend right] (latch) edge (entry);
+\path [tip,color=Green]            (body-1) edge (latch);
+\path [tip,color=Green,bend right] (body-2) edge (latch);
+\path [tip,color=Green,bend right] (latch) edge (entry);
 
 \path [tip,bend left,color=blue]  (entry) edge (exit-0);
 \path [tip,bend right,color=blue] (exit-0) edge (exit-1);

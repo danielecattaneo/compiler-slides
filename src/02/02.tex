@@ -10,7 +10,14 @@
 \AtBeginSection[]
 {
 \begin{frame}{Contents}
-\tableofcontents[currentsection]
+\tableofcontents[currentsection,subsectionstyle=show/shaded/hide]
+\end{frame}
+}
+
+\AtBeginSubsection[]
+{
+\begin{frame}{Contents}
+\tableofcontents[currentsection,subsectionstyle=show/shaded/hide]
 \end{frame}
 }
 

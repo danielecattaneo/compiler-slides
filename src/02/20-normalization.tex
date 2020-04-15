@@ -3,7 +3,7 @@
 \section{Normalization Passes}
 
 
-\begin{frame}{Canonicalize Pass Input}
+\begin{frame}{Canonicalizing Pass Input}
 We will see the following passes:
 
 \begin{table}
@@ -19,7 +19,7 @@ We will see the following passes:
 Variable promotion  &
 \texttt{mem2reg}   \\
 
-Loop simplify           &
+Loop simplification &
 \texttt{loop-simplify} \\
 
 Loop-closed SSA  &
@@ -38,6 +38,9 @@ They are \alert{normalization} passes:
 \item they convert the code into a canonical form
 \end{itemize}
 \end{frame}
+
+
+\subsection{Variable Promotion}
 
 
 \begin{frame}{Variable Promotion}
@@ -67,7 +70,7 @@ They are allocated like that because the compiler follows a \alert{conservative}
 \vfill
 However, complex representations make optimizations more difficult:
 \begin{itemize}
-\item suppose you want to compute the \cinline{a * x + y} expression using only \alert{one}
+\item suppose you want to compute the \cinline{a*x+y} expression using only \alert{one}
       instruction (aka FMA4)
 \item hard to detect due to \llvminline{load} and \llvminline{store}
 \end{itemize}
@@ -128,8 +131,12 @@ Also available as a utility function:
 \end{frame}
 
 
+\subsection{Loop Simplification}
+
+
 \begin{frame}{Loops}
-Different kind of loops:
+\begin{center}
+There are several kind of loops:
 
 \begin{columns}[t]
 \column{.30\textwidth}
@@ -152,54 +159,49 @@ Different kind of loops:
 \end{columns}
 
 \bigskip
-In LLVM the focus is on one kind of loop:
-
-\begin{itemize}
-\item natural loops
-\end{itemize}
+LLVM focuses on one class of loop:\\
+\alert{Natural Loops}
+\end{center}
 \end{frame}
+
 
 \begin{frame}{Natural Loops}
 A natural loop:
 
 \begin{itemize}
-\item has only one entry node -- \emph{header}
-\item there is a back edge that enter the loop header
+\item has only one entry node -- the \emph{header}
+\item there is a back edge that enters the loop header
 \end{itemize}
 
 \vfill
 Under this definition:
 
 \begin{itemize}
-\item the irreducible loop is not a natural loop
-\item since LLVM consider only natural loops, the irreducible loop \alert{is not
+\item the irreducible loop example is not a natural loop
+\item since LLVM consider only natural loops, the irreducible loop example \alert{is not
       recognized} as a loop
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Loop Terminology}
-Loops defined starting from back-edges:
 
-\vfill
-\begin{description}
-\item[back-edge] edge entering loop header: $(3,1)$
-\end{description}
+\begin{frame}{Loop Terminology}
+Loops are defined starting from the back-edges:
 
 \begin{columns}[t]
+
 \column{.59\textwidth}
 \begin{description}
+\item[back-edge] edge entering loop header: $(3,1)$
 \item[header] loop entry node: $1$
 \item[body] nodes that can reach back-edge source node ($3$) without passing
             from back-edge target node ($1$) plus back-edge target node:
             $\{1 ,2, 3\}$
 \end{description}
+
 \column{.32\textwidth}
-\vspace*{-1em}
 \begin{block}{\small A loop}
-\vspace*{-1em}
 \input{img/loop-nodes.tex}
 \end{block}
-
 
 \end{columns}
 
@@ -209,25 +211,29 @@ Loops defined starting from back-edges:
 \end{description}
 \end{frame}
 
+
 \begin{frame}{Loop Simplify}
-Natural loops finding is the base pass \alert{identify} loops, but:
+
+Natural loops are
 
 \begin{itemize}
-\item some features are not analysis/optimization friendly
+\item easy to \alert{identify}
+\item not really analysis/optimization friendly!
 \end{itemize}
 
 \vfill
-The \texttt{loop-simplify} pass normalize natural loops:
+The \texttt{loop-simplify} pass normalizes natural loops:
 
 \begin{columns}[t]
 \column{.50\textwidth}
 \begin{description}
-\item[pre-header] the \alert{only predecessor} of \alert{header} node
-\item[latch] the \alert{starting node} of the \alert{only back-edge}
+\item[pre-header] ensures the \alert{loop header} has \alert{a single entry edge}
+\item[latch] ensures the loop has \alert{a single back-edge}
 \item[exit-block] ensures \alert{exits dominated} by loop \alert{header}
 \end{description}
 
 \column{.40\textwidth}
+\vspace{-1em}
 \begin{block}{Pre-header Insertion}
 \centering
 \input{img/pre-header.tex}
@@ -235,7 +241,9 @@ The \texttt{loop-simplify} pass normalize natural loops:
 \end{columns}
 \end{frame}
 
+
 \begin{frame}{Loop Simplify}{Example}
+\vspace{-1.5em}
 \begin{columns}[t]
 \column{.45\textwidth}
 \begin{block}{Latch Insertion}
@@ -249,34 +257,40 @@ The \texttt{loop-simplify} pass normalize natural loops:
 \input{img/exit-block.tex}
 \end{block}
 \end{columns}
-
+\bigskip
 \begin{itemize}
 \item pre-header always executed before entering the loop
 \item latch always executed before starting a new iteration
-\item exit-blocks always executed after exiting the loop
+\item exit-blocks executed only after exiting the loop
 \end{itemize}
 \end{frame}
+
+
+\subsection{Loop-closed SSA}
+
 
 \begin{frame}{Loop-closed SSA}
 Loop representation can be further normalized:
 
 \begin{itemize}
-\item \texttt{loop-simplify} normalize the \alert{shape} of the loop
-\item nothing is said about loop definitions
+\item \texttt{loop-simplify} normalizes the \alert{shape} of the loop \emph{(control flow)}
+\item it does not involve the instructions in the loop \emph{(data flow)}
 \end{itemize}
 
 \vfill
 Keeping SSA form is expensive with loops:
-
 \begin{itemize}
-\item \texttt{lcssa} insert \llvminline{phi} instruction at loop boundaries for
-      variables \alert{defined inside} the loop body and \alert{used outside}
-\item this guarantees isolation between optimization performed inside and outside
-      the loop
-\item faster keeping IR into SSA form -- propagation of code changes outside the
-      loop blocked by \llvminline{phi} instructions
+\item Any optimization involving an SSA variable \alert{defined inside the loop}, and \alert{used
+outside the loop}, causes a ripple effect!
+\end{itemize}
+\vfill
+The \texttt{lcssa} transformation is the solution:
+\begin{itemize}
+\item inserts \llvminline{phi} instructions at loop boundaries
+\item now, optimizations performed inside the loop do not affect the code outside of it
 \end{itemize}
 \end{frame}
+
 
 \begin{frame}{Loop-closed SSA}{Example}
 \begin{block}{Linear Search}
@@ -285,30 +299,33 @@ Keeping SSA form is expensive with loops:
 \end{block}
 
 \vfill
-The example is trivial:
-
-\begin{itemize}
-\item think about having large loop bodies
-\item transformation becomes useful
-\end{itemize}
+\begin{center}
+The example is trivial, this transformation is mostly useful for \emph{large loop bodies}.
+\end{center}
 \end{frame}
+
 
 \begin{frame}{Loop-closed SSA}{Example}
 \begin{block}{Before LCSSA}
 \centering
-\llvminput{snippet/before-lcssa.ll}
+\llvminput[\scriptsize\tt]{snippet/before-lcssa.ll}
 \end{block}
 \vspace{\baselineskip}
 \vfill
 \end{frame}
 
+
 \begin{frame}{Loop-closed SSA}{Example}
 \begin{block}{After LCSSA}
 \centering
-\llvminput{snippet/after-lcssa.ll}
+\llvminput[\scriptsize\tt]{snippet/after-lcssa.ll}
 \end{block}
 \vfill
 \end{frame}
+
+
+\subsection{Induction variable simplification}
+
 
 \begin{frame}{Induction Variables}
 Some loop variables are \emph{special}:
@@ -318,20 +335,21 @@ Some loop variables are \emph{special}:
 \end{itemize}
 
 \vfill
-Generalization lead to \alert{induction variables}:
+The generalization of this intuition are \alert{induction variables}:
 
 \begin{itemize}
-\item \cinline{foo} is a loop induction variable if its successive values form
+\item \cinline{foo} is a \textbf{loop induction variable}\\
+		  if its successive values form
       an arithmetic progression:
 
       \begin{center}
       \cinline{foo = bar * baz + biz}
       \end{center}
 
-      where \cinline{bar, biz} are
-      loop-invariant~\footnote{Constants inside the loop}, and \cinline{baz} is
-      an induction variable
-\item \cinline{foo} is a \alert{canonical} induction variable if it is always
+      where:
+      \cinline{bar}, \cinline{biz} are loop-invariant~\footnote{Constants inside the loop},\\
+      \hphantom{where: }\cinline{baz} is an induction variable
+\item \cinline{foo} is a \textbf{canonical induction variable}\\if it is always
       incremented by a constant amount:
 
       \begin{center}
@@ -342,16 +360,22 @@ Generalization lead to \alert{induction variables}:
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Induction Variable Simplification}
-Canonical induction variables are used to \alert{drive} loop execution:
 
+\begin{frame}{Induction Variable Simplification}
+Canonical induction variables are often used to \alert{drive} loop execution.
+
+\vfill
+
+Given a loop, the \texttt{indvars} pass tries to transform its induction variables
+into \alert{canonical} induction variables.
 \begin{itemize}
-\item given a loop, the \texttt{indvars} pass tries to find its canonical
-      induction variable
+\item It also transforms loop exit conditions in simple inequalities
+\item Definition of other variables derived from the induction variables
+      are moved outside the loop if used there
 \end{itemize}
 
 \vfill
-With respect to theory, LLVM canonical induction variable is:
+LLVM defines canonical induction variables as:
 
 \begin{itemize}
 \item initialized to \llvminline{0}
@@ -359,22 +383,27 @@ With respect to theory, LLVM canonical induction variable is:
 \end{itemize}
 \end{frame}
 
+
+\subsection{Recap}
+
+
 \begin{frame}{Normalization}{Wrap-up}
-Normalization passes running order:
+``Standard'' running order:
 
 \begin{enumerate}
-\item \texttt{mem2reg}: limit use of memory, increasing the effectiveness of
-       subsequent passes
-\item \texttt{loop-simplify}: canonicalize loop shape, lower burden of writing
-      passes
-\item \texttt{lcssa}: keep effects of subsequent loop optimizations local,
-      limiting overhead of maintaining SSA form
-\item \texttt{indvars}: normalize induction variables, highlighting the
-      canonical induction variable
+\item \texttt{mem2reg}: limits use of memory
+\item \texttt{loop-simplify}: canonicalizes loops
+	\begin{itemize}
+	\item Improved detection of a lot of standard patterns!
+	\end{itemize}
+\item \texttt{lcssa}: keeps effects of subsequent loop optimizations local\\
+      \hphantom{\texttt{lcssa}: }limits overhead of maintaining SSA form
+\item \texttt{indvars}: normalizes induction variables\\
+			\hphantom{\texttt{indvars}: }simplifies and highlightsthe loop condition
 \end{enumerate}
 
 \vfill
-Other normalization passes available:
+For more normalization passes:
 
 \begin{itemize}
 \item try running \texttt{opt -help}

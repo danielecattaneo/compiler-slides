@@ -1,34 +1,32 @@
 % !TEX root = 02.tex
 
 \section{Analysis Passes}
+
+
 \begin{frame}{Checking Input Properties}
-Analysis basically allows to:
+Analyses basically allow to:
 \begin{itemize}
 \item \alert{derive} information and properties of the input
 \item \alert{verify} properties of input
 \end{itemize}
 
 \vfill
-Keeping analysis information is expensive:
+Keeping analyzed information updated is expensive:
 \begin{itemize}
-\item tuned algorithms updates analysis information when an optimization
-      invalidates them
-\item incrementally updating analysis is cheaper than recomputing them
+\item tuned algorithms update information when an optimization
+      invalidates it
+\item incrementally updating analyses are cheaper than recomputing them
 \end{itemize}
 
 \vfill
-Many LLVM analysis supports incremental updates:
-\begin{itemize}
-\item this is an \alert{optimization}
-\item focus on \alert{information} provided by analysis
-\end{itemize}
+As an \alert{optimization}, many LLVM analysis supports incremental updates.
 \end{frame}
 
-\begin{frame}{Useful Analysis}
-We will see the following passes:
 
-\begin{block}{Analysis}
-\centering
+\begin{frame}{Useful Analyses}
+\begin{center}
+We will see the following passes:\\
+\bigskip
 \begin{tabular}{ccc}
 \toprule
 
@@ -39,7 +37,7 @@ We will see the following passes:
 \midrule
 
 Control flow graph  &
-\texttt{none}       &
+---       &
 No                 \\
 
 Dominator tree    &
@@ -68,27 +66,34 @@ Yes               \\
 
 \bottomrule
 \end{tabular}
-\end{block}
+\end{center}
 \end{frame}
 
-\begin{frame}{Require Analysis}
-Ask the pass manager to schedule a specific pass
-before running the current one.
+
+\begin{frame}{Requesting an Analysis}
+\begin{center}
+Your pass needs to tell the pass manager which analyses it needs!
 
 \vfill
-Requiring analysis by transitivity:
-\begin{description}
-\item[yes] \cppinline{llvm::AnalysisUsage::addRequiredTransitive<T>()}
-\item[no] \cppinline{llvm::AnalysisUsage::addRequired<T>()}
-\end{description}
+Transitive analyses:\\
+\cppinline{llvm::AnalysisUsage::addRequiredTransitive<T>()}\\
+\medskip
+Non-transitive analyses: \\
+\cppinline{llvm::AnalysisUsage::addRequired<T>()}\\
 
 \vfill
-In cases where \alert{analyses chain},the addRequiredTransitive method
-should be used instead of the addRequired method.
-
+For \alert{chained analyses}\footnote{Analyses that use the result of another analysis}, the \texttt{addRequiredTransitive} method
+should be used instead of the \texttt{addRequired} method.\\
+\medskip
+{\small
 This informs the PassManager that the transitively required pass
-should be alive as long as the requiring pass is.
+should be alive as long as the requiring pass is.}
+\end{center}
 \end{frame}
+
+
+\subsection{Control Flow Graph}
+
 
 \begin{frame}{Control Flow Graph}
 The Control Flow Graph is implicitly maintained by LLVM:
@@ -101,17 +106,20 @@ The Control Flow Graph is implicitly maintained by LLVM:
 Recap:
 
 \begin{itemize}
-\item CFG for a function is a set of basic blocks
-\item a basic block is a set of instructions
+\item CFG for a function is a graph of basic blocks
+\item a basic block is a list of instructions
 \end{itemize}
 
 \vfill
-Functions and basic blocks acts like containers:
+Functions and basic blocks act like containers:
 
 \begin{itemize}
 \item STL-like accessors: \cppinline{front()}, \cppinline{back()},
       \cppinline{size()}, \ldots
 \item STL-like iterators: \cppinline{begin()}, \cppinline{end()}
+	\begin{itemize}
+	\item Warning for BBs: order of iteration $\neq$ order of execution!
+	\end{itemize}
 \end{itemize}
 
 \vfill
@@ -122,8 +130,9 @@ Each contained element is aware of its container:
 \end{itemize}
 \end{frame}
 
+
 \begin{frame}{Control Flow Graph}{Walking}
-Every CFG has an entry basic block:
+Every CFG has an \alert{entry} basic block:
 
 \begin{itemize}
 \item the \alert{first} executed basic block
@@ -132,16 +141,24 @@ Every CFG has an entry basic block:
 \end{itemize}
 
 \vfill
-More than one exit blocks can be generated:
+At the end of a basic blocks there's always a \alert{terminator} instruction:
+\begin{itemize}
+\item \llvminline{ret}, \llvminline{br}, \llvminline{switch}, \llvminline{unreachable}, \ldots
+\end{itemize}
+
+\vfill
+More than one \alert{exit} block can be present in a function:
 
 \begin{itemize}
-\item their terminator instructions are \llvminline{ret}s
 \item they are the \alert{leaves/sinks} of the graph
-\item use \cppinline{llvm::BasicBlock::getTerminator()} to get the terminator
-      \ldots
-\item \ldots then check its real class
+\item their terminator instructions are always \llvminline{ret}s
+\begin{enumerate}
+\item \cppinline{llvm::BasicBlock::getTerminator()}
+\item check the opcode of the terminator
+\end{enumerate}
 \end{itemize}
 \end{frame}
+
 
 \begin{frame}{Side Note}{Casting Framework}
 For performance reasons, a custom casting framework is used:
@@ -153,146 +170,197 @@ For performance reasons, a custom casting framework is used:
 
 \begin{block}{LLVM Casting Functions}
 \centering
-\begin{tabular}{cc}
-\toprule
+\medskip
+\begin{tabular}{rl}
 
-\multicolumn{1}{c}{\textbf{Meaning}}   &
-\multicolumn{1}{c}{\textbf{Function}} \\
+Static cast of \cppinline{Y*} to \cppinline{X}  &
+\cppinline{X *llvm::cast<X>(Y *)}                \\
 
-\midrule
+Dynamic cast of \cppinline{Y*} to \cppinline{X}  &
+\cppinline{X *llvm::dyn\_cast<X>(Y *)}            \\
 
-Static cast of \cppinline{Y *} to \cppinline{X *}  &
-\cppinline{X * llvm::cast<X>(Y *)}                \\
-
-Dynamic cast of \cppinline{Y *} to \cppinline{X *}  &
-\cppinline{X * llvm::dyn\_cast<X>(Y *)}            \\
-
-Is \cppinline{Y} an \cppinline{X}?  &
+Is \cppinline{Y*} an instance of \cppinline{X}?  &
 \cppinline{bool llvm::isa<X>(Y *)} \\
 
-\bottomrule
 \end{tabular}
+\smallskip
 \end{block}
 
 Example:
 
 \begin{itemize}
-\item is \cppinline{BB} a sink?
-      \begin{center}
+\item is \cppinline{BB} a sink?\\
       \cppinline{llvm::isa<llvm::ReturnInst>(BB.getTerminator())}
-      \end{center}
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Control Flow Graph}{Basic Blocks}
-Every basic block \cppinline{BB} has one or more:
 
-\begin{description}
+\begin{frame}{Control Flow Graph}{Basic Blocks}
+Every basic block \cppinline{BB} has one or more\footnote{see include/llvm/IR/CFG.h}:
+
+\begin{description}[predecessors]
 \item[predecessors] from \cppinline{pred\_begin(BB)} to
-      \cppinline{pred\_end(BB)} \footnote{see include/llvm/IR/CFG.h}
+      \cppinline{pred\_end(BB)}
 \item[successors] from \cppinline{succ\_begin(BB)} to
       \cppinline{succ\_end(BB)}
 \end{description}
 
 \vfill
-Convenience accessors directly available in \cppinline{llvm::BasicBlock}:
+Other convenience methods available in \cppinline{llvm::BasicBlock}:
 
 \begin{itemize}
-\item e.g. \cppinline{llvm::BasicBlock::getUniquePredecessor()}
+\item useful getters
+\begin{itemize}
+\item \cppinline{BasicBlock *getUniquePredecessor()}
+\item \ldots
 \end{itemize}
-
-Other convenience member functions:
-
+\item moving a basic block
 \begin{itemize}
-\item moving a basic block:
-      \cppinline{llvm::BasicBlock::moveBefore(llvm::BasicBlock *)} or
-      \cppinline{llvm::BasicBlock::moveAfter(llvm::BasicBlock *)}
+\item      \cppinline{moveBefore(llvm::BasicBlock *)}
+\item      \cppinline{moveAfter(llvm::BasicBlock *)}
+\end{itemize}
 \item split a basic block:
-      \cppinline{llvm::BasicBlock::splitBasicBlock(llvm::BasicBlock::iterator)}
+\begin{itemize}
+\item      \cppinline{splitBasicBlock(llvm::BasicBlock::iterator)}
+\end{itemize}
 \item \ldots
 \end{itemize}
 \end{frame}
 
+
 \begin{frame}{Control Flow Graph}{Instructions}
-The \cppinline{llvm::Instruction} class define common operations:
-
+The \cppinline{llvm::Instruction} class defines common operations: \\
+\medskip
 \begin{itemize}
-\item e.g. getting an operand: \cppinline{llvm::Instruction::getOperand(unsigned)}
-\end{itemize}
-
-Subclasses provide specialized accessors:
-
+\item getting an operand
 \begin{itemize}
-\item e.g the \llvminline{load} instruction takes an operand that is a pointer:
-      \cppinline{llvm::LoadInst::getPointerOperand()}
+\item \cppinline{getOperand(unsigned)}
 \end{itemize}
-
-\pause
+\end{itemize}
 \vfill
-The value produced by the instruction is the \alert{instruction itself}:
-
-\begin{block}{Example}
-Consider:
-
-\centering
-\llvminline{\%6 = load i32, i32* \%1, align 4}
-
-\flushleft
-the \llvminline{load} is described
-by an instance of \cppinline{llvm::LoadInst}. That instance also models the
-\llvminline{\%6} variable
-\end{block}
+Subclasses provide specialized accessors: \\
+\medskip
+\begin{itemize}
+\item the \llvminline{load} instruction takes as operand the pointer to the memory to be loaded:
+\begin{itemize}
+\item      \cppinline{llvm::LoadInst::getPointerOperand()}
+\end{itemize}
+\end{itemize}
 \end{frame}
+
+
+\begin{frame}{Control Flow Graph}{Instructions are Values}
+\vfill
+\begin{center}
+The value produced by the instruction is the \alert{instruction itself}:\\
+\vfill
+\begin{block}{Example}
+\begin{center}
+\llvminline{\%6 = load i32, i32* \%1, align 4}\\
+\medskip
+The \llvminline{load} is described by an instance of \cppinline{llvm::Instruction}. \\
+That instance also represents the \llvminline{\%6} variable. \\
+\smallskip
+In fact, \cppinline{llvm::Instruction} inherits from \cppinline{llvm::Value}.
+\end{center}
+\end{block}
+
+\vfill
+
+However, remember that not all instances of\\\cppinline{llvm::Value}
+are also \cppinline{llvm::Instruction}s!\\
+\smallskip
+{\small i.e. function arguments}
+
+\end{center}
+\vfill
+\end{frame}
+
 
 \begin{frame}{Instructions}{Creating New Instructions}
-Instructions built using:
+Instructions are created using:
 
 \begin{itemize}
-\item constructors -- e.g. \cppinline{llvm::LoadInst::LoadInst(...)}
-\item factory methods -- e.g. \cppinline{llvm::GetElementPtrInst::Create(...)}
-\end{itemize}
-
-Interface is not homogeneous:
-
+\item constructors
 \begin{itemize}
-\item some instructions support both methods
-\item others support only one
+\item \cppinline{llvm::LoadInst::LoadInst(...)}
 \end{itemize}
-
+\item factory methods
+\begin{itemize}
+\item \cppinline{llvm::GetElementPtrInst::Create(...)}
+\end{itemize}
+\item the helper class \cppinline{llvm::IRBuilder}
+\begin{itemize}
+\item \cppinline{llvm::IRBuilder<> builder(insPoint);}\\
+\cppinline{builder.CreateAdd(...);}
+\end{itemize}
+\end{itemize}
 \vfill
-At build-time, instructions can be:
-
-\begin{itemize}
-\item appended to a basic block
-\item inserted after/before a given instruction
-\end{itemize}
-
-Insertion point usually specified as builder last argument
+\alert{Interface is not homogeneous!}\\
+Some instructions support all methods, others support only one.
 \end{frame}
 
-\begin{frame}{Side Note}{Definitions and Uses}
-LLVM class hierarchy is built around two simple concepts:
 
-\begin{description}
+\begin{frame}{Instructions}{Inserting New Instructions}
+
+
+\vfill
+Instructions can be inserted:
+\vfill
+\begin{itemize}
+\item automatically by \cppinline{IRBuilder}
+\begin{itemize}
+\item insertion point is given at \cppinline{IRBuilder} instantiation
+\end{itemize}
+\bigskip
+\item manually by appending to a basic block
+\item manually by inserting after/before another instruction
+\end{itemize}
+\vfill
+\end{frame}
+
+
+\begin{frame}{Side Note}{Definitions and Uses}
+LLVM class hierarchy is built around three simple concepts:
+
+\begin{description}[valueMMM]
 \item[value] something that can be used: \cppinline{llvm::Value}
 \item[user] something that can use: \cppinline{llvm::User}
+\item[use] the link between the \alert{value} and the \alert{user}: \cppinline{llvm::Use}
 \end{description}
-
+\medskip
 A value is a \alert{definition}:
 
 \begin{itemize}
-\item \cppinline{llvm::Value::use\_begin()},
-      \cppinline{llvm::Value::use\_end()} to visit uses
-      \footnote{\cppinline{llvm::Instruction} derives from \cppinline{llvm::Value}}
+\item Visiting where a definition is used:
+\begin{itemize}
+\item \cppinline{llvm::Value::use\_begin()}, \cppinline{llvm::Value::use\_end()}
 \end{itemize}
-
-An user access \alert{definitions}:
+\end{itemize}
+\medskip
+An user accesses \alert{definitions}:
 
 \begin{itemize}
-\item \cppinline{llvm::User::op\_begin()},
-      \cppinline{llvm::User::op\_end()} to visit used values
-      \footnote{\cppinline{llvm::Value} derives from \cppinline{llvm::User}}
+\item Visiting the definitions that are used:
+\begin{itemize}
+\item \cppinline{llvm::User::op\_begin()}, \cppinline{llvm::User::op\_end()}
 \end{itemize}
+\end{itemize}
+\medskip
+
+\end{frame}
+
+
+\begin{frame}{Side Note}{Definitions and Uses II}
+
+\begin{itemize}
+\item \cppinline{llvm::Instruction} inherits from \cppinline{llvm::Value}
+\item \cppinline{llvm::Value} inherits from \cppinline{llvm::User}
+\end{itemize}
+
+\vfill
+There are other kinds of \cppinline{llvm::Value} and \cppinline{llvm::User} than
+\cppinline{llvm::Instruction} and \cppinline{llvm::Value}
 
 \vfill
 \begin{columns}[t]
@@ -313,6 +381,7 @@ Instructions:
 \end{itemize}
 \end{columns}
 \end{frame}
+
 
 \begin{frame}{Side Note}{Value Typing}
 Every \cppinline{llvm::Value} is typed:
@@ -342,6 +411,10 @@ Consider:
 \end{itemize}
 \end{block}
 \end{frame}
+
+
+\subsection{Dominator Trees}
+
 
 \begin{frame}{Dominance Trees}
 Dominance trees answer to control-related queries:
@@ -380,6 +453,10 @@ by using \texttt{opt}, it is possible print them:
 \end{itemize}
 \end{frame}
 
+
+\subsection{Loop Information}
+
+
 \begin{frame}{Loop Information}
 Loop information are represented using two classes:
 
@@ -398,6 +475,7 @@ Using \cppinline{llvm::LoopInfo} it is possible:
       \cppinline{llvm::LoopInfo::operator[](llvm::BasicBlock *)}
 \end{itemize}
 \end{frame}
+
 
 \begin{frame}{Loop Information}{Nesting Tree}
 Loops are represented in a \alert{nesting tree}:
@@ -425,6 +503,7 @@ Nest navigation:
 \end{itemize}
 \end{frame}
 
+
 \begin{frame}{Loop Information}{Query Loops}
 Accessors for relevant nodes also available:
 
@@ -448,6 +527,9 @@ Loop basic blocks accessible via:
       \cppinline{std::vector<llvm::BasicBlock *> \&llvm::Loop::getBlocks()}
 \end{description}
 \end{frame}
+
+
+\subsection{Scalar Evolution}
 
 
 \begin{frame}{Scalar Evolution}
@@ -479,6 +561,7 @@ SCEV for \llvminline{\%i.0}:
 \end{columns}
 \end{frame}
 
+
 \begin{frame}{Scalar Evolution}{Example}
 \begin{columns}
 \column{.55\textwidth}
@@ -505,6 +588,7 @@ SCEV \llvminline{\{A,B,C\}<\%D>}:
 \end{block}
 \end{frame}
 
+
 \begin{frame}{Scalar Evolution}{More than Induction Variables}
 The scalar evolution framework manages \alert{any scalar expression}:
 
@@ -522,6 +606,7 @@ SCEV is an analysis used for common optimizations:
 \item \ldots
 \end{itemize}
 \end{frame}
+
 
 \begin{frame}{Scalar Evolution}{SCEVs Design}
 SCEVs are modeled by the \cppinline{llvm::SCEV} class:
@@ -554,6 +639,7 @@ SCEV tree explorable through the visitor pattern:
 \end{itemize}
 \end{frame}
 
+
 \begin{frame}{Scalar Evolution}{Analysis Interface}
 
 The \cppinline{llvm::ScalarEvolution} class:
@@ -576,6 +662,9 @@ The \cppinline{llvm::ScalarEvolution} class:
       \ldots
 \end{itemize}
 \end{frame}
+
+
+\subsection{Alias Analysis}
 
 
 \begin{frame}{Alias Analysis}
@@ -606,6 +695,7 @@ Different algorithms for alias analysis:
 \cppinput{snippet/requiring-alias-analysis.cpp}
 \end{block}
 \end{frame}
+
 
 \begin{frame}{Alias Analysis}{Memory Representation}
 \begin{columns}[t]
@@ -645,6 +735,7 @@ Basic building block is \cppinline{llvm::AliasAnalysis::Location}:
 \end{itemize}
 \end{frame}
 
+
 \begin{frame}{Alias Analyzer}{Basic Interface}
 Given two locations $X$, $Y$, the alias analyzer classifies them:
 
@@ -670,6 +761,7 @@ Queries performed using:
 \item \cppinline{llvm::AliasAnalyzer::alias(X, Y)}
 \end{itemize}
 \end{frame}
+
 
 \begin{frame}{Alias Analyzer}{Mid-level Interface}
 Basic alias analyzer interface is low-level -- we would like expressing queries
@@ -697,6 +789,7 @@ For a given location $X$, a \cppinline{llvm::AliasSet}:
 \end{itemize}
 \end{frame}
 
+
 \begin{frame}{Alias Analyzer}{Alias Set Memory Accesses}
 Each alias set \alert{references} the memory:
 
@@ -716,6 +809,7 @@ Each alias set \alert{references} the memory:
 \vfill
 \end{itemize}
 \end{frame}
+
 
 \begin{frame}{Alias Analyzer}{Mid-level Interface}
 Entry point is \cppinline{llvm::AliasSetTracker::getAliasSetForPointer(...)}:
@@ -739,6 +833,10 @@ Having the \cppinline{llvm::AliasSet}:
 \item check aliasing type: \cppinline{llvm::AliasSet::isMustAlias()}, \ldots
 \end{itemize}
 \end{frame}
+
+
+\subsection{Memory Dependence}
+
 
 \begin{frame}{Memory Dependence Analysis}{Alias Analyzer High-level Interface}
 The \cppinline{llvm::MemoryDependenceAnalysis} wraps alias analysis to answer
@@ -769,6 +867,7 @@ Writes:
 \end{columns}
 \end{frame}
 
+
 \begin{frame}{Memory Dependence Analysis}{APIs}
 Let \llvminline{\%foo} be a \cppinline{llvm::Instruction} accessing memory:
 
@@ -793,3 +892,4 @@ Dependencies are classified:
       \llvminline{\%foo} function
 \end{itemize}
 \end{frame}
+
