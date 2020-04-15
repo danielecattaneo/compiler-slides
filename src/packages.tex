@@ -1,3 +1,4 @@
+\documentclass[10pt,usenames,dvipsnames]{beamer}
 \usepackage[english]{babel}
 \usepackage{euler}
 
@@ -6,7 +7,6 @@
 \usecolortheme{seagull}
 \usefonttheme{professionalfonts}
 \usefonttheme{structurebold}
-\usefonttheme[onlymath]{serif}
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{frametitle}
 {
@@ -20,6 +20,10 @@
 }
 \setbeamerfont{title}{size=\huge}
 \setbeamerfont{subtitle}{size=\Large}
+\renewcommand{\thefootnote}{\textsf{\fnsymbol{footnote}}}
+
+% footnote refs per frame
+\AtBeginEnvironment{frame}{\setcounter{footnote}{0}}
 
 \usepackage[no-math]{fontspec}
 
@@ -92,3 +96,18 @@
   morestring=[b]",%
   morecomment=[l];%
   }[keywords,comments,strings]
+  
+% Create Color definition From Template: 
+% #1 template name, 
+% #2 foreground color name
+% #3 background color name
+\newcommand{\ccft}[3]{
+\usebeamercolor{#1}
+\definecolor{#2}{named}{fg}
+\definecolor{#3}{named}{bg}
+}
+\ccft{palette primary}{ThemePriFg}{ThemePriBg}
+\ccft{palette secondary}{ThemeSecFg}{ThemeSecBg}
+\ccft{palette tertiary}{ThemeTerFg}{ThemeTerBg}
+\ccft{palette quaternary}{ThemeQuaFg}{ThemeQuaBg}
+
