@@ -1,1 +1,1 @@
-AU.addRequiredTransitive<llvm::AliasAnalysis>();
+AU.addRequiredTransitive<AAResultsWrapperPass>();

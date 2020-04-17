@@ -57,11 +57,11 @@ Scalar evolution           &
 Yes                       \\
 
 Alias analysis    &
-\texttt{special}  &
+---  &
 Yes              \\
 
-Memory dependence  &
-\texttt{memdep}    &
+Memory SSA  &
+\texttt{memoryssa}    &
 Yes               \\
 
 \bottomrule
@@ -700,7 +700,7 @@ Alias analysis tries to answer the question:
 Different algorithms are available for alias analysis:
 
 \begin{itemize}
-\item common interface: \cppinline{llvm::AliasAnalysis}
+\item common interface: \cppinline{llvm::AAResults}
 \item base implementation: basic alias analysis (\texttt{basicaa})
 \end{itemize}
 
@@ -720,13 +720,11 @@ Different algorithms are available for alias analysis:
 \end{block}
 
 \centering
-\bigskip
-Basic building block:\\\texttt{llvm::AliasAnalysis::}\\\texttt{Location}
-
-\begin{itemize}
-\item address: e.g. \llvminline{\%a}
-\item size: e.g. 2 bytes
-\end{itemize}
+Basic building block:\\\texttt{llvm::MemoryLocation}\\
+\medskip
+Encapsulates a tuple:\\(\alert{address}, \alert{size})\\
+\medskip
+Can be computed from a \texttt{llvm::Value}
 
 \column{.45\textwidth}
 \begin{block}{Distinct Locations}
@@ -748,24 +746,24 @@ Basic building block:\\\texttt{llvm::AliasAnalysis::}\\\texttt{Location}
 \end{frame}
 
 
-\begin{frame}{Alias Analyzer}{Basic Interface}
-Given two locations $X$, $Y$, the alias analyzer classifies them:
-
+\begin{frame}{Alias Analysis}{Basic Interface}
+Given two memory locations $X$, $Y$, the alias analyzer classifies them:\\
+\vfill
 \begin{itemize}
-\item \texttt{\textbf{llvm::AliasAnalyzer::NoAlias}}\\
+\item \texttt{\textbf{llvm::AliasResult::NoAlias}}\\
 			$X$ and $Y$ \alert{are
       different} memory locations
 \vfill
-\item \texttt{\textbf{llvm::AliasAnalyzer::MustAlias}}\\
+\item \texttt{\textbf{llvm::AliasResult::MustAlias}}\\
 			$X$ and $Y$ \alert{are equal}
       -- i.e. they points to the same address
 \vfill
-\item \texttt{\textbf{llvm::AliasAnalyzer::PartialAlias}}\\
+\item \texttt{\textbf{llvm::AliasResult::PartialAlias}}\\
 			$X$ and $Y$
       \alert{partially overlap} -- i.e. they points to different addresses,
       but the pointed memory areas partially overlap
 \vfill
-\item \texttt{\textbf{llvm::AliasAnalyzer::MayAlias}}\\
+\item \texttt{\textbf{llvm::AliasResult::MayAlias}}\\
 			\alert{unable to compute}
       aliasing information -- i.e. $X$ and $Y$ can be different locations,
       or $X$ can be a complete/partial alias of $Y$
@@ -774,84 +772,117 @@ Given two locations $X$, $Y$, the alias analyzer classifies them:
 \vfill
 Queries performed using:
 \begin{itemize}
-\item \cppinline{llvm::AliasAnalyzer::alias(X, Y)}
+\item \cppinline{llvm::AAResults::alias(X, Y)}
 \end{itemize}
 \end{frame}
 
 
-\begin{frame}{Alias Analyzer}{Mid-level Interface}
+\begin{frame}{Alias Analysis}{Basic Interface}
+A different categorization involves whether an instruction $I$
+\alert{reads and/or modifies} a memory location $X$:\\
+\vfill
+\begin{itemize}
+\item \texttt{\textbf{llvm::ModRefInfo::NoModRef}}\\
+			The access neither references nor modifies the value stored in $X$
+\vfill
+\item \texttt{\textbf{llvm::ModRefInfo::Ref}}\\
+			The access may reference the value stored in $X$ 
+\vfill
+\item \texttt{\textbf{llvm::ModRefInfo::Mod}}\\
+			The access may modify the value stored in $X$ 
+\vfill
+\item \texttt{\textbf{llvm::ModRefInfo::ModRef}}\\
+			The access may reference and may modify the value stored in $X$
+\end{itemize}
+
+\vfill
+Queries performed using:
+\begin{itemize}
+\item \cppinline{llvm::AAResults::getModRefInfo(I, X)}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Alias Analysis}{Mid-level Interface}
 \begin{center}
 This interface is very low-level!\\
 \smallskip
 What if we wanted to compute all aliases of a single value $X$?\\
 \vfill
 To do this, LLVM provides the \cppinline{llvm::AliasSet} class:
-\end{center}
+
+\begin{columns}
+\column{0.75\textwidth}
 \begin{enumerate}
-\item construct a \cppinline{llvm::AliasSetTracker}\\
-			starting from a \cppinline{llvm::AliasAnalyzer *}
+\item instantiate a new \cppinline{llvm::AliasSetTracker}\\
+			starting from \cppinline{llvm::AAResults}\footnotemark[1]
 \item it builds (one or more) \cppinline{llvm::AliasSet}
 \end{enumerate}
+\end{columns}
 
+\footnotetext[1]{\cppinline{using llvm::AliasAnalysis = llvm::AAResults\;}}
 \vfill
 For a given location $X$, a \cppinline{llvm::AliasSet}:
 
+\begin{columns}
+\column{0.6\textwidth}
 \begin{itemize}
 \item contains all locations aliasing with $X$
 \end{itemize}
+\end{columns}
+\vfill
+\end{center}
 \end{frame}
 
 
-\begin{frame}{Alias Analyzer}{Alias Set Memory Accesses}
-Each alias set \alert{references} the memory:
+\begin{frame}{Alias Analysis}{Alias Set Memory Accesses}
+Alias sets return memory reference and aliasing information just like
+the low-level interface.
+\vfill
+\alert{Warning:} This information is \alert{less precise}, 
+as it is derived by \alert{conservatively aggregating}
+more detailed data!
 
 \vfill
 \begin{itemize}
-\item \cppinline{llvm::AliasSet::NoModRef}: no memory reference -- i.e. the set
-      is empty
-\vfill
-\item \cppinline{llvm::AliasSet::Mod}: memory accessed in write-mode -- e.g. a
+\item \texttt{\textbf{bool llvm::AliasSet::isRef()}}\\
+			memory accessed in read-mode -- e.g. a
+      \llvminline{load} is inside the set
+\item \texttt{\textbf{bool llvm::AliasSet::isMod()}}\\
+			memory accessed in write-mode -- e.g. a
       \llvminline{store} is inside the set
 \vfill
-\item \cppinline{llvm::AliasSet::Ref}: memory accessed in read-mode -- e.g. a
-      \llvminline{load} is inside the set
-\vfill
-\item \cppinline{llvm::AliasSet::ModRef}: memory accessed in read-write mode --
-      e.g. a \llvminline{load} and a \llvminline{store} inside the set
+\item \texttt{\textbf{bool llvm::AliasSet::isMustAlias()}}\\
+			all pointers in the set \texttt{MustAlias} with each other
+\item \texttt{\textbf{bool llvm::AliasSet::isMayAlias()}}\\
+			at least one pair of pointer is not a \texttt{MustAlias} pair
 \vfill
 \end{itemize}
 \end{frame}
 
 
-\begin{frame}{Alias Analyzer}{Mid-level Interface}
-Entry point is \cppinline{llvm::AliasSetTracker::getAliasSetForPointer(...)}:
-
-\begin{itemize}
-\item \cppinline{llvm::Value *}: location address
-\item \cppinline{uint64\_t}: location size
-\item \cppinline{llvm::MDNode *}: used for type-based alias
-      analysis~\footnote{set to \cppinline{NULL}}
-\item \cppinline{bool *}: whether a new \cppinline{llvm::AliasSet} has been
-      created to hold the location -- location does not alias up to now
-\end{itemize}
-
+\begin{frame}{Alias Analysis}{Mid-level Interface}
+\begin{center}
+Entry point is\\
+\cppinline{llvm::AliasSetTracker::getAliasSetFor(...)}\\
+\medskip
+Only argument is a reference to\\
+\cppinline{llvm::MemoryLocation}
 \vfill
-Having the \cppinline{llvm::AliasSet}:
-
-\begin{itemize}
-\item STL container-like interface: \cppinline{size()}, \cppinline{begin()},
-      \cppinline{end()}, \ldots
-\item check reference type: \cppinline{llvm::AliasSet::isRef()}, \ldots
-\item check aliasing type: \cppinline{llvm::AliasSet::isMustAlias()}, \ldots
-\end{itemize}
+Once you have the \cppinline{llvm::AliasSet} you can inspect
+the list of memory locations in it with the standard C++ iterator pattern:\\
+\medskip
+\cppinline{size()}, \cppinline{begin()}, \cppinline{end()}
+\end{center}
+\vfill
 \end{frame}
 
 
-\subsection{Memory Dependence}
+\subsection{Memory SSA}
 
 
-\begin{frame}{Memory Dependence Analysis}{Alias Analyzer High-level Interface}
-The \cppinline{llvm::MemoryDependenceAnalysis} wraps alias analysis to answer
+\begin{frame}{Memory SSA}{Alias Analyzer High-level Interface}
+The \cppinline{llvm::MemorySSAAnalysis} pass wraps alias analysis to answer
 queries in the following form:
 
 \begin{itemize}
@@ -860,48 +891,34 @@ queries in the following form:
 \end{itemize}
 
 \vfill
-\begin{columns}[t]
-\column{.45\textwidth}
-Reads:
-
+This is done by representing all memory accesses in a\\\alert{SSA-like form}:
 \begin{itemize}
-\item \llvminline{store} instructions writing memory locations aliases with
-      the one references by \llvminline{\%foo}
+\item \llvminline{store}-like instructions become \alert{definitions} (\llvminline{MemoryDef})
+\item \llvminline{load}-like instructions become \alert{uses} (\llvminline{MemoryDef})
+\item \llvminline{store}s to the same location in parallel CFG branches become \alert{phi}s (\llvminline{MemoryPhi})
 \end{itemize}
-
-\column{.45\textwidth}
-Writes:
-
-\begin{itemize}
-\item \llvminline{load} instructionss reading memory locations aliased with
-      the one referenced by \llvminline{\%foo}
-\end{itemize}
-\end{columns}
 \end{frame}
 
 
 \begin{frame}{Memory Dependence Analysis}{APIs}
-Let \llvminline{\%foo} be a \cppinline{llvm::Instruction} accessing memory:
-
+MemorySSA ``instructions'' are owned by \cppinline{llvm::MemorySSA} objects.\\
+\bigskip
+They are \alert{overlaid} on top of the normal CFG. \\
+\smallskip
 \begin{itemize}
-\item call \cppinline{llvm::MemoryDependenceAnalysis::getDependency(...)}
-\item you get a \llvminline{llvm::MemDepResult}
+\item \cppinline{AccessList *getBlockAccesses(BasicBlock *)}
+\item \cppinline{DefsList *getBlockDefs(BasicBlock *)}
 \end{itemize}
-
-\vfill
-Dependencies are classified:
-
+\bigskip
+This basic interface is very \alert{hard to use}:\\
+\smallskip
 \begin{itemize}
-\item \llvminline{llvm::MemDepResult::isClobber()}: an instruction clobbering --
-      i.e. potentially modifying -- location referenced by \llvminline{\%foo}
-      has been found
-\item \llvminline{llvm::MemDepResult::isDef()}: an instruction defining -- e.g.
-      writing -- the exact location referenced by \llvminline{\%foo} has been
-      found
-\item \llvminline{llvm::MemDepResult::isNonLocal()}: no dependency found on
-      \llvminline{\%foo} basic block
-\item \llvminline{llvm::MemDepResult::isNonFuncLocal()}: no dependency found on
-      \llvminline{\%foo} function
+\item \cppinline{llvm::MemorySSAWalker} provides support for the most common query
+\item \cppinline{MemoryAccess *getClobberingMemoryAccess(...)}
+\begin{itemize}
+\item Returns the nearest dominating memory access that clobbers the
+same memory location given.
+\end{itemize}
 \end{itemize}
 \end{frame}
 

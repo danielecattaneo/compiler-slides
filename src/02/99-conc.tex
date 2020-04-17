@@ -4,14 +4,13 @@
 \begin{frame}{Conclusions}
 Inside LLVM there a lot of passes:
 
-\begin{description}
+\begin{description}[normalization]
 \item[normalization] put program into a canonical form
-\item[analysis] get info about program
+\item[analysis] get info about the program
 \end{description}
 
 \vfill
-Please remember that
-
+Please remember that:
 \begin{itemize}
 \item a good compiler writer \alert{re-uses} code
 \item check LLVM sources before re-implementing a pass
