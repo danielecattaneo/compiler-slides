@@ -894,7 +894,7 @@ queries in the following form:
 This is done by representing all memory accesses in a\\\alert{SSA-like form}:
 \begin{itemize}
 \item \llvminline{store}-like instructions become \alert{definitions} (\llvminline{MemoryDef})
-\item \llvminline{load}-like instructions become \alert{uses} (\llvminline{MemoryDef})
+\item \llvminline{load}-like instructions become \alert{uses} (\llvminline{MemoryUse})
 \item \llvminline{store}s to the same location in parallel CFG branches become \alert{phi}s (\llvminline{MemoryPhi})
 \end{itemize}
 \end{frame}
