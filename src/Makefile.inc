@@ -57,6 +57,6 @@ clean:
 	rm -f $(MAIN).log $(MAIN).toc $(MAIN).fls $(MAIN).lof
 	rm -f $(MAIN).idx $(MAIN).loa $(MAIN).lot $(MAIN).lolisting 
 	rm -f $(MAIN).synctex.gz $(MAIN).nav $(MAIN).out $(MAIN).snm
-	rm -f $(MAIN).pdf $(OUTPUT) 
+	rm -f $(MAIN).pdf
 
 
