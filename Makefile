@@ -1,11 +1,11 @@
 DESTDIR ?= .
-objects := 00 01 02 03
+objects := $(shell ls src | grep -E '\d\d.*')
 
 all: $(objects)
 .PHONY: all
 
 $(objects):
-	$(MAKE) DESTDIR=../../$(DESTDIR) -C src/$@
+	$(MAKE) pub DESTDIR=../../$(DESTDIR) -C src/$@
 	
 clean:
 	for object in $(objects); do \
