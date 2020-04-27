@@ -3,13 +3,6 @@
 \section{Introduction}
 
 
-\begin{frame}{TODO}
-*) LLVM tools other than OPT\\
-*) MCA: what it is for (feat. ACA exercise)\\
-*) LLVM performance models\\
-\end{frame}
-
-
 \begin{frame}{LLVM Tools}
 LLVM provides several \alert{tools} for various purposes:
 \medskip
@@ -202,6 +195,17 @@ and make it easier to perform.\\
 \end{frame}
 
 
+\begin{frame}{How LLVM-MCA works}
+\begin{center}
+LLVM incorporates a \alert{dataset of instruction latency information} used for estimating the performance impact of various instructions.\\
+\bigskip
+LLVM-MCA expands this information to incorporate \alert{machine-specific models} about several CPU cores.\\
+\medskip
+$\Downarrow$\\
+\medskip
+LLVM-MCA uses the \alert{backend} part of LLVM to do its job!
+\end{center}
+\end{frame}
 
 
 
