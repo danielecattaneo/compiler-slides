@@ -1,6 +1,7 @@
-//LLVM-MCA-OPTIONS -timeline
+//LLVM-MCA-OPTIONS -timeline -all-stats -bottleneck-analysis
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "benchmark.h"
 
 
@@ -11,10 +12,14 @@
 int main(int argc, char *argv[])
 {
   double *buffer = mallocBufferDouble(N_MTX*SIZE_MTX*2, 0.0, 1.0);
-  double *results = calloc(sizeof(double), N_MTX*SIZE_MTX);
+  double *results = malloc(sizeof(double)*N_MTX*SIZE_MTX);
   
-  timer_state_t time;
-  timerStart(&time);
+  benchmark_state_t bench;
+  BENCHMARK_BEGIN(bench, "+ accumulator", 100, 2);
+  
+  memset(results, 0, sizeof(double)*N_MTX*SIZE_MTX);
+  
+  BENCHMARK_TIMER_START(bench);
   
   for (int i=0; i<N_MTX; i++) {
     __asm volatile("# LLVM-MCA-BEGIN plus_accum_body");
@@ -36,9 +41,11 @@ int main(int argc, char *argv[])
     __asm volatile("# LLVM-MCA-END");
   }
   
-  timerStopAndPrint(&time, "4x4 matrix mult");
+  BENCHMARK_TIMER_STOP(bench);
+  
   for (int i=0; i<N_MTX*SIZE_MTX; i++)
     forceUse(results+i);
+  BENCHMARK_END(bench);
   
   free(buffer);
   free(results);

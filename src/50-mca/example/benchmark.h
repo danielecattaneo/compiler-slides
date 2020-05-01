@@ -27,8 +27,8 @@ typedef struct {
 #endif
 } timer_state_t;
 
-
-static __attribute__((always_inline)) void timerStart(timer_state_t *timer_state)
+static __attribute__((always_inline)) void timerStart(
+    timer_state_t *timer_state)
 {
 #ifdef __APPLE__
   timer_state->stime = mach_absolute_time();
@@ -39,8 +39,8 @@ static __attribute__((always_inline)) void timerStart(timer_state_t *timer_state
 #endif
 }
 
-
-static __attribute__((always_inline)) uint64_t timerStop(timer_state_t *timer_state)
+static __attribute__((always_inline)) uint64_t timerStop(
+    timer_state_t *timer_state)
 {
   uint64_t diff;
 
@@ -75,12 +75,50 @@ static __attribute__((always_inline)) uint64_t timerStop(timer_state_t *timer_st
   return diff;
 }
 
-
-static __attribute__((always_inline)) void timerStopAndPrint(timer_state_t *timer_state, const char *desc)
+static __attribute__((always_inline)) double timerStopAndPrint(
+    timer_state_t *timer_state, const char *desc)
 {
   uint64_t nanosec = timerStop(timer_state);
-  printf("[%s] time taken: %lf s\n", desc, (double)nanosec/(double)1000000000);
+  double secs = (double)nanosec/(double)1000000000;
+  printf("[%s] time taken: %lf s\n", desc, secs);
+  return secs;
 }
+
+
+
+typedef struct {
+  timer_state_t timer;
+  double time_accum;
+  int rep_count;
+  int rep_i;
+  const char *name;
+} benchmark_state_t;
+
+#define BENCHMARK_BEGIN(b, b_name, b_rep_count, b_preheat) \
+  (b).time_accum = 0;\
+  (b).rep_count = (b_rep_count);\
+  (b).rep_i = -(b_preheat);\
+  (b).name = (b_name);\
+  if ((b).rep_i < 0)\
+    printf("[%s] preheating started\n", (b).name);\
+  for (; (b).rep_i < (b).rep_count; (b).rep_i++) {
+  
+#define BENCHMARK_TIMER_START(b) do {\
+      timerStart(&((b).timer));\
+    } while (0)
+
+#define BENCHMARK_TIMER_STOP(b) do {\
+      double secs = timerStopAndPrint(&((b).timer), (b).name);\
+      if ((b).rep_i >= 0)\
+        (b).time_accum += secs;\
+      if ((b).rep_i == -1)\
+        printf("[%s] preheating ended\n", (b).name);\
+    } while (0)
+  
+#define BENCHMARK_END(b) \
+  }\
+  printf("[%s] average time taken over %d iterations: %lf s\n", \
+      (b).name, (b).rep_count, (b).time_accum / (double)(b).rep_count);
 
 
 uint64_t xorshift64star(void);

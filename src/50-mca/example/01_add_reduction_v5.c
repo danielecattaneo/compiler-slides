@@ -1,4 +1,4 @@
-//LLVM-MCA-OPTIONS -timeline
+//LLVM-MCA-OPTIONS -timeline -all-stats -bottleneck-analysis
 #include <immintrin.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,11 +11,14 @@
 int main(int argc, char *argv[])
 {
   double *buffer = mallocBufferDouble(N, 0.0, 1.0);
+  
+  benchmark_state_t bench;
+  BENCHMARK_BEGIN(bench, "+ accumulator", 100, 2);
+  
   __m256d haccum = _mm256_set1_pd(0.0);
   
-  timer_state_t time;
-  timerStart(&time);
-  
+  BENCHMARK_TIMER_START(bench);
+
   for (int i=0; i<N; i+=8*2) {
     __asm volatile("# LLVM-MCA-BEGIN plus_accum_body");
     
@@ -42,8 +45,10 @@ int main(int argc, char *argv[])
   __m128d th1 = _mm_add_pd(haccumh, _mm256_castpd256_pd128(haccum));
   double accum = _mm_cvtsd_f64(_mm_hadd_pd(th1, th1));
   
-  timerStopAndPrint(&time, "+ accumulator");
+  BENCHMARK_TIMER_STOP(bench);
+  
   printf("result = %lf\n", accum); // approx 40000000
+  BENCHMARK_END(bench);
   
   free(buffer);
   return 0;
