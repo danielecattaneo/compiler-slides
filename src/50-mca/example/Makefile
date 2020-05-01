@@ -1,5 +1,7 @@
-LLVM_MCA ?= llvm-mca
+LLVM_MCA ?= llvm-mca-mp-9.0
+CLANG ?= clang
 CFLAGS ?= -O3 -march=native
+LLVM_MCA_FLAGS ?=
 SRC := \
   01_add_reduction_v1.c\
   01_add_reduction_v2.c\
@@ -19,14 +21,14 @@ MCA_OUT := $(SRC:.c=.mca.txt)
 all:	$(OUTPUT) $(ASM_OUT) $(MCA_OUT)
 
 %:	%.c benchmark.c benchmark.h
-	clang $(CFLAGS) benchmark.c $< -o $@
+	$(CLANG) $(CFLAGS) benchmark.c $< -o $@
 
 %.s:	%.c
-	clang $(CFLAGS) -S $< -o $@
+	$(CLANG) $(CFLAGS) -S $< -o $@
 
 %.mca.txt:	%.s
 	mca_options=$$(cat $*.c | grep -E '//LLVM-MCA-OPTIONS' | sed -e 's/\/\/LLVM-MCA-OPTIONS//g');\
-	$(LLVM_MCA) $$mca_options $< > $@
+	$(LLVM_MCA) $$mca_options $(LLVM_MCA_FLAGS) $< > $@
 
 .PHONY: clean
 clean:

@@ -85,7 +85,6 @@ static __attribute__((always_inline)) double timerStopAndPrint(
 }
 
 
-
 typedef struct {
   timer_state_t timer;
   double time_accum;
