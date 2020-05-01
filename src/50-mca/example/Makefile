@@ -4,7 +4,12 @@ SRC := \
   01_add_reduction_v1.c\
   01_add_reduction_v2.c\
   01_add_reduction_v3.c\
-  01_add_reduction_v4.c
+  01_add_reduction_v4.c\
+  01_add_reduction_v5.c\
+  02_mtx_mul_v1.c\
+  02_mtx_mul_v2.c\
+  02_mtx_mul_v3.c\
+  02_mtx_mul_v4.c
 
 OUTPUT := $(SRC:.c=)
 ASM_OUT := $(SRC:.c=.s)
