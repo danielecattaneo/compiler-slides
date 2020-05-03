@@ -3,25 +3,6 @@
 \section{LLVM framework quick start}
 
 
-\begin{frame}{Commands}
-	\begin{description}[llvm-dwarfdump]
-		\item[llvm-as] LLVM assembler
-		\item[llvm-dis] LLVM disassembler
-		\item[opt] LLVM optimizer
-		\item[llc] LLVM static compiler
-		\item[lli] directly execute programs from LLVM bitcode
-		\item[llvm-link] LLVM bitcode linker
-		\item[llvm-mca] LLVM machine code analyzer
-		\item[llvm-nm] list LLVM bitcode and object file's symbol table
-		\item[llvm-stress] generate random .ll files
-		\item[llvm-config] prints out install configuration parameters
-		\item[llvm-dwarfdump] print contents of DWARF sections
-	\end{description}
-	\vfill
-	For a complete reference, see the LLVM command guide\footnote{\url{http://llvm.org/docs/CommandGuide/index.html}}
-\end{frame}
-
-
 \begin{frame}{Simulating a LLVM driver manually}
 	\noindent\hspace{-1.2cm}\includegraphics[width=13cm]{img/toolchain}
 \end{frame}
@@ -37,6 +18,53 @@
 	\end{itemize}
 	\vfill
 	We will follow the first one, with a few adjustments.
+\end{frame}
+
+
+\begin{frame}{Building LLVM}
+\begin{center}
+To test your pass you need a \alert{Debug+Assertions} build of LLVM.\\
+\bigskip
+This build needs to be \alert{kept separated} from normal Release builds (it's very slow!)\\
+\bigskip
+The best way to get such a LLVM build is to \alert{make it yourself}!
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Building LLVM}
+\begin{itemize}
+\item Detailed instructions: \url{https://llvm.org/docs/GettingStarted.html}
+\end{itemize}
+\bigskip
+\begin{description}
+\item[Problem 1] With the \alert{default options}, a finished build takes\\\alert{25 GB of disk space}
+\item[Problem 2] A standard build with the GNU toolchain uses \alert{a lot of RAM} ($\approx$16 GB or more with a modern 4 core CPU!) especially when linking
+\end{description}
+\bigskip
+We need to customize the build process a bit...
+\end{frame}
+
+
+\begin{frame}{Building LLVM}
+\begin{itemize}
+\item The build flags I like to use:\\
+\smallskip\texttt{\small-GNinja \\
+-DLLVM\_ENABLE\_PROJECTS='clang' \\
+-DLLVM\_INSTALL\_UTILS=ON \\
+\textbf{-DLLVM\_BUILD\_LLVM\_DYLIB=ON \\
+-DLLVM\_LINK\_LLVM\_DYLIB=ON} \\
+-DLLVM\_OPTIMIZED\_TABLEGEN=ON \\
+-DLLVM\_INCLUDE\_EXAMPLES=OFF \\
+-DCMAKE\_INSTALL\_PREFIX=/opt/llvm-9.0-d \\
+\textbf{-DLLVM\_USE\_LINKER=lld \\
+-DCMAKE\_C\_COMPILER=clang-9 \\
+-DCMAKE\_CXX\_COMPILER=clang++-9} \\
+}
+\item Building with LLVM itself solves the RAM usage problem!
+\item Using \alert{shared libraries} drops the disk usage to \alert{10 GB}.\\
+{\footnotesize The build products alone will still take 20 GB of disk space...}
+\end{itemize}
 \end{frame}
 
 

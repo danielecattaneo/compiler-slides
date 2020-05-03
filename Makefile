@@ -1,14 +1,14 @@
 DESTDIR ?= .
-objects := $(shell ls src | grep -E '\d\d.*')
+objects := $(shell find -s src -d 2 -name "Makefile" | sed -E -e 's/src\///g' -e 's/\/Makefile//g')
 
 all: $(objects)
 .PHONY: all
 
 $(objects):
-	$(MAKE) pub DESTDIR=../../$(DESTDIR) -C src/$@
+	$(MAKE) pub DESTDIR=$(realpath $(DESTDIR)) -C src/$@
 	
 clean:
 	for object in $(objects); do \
-	  $(MAKE) clean DESTDIR=../../$(DESTDIR) -C src/$$object; \
+	  $(MAKE) clean DESTDIR=$(realpath $(DESTDIR)) -C src/$$object; \
 	done
 
