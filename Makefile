@@ -5,10 +5,10 @@ all: $(objects)
 .PHONY: all
 
 $(objects):
-	$(MAKE) pub DESTDIR=../../$(DESTDIR) -C src/$@
+	$(MAKE) pub DESTDIR=$(realpath $(DESTDIR)) -C src/$@
 	
 clean:
 	for object in $(objects); do \
-	  $(MAKE) clean DESTDIR=../../$(DESTDIR) -C src/$$object; \
+	  $(MAKE) clean DESTDIR=$(realpath $(DESTDIR)) -C src/$$object; \
 	done
 
