@@ -1,5 +1,5 @@
 DESTDIR ?= .
-objects := $(shell ls src | grep -E '\d\d.*')
+objects := $(shell find -s src -d 2 -name "Makefile" | sed -E -e 's/src\///g' -e 's/\/Makefile//g')
 
 all: $(objects)
 .PHONY: all
