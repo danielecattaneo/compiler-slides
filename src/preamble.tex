@@ -87,6 +87,8 @@
 \newcommand{\cppinline}[2][\ttfamily]{\lstinline[language=C++,basicstyle=#1]!#2!}
 \newcommand{\llvminput}[2][\ttfamily]{\lstinputlisting[language=LLVM,basicstyle=#1]{#2}}
 \newcommand{\llvminline}[2][\ttfamily]{\lstinline[language=LLVM,basicstyle=#1]!#2!}
+\newcommand{\asminput}[2][\ttfamily]{\lstinputlisting[language=x86gas,basicstyle=#1]{#2}}
+\newcommand{\asminline}[2][\ttfamily]{\lstinline[language=x86gas,basicstyle=#1]!#2!}
 \lstdefinelanguage{LLVM}%
   {morekeywords={define,declare,global,constant,internal,external,private,%
       linkonce,linkonce_odr,weak,weak_odr,appending,common,extern_weak,%
@@ -107,6 +109,53 @@
   sensitive=t,%
   morestring=[b]",%
   morecomment=[l];%
+  }[keywords,comments,strings]
+\lstdefinelanguage{x86gas}%
+  {morekeywords={%
+.abort, .ABORT, .align, .ascii, .asciz, .balign, .bss, .bundle, .byte, .cfi, %
+.comm, .cstring, .data, .def, .desc, .dim, .double, .eject, .else, .elseif, %
+.end, .endef, .endfunc, .endif, .equ, .equiv, .eqv, .err, .error, .exitm, %
+.extern, .fail, .file, .fill, .float, .func, .global, .globl, .gnu, .hidden, %
+.hword, .ident, .if, .incbin, .include, .int, .internal, .irp, .irpc, .lcomm, %
+.lflags, .line, .ln, .linkonce, .list, .loc, .local, .long, .macro, .mri, %
+.noaltmacro, .nolist, .octa, .offset, .org, .p2align, .popsection, .previous, %
+.print, .protected, .psize, .purgem, .pushsection, .quad, .rept, .sbttl, .scl, %
+.section, .set, .short, .single, .size, .skip, .sleb128, .space, .stabd, %
+.stabn, .stabs, .string, .struct, .subsection, .symver, .tag, .text, .title, %
+.type, .uleb128, .val, .version, .vtable, 	.vtable_entry, 	.vtable_inherit, %
+.warning, .weak, .weakref, .word, .zero
+},%
+  morekeywords=[2]{%
+aaa, adcb, adcl, add, addb, addl, addps, addw, addq, adds, addss, addsd, and, %
+andb, andw, andl, andq, bswap, call, callq, cld, cltd, cltq, cmova, cmovae, %
+cmovb, cmovbe, cmovg, cmovge, cmovl, cmovle, cmovna, cmovnae, cmovnb, cmovnbe, %
+cmovne, cmovng, cmovnge, cmovnl, cmovnle, cmovns, cmovnz, cmovs, cmovz, cmp, %
+cmpb, cmpeqps, cmpl, cmpq, cmpsl, cmpxchg, cpuid, cqto, cvtps2dq, cvtdq2ps, %
+cvtsd2ss, cvtsi2s, cvtsi2ss, cvtsi2ssq, cvtsi2sd, cvtsi2sdq, cvtss2sd, cvttsd, %
+cvttsd2si, cvttsd2siq, cvtts, cvttss, cvttss2si, cvttss2siq, das, dec, decb, %
+decw, decl, decq, divw, divl, divq, divs, divss, divsd, fabs, fadd, fbld, %
+fbstp, fchs, fcmovb, fcomi, fcoms, fcos, fdivp, fdivr, fdivrp, fidivs, filds, %
+fimul, finit, fists, fld1, fldcw, fldl, fldl2t, fldl2e, fldlenv, fldlcw, %
+fldlg2, fldln2, fldpi, flds, fldz, fmul, fmulp, fprem1, frame, frndint, %
+frstor, fsave, fsin, fsincos, fsqrt, fst, fstcw, fstl, fstps, fsts, fstsw, %
+fstenv, fstpl, fstsw, fsubr, fxch, fyl2x, idivl, idivq, imul, imulb, imull, %
+imulw, imulq, inc, incb, incw, incl, incq, int, ja, jb, jc, jcxz, je, jg, jge, %
+jl, jmp, jne, jns, jnz, jo, jp, js, jz, lea, leab, leave, leawl, leaq, leal, %
+lodsb, lodsl, loop, maxps, maxs, maxss, maxsd, mins, minss, minssd, mov, %
+movabsq, movapd, movaps, movqps, movb, movdqa, movdqu, movl, movlpd, movq, %
+movupd, movups, movsb, movsbw, movsbl, movsbq, movsd, movsl, movslq, movsw, %
+movswl, movswq, movsx, movss, movsd, movw, movz, movzbw, movzbl, movzbq, %
+movzwl, movzwq, movzx, msg, mull, mulpd, muls, mulss, mulsd, mulq, neg, negb, %
+negw, negl, negq, nop, not, notb, notw, notl, notq, or, orb, orw, orl, orq, %
+paddd, pcmpeqw, pop, popfl, popl, popq, popw, push, pushfl, pushl, pushq, %
+pushw, rep, repe, repne, ret, retq, rspreg, sahf, sal, salb, salw, sall, salq, %
+sar, sarb, sarw, sarl, sarq, sbbb, sbbl, shr, shrb, shrw, shrl, shrq, sqrtps, %
+sqrts, sqrtss, sqrtsd, std, stosb, sub, subb, subl, subq, subw, subs, subss, %
+subsd, syscall, test, testb, testq, ucomis, ucomisd, ucomiss, xchg, xor, xorb, %
+xorps, xorw, xorl, xorq, vxorpd, vaddsd},%
+  sensitive=t,%
+  morestring=[b]",%
+  morecomment=[l]\#%
   }[keywords,comments,strings]
   
 % Create Color definition From Template: 

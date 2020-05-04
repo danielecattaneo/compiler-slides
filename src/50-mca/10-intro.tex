@@ -208,10 +208,48 @@ LLVM-MCA uses the \alert{backend} part of LLVM to do its job!
 \end{frame}
 
 
+\begin{frame}{Who needs LLVM-MCA}
+\begin{enumerate}
+\item Developers of performance-sensitive applications 
+	\begin{itemize}
+	\item Helps deciding where to vectorize
+	\item Tells you if the algorithm works well for the CPU
+	\item Analyzes if the implementation is memory-bound or not
+	\item Helps specifically if you are working in assembly language!
+	\end{itemize}
+\item Compiler writers who want to check if their optimization is a good idea
+	\begin{itemize}
+	\item Well it's a bit too low-level for that...
+	\end{itemize}
+\end{enumerate}
+\bigskip
+Fortunately, most of the time the compiler does a plenty good job optimizing stuff!
+\end{frame}
 
 
+\begin{frame}{Why you don't need LLVM-MCA!}
+\begin{center}
+In the days of the 8 and 16 bit processors, \alert{code optimization} mostly meant \emph{choosing the right instruction} because the memory was as fast as the CPU, there was no pipelining or speculative execution, and complex algorithms didn't fit into the RAM.\\
+\medskip
+Sometimes inexperienced programmers have the \emph{impression} this is still true today.\\
+\bigskip
+{\Large This is not true anymore!}\\
+\bigskip
+Instruction choice is \alert{largely irrelevant}!\\
+\end{center}
+\end{frame}
 
 
-
-
+\begin{frame}{Why you don't need LLVM-MCA!}
+What is \alert{truly} important:
+\begin{enumerate}
+\item Complexity of your algorithm
+\item Access locality
+\item Explicit MIMD parallelization (threads)
+\item Explicit SIMD parallelization (vector intrinsics)\label{fl:parall}
+\item Compiler flags: \texttt{-O3 -ffast-math}\label{fl:compilerflgs}
+\end{enumerate}
+\bigskip
+Points \ref{fl:parall} and \ref{fl:compilerflgs} are where LLVM-MCA helps, but they are also the least important ones!
+\end{frame}
 

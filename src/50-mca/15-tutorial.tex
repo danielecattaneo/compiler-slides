@@ -3,3 +3,133 @@
 \section{Analyzing a program with LLVM-MCA}
 
 
+\begin{frame}{Preface}
+Let's look at how MCA allows us to predict the performance of some code \alert{without running it}\\
+\medskip
+Two examples:
+\begin{itemize}
+\item Sum reduction
+\item Matrix multiplication
+\end{itemize}
+\medskip
+We will look at:
+\begin{itemize}
+\item C language source code
+\item Assembly language produced by the compiler
+\item Analysis of the assembly language made by LLVM-MCA
+\end{itemize}
+\end{frame}
+
+
+\subsection{Sum reduction}
+
+
+\begin{frame}{Sum Reduction}
+\begin{block}{Math}
+Given a vector $V = [v_1, v_2, \ldots v_N]$ we compute:\\
+\[
+x = \sum_{i=1}^{N}{v_i}
+\]
+\end{block}
+\begin{block}{Obvious Implementation}
+\cinput{listings/01_add_reduction_v1_cleaned.c}
+\end{block}
+\begin{itemize}
+\item Let's measure the performance we get with LLVM-MCA!
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Marking portions of code}
+\begin{itemize}
+\item We need to tell LLVM-MCA which portion of code we want to measure!
+\end{itemize}
+\bigskip
+Important things to know:
+\begin{enumerate}
+\item branch instructions are ignored
+\item every piece of code is assumed to be executed in a loop
+\item the behavior of memory accesses is not simulated
+\end{enumerate}
+\bigskip
+Consequences:
+\begin{itemize}
+\item We need to debug data locality issues \alert{first}
+\item The only thing that can be analyzed feasibly is straight-line code
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Marking portions of code}
+In this example there is not much possibility for data locality
+issues (only sequential reads...)\\
+\bigskip
+From what we said it's clear that the portion of code we are interested
+in is the \alert{body of the loop}\\
+\medskip
+To make LLVM-MCA analyze it we have to enclose it \alert{in the assembly code}
+with:\\
+\smallskip
+\begin{center}
+\large
+\texttt{\# LLVM-MCA-BEGIN }\textit{block\_name}\\
+\smallskip
+\texttt{\# LLVM-MCA-END}
+\end{center}
+\smallskip
+{\footnotesize \textit{block\_name} is any string identifier you want}
+\end{frame}
+
+
+\begin{frame}{Marking portions of code}
+If we are working in the C language, we can use \texttt{asm} blocks:
+\begin{block}{Obvious Implementation (annotated)}
+\cinput[\tt\small]{listings/01_add_reduction_v1.c}
+\end{block}
+\bigskip
+\alert{Warning:} Adding \texttt{asm} blocks can prevent optimizations!\\
+\smallskip
+{\footnotesize In this particular case, it prevents \alert{loop unrolling}.
+For the purpose of the example it's not a problem because we will talk about
+loop unrolling in a bit...}
+\end{frame}
+
+
+\begin{frame}{Marking portions of code}
+Let's compile with \texttt{-O3}...
+\begin{block}{Obvious Implementation (compiled)}
+\asminput[\tt\small]{listings/01_add_reduction_v1.s}
+\end{block}
+\bigskip
+\end{frame}
+
+
+\begin{frame}{Running LLVM-MCA}
+It's now time to actually run the analysis with LLVM-MCA.\\
+\medskip
+There are several kinds of options available:
+\begin{itemize}
+\item Machine type options (defaults autodetected from host)
+\item Analysis configuration options
+	\begin{description}[\texttt{-bottleneck-analysis}]
+	\item[\texttt{-iterations}] Number of iterations to simulate
+	\item[\texttt{-register-file-size}] Size of the shadow register file
+	\item[\texttt{-bottleneck-analysis}] Enables bottleneck analysis
+	\end{description}
+\item Options for toggling \alert{views} of the analysis data:
+	\begin{description}[\texttt{-instruction-tables}]
+	\item[\texttt{-resource-pressure}] Enable the resource pressure view.
+	\item[\texttt{-instruction-info}] Enable the instruction info view.
+	\item[\texttt{-instruction-tables}] Prints resource pressure information based on the static information available from the processor model.
+	\item[\ldots]
+	\end{description}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Running LLVM-MCA}
+To keep things simple we'll just use the default options plus \texttt{-bottleneck-analysis}.\\
+\end{frame}
+
+
+
