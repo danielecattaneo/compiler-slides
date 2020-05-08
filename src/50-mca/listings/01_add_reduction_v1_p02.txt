@@ -1,0 +1,9 @@
+Timeline view:
+                    0123456789        
+Index     0123456789          01234567
+
+[0,0]     DeeeeeeeeeER   .    .    . .   vaddsd	(%rbx,%rax,8), %xmm0, %xmm0
+[1,0]     D====eeeeeeeeeER    .    . .   vaddsd	(%rbx,%rax,8), %xmm0, %xmm0
+[2,0]     D========eeeeeeeeeER.    . .   vaddsd	(%rbx,%rax,8), %xmm0, %xmm0
+[3,0]     .D===========eeeeeeeeeER . .   vaddsd	(%rbx,%rax,8), %xmm0, %xmm0
+[4,0]     .D===============eeeeeeeeeER   vaddsd	(%rbx,%rax,8), %xmm0, %xmm0

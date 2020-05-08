@@ -1,0 +1,8 @@
+$ ./add_reduction_v1
+...
+average time taken over 100 iterations: 0.100273 s
+$
+$ ./add_reduction_v2
+...
+average time taken over 100 iterations: 0.098941 s
+$

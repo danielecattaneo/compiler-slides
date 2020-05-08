@@ -15,7 +15,7 @@ SRC := \
 
 OUTPUT := $(SRC:.c=)
 ASM_OUT := $(SRC:.c=.s)
-MCA_OUT := $(SRC:.c=.mca.txt)
+MCA_OUT := $(SRC:.c=.mca.txt) 01_add_reduction_v1b.mca.txt
 
 .PHONY: all
 all:	$(OUTPUT) $(ASM_OUT) $(MCA_OUT)
@@ -27,7 +27,11 @@ all:	$(OUTPUT) $(ASM_OUT) $(MCA_OUT)
 	$(CLANG) $(CFLAGS) -S $< -o $@
 
 %.mca.txt:	%.s
-	mca_options=$$(cat $*.c | grep -E '//LLVM-MCA-OPTIONS' | sed -e 's/\/\/LLVM-MCA-OPTIONS//g');\
+	if [[ -e $*.c ]]; then \
+	  mca_options=$$(cat $*.c | grep -E '//LLVM-MCA-OPTIONS' | sed -e 's/\/\/LLVM-MCA-OPTIONS//g');\
+	else \
+	  mca_options=$$(cat $< | grep -E '#+LLVM-MCA-OPTIONS' | sed -E -e 's/#+LLVM-MCA-OPTIONS//g');\
+	fi; \
 	$(LLVM_MCA) $$mca_options $(LLVM_MCA_FLAGS) $< > $@
 
 .PHONY: clean

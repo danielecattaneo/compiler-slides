@@ -6,7 +6,7 @@ LBB0_2:
 	## InlineAsm End
 	vaddsd	(%rbx,%rax,8), %xmm0, %xmm0
 	## InlineAsm Start
-	## LLVM-MCA-END
+	## LLVM-MCA-END plus_accum_body
 	## InlineAsm End
 	addq	$1, %rax
 	cmpq	$80000000, %rax

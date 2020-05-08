@@ -1,0 +1,15 @@
+Critical sequence based on the simulation:
+
+              Instruction                                 Dependency Information
+ +----< 1.    addq	$1, %rax
+ |
+ |    < loop carried > 
+ |
+ |      0.    vaddsd	(%rbx,%rax,8), %xmm0, %xmm0
+ +----> 1.    addq	$1, %rax                          ## REGISTER dependency:  %rax
+ |      2.    cmpq	$80000000, %rax
+ |      3.    jne	LBB0_2
+ |
+ |    < loop carried > 
+ |
+ +----> 0.    vaddsd	(%rbx,%rax,8), %xmm0, %xmm0       ## REGISTER dependency:  %rax

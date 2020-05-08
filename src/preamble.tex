@@ -35,6 +35,7 @@
 \usepackage{ragged2e}
 \usepackage{varwidth}
 \usepackage{multicol}
+\usepackage{amsmath}
 
 \makeatletter
 \newlength{\negph@width}%
@@ -81,6 +82,8 @@
 \usetikzlibrary{shapes.multipart}
 
 \lstset{basicstyle=\ttfamily}
+\newcommand{\txtinput}[2][\ttfamily]{\lstinputlisting[language=none,basicstyle=#1]{#2}}
+\newcommand{\txtinline}[2][\ttfamily]{\lstinline[language=none,basicstyle=#1]!#2!}
 \newcommand{\cinput}[2][\ttfamily]{\lstinputlisting[language=C,basicstyle=#1]{#2}}
 \newcommand{\cinline}[2][\ttfamily]{\lstinline[language=C,basicstyle=#1]!#2!}
 \newcommand{\cppinput}[2][\ttfamily]{\lstinputlisting[language=C++,basicstyle=#1]{#2}}
@@ -157,6 +160,9 @@ xorps, xorw, xorl, xorq, vxorpd, vaddsd},%
   morestring=[b]",%
   morecomment=[l]\#%
   }[keywords,comments,strings]
+\lstdefinelanguage{none}{
+  identifierstyle=
+}
   
 % Create Color definition From Template: 
 % #1 template name, 

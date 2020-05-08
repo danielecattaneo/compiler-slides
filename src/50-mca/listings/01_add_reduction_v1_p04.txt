@@ -1,0 +1,19 @@
+Cycles with backend pressure increase [ 38.24% ]
+Throughput Bottlenecks: 
+  Resource Pressure       [ 0.00% ]
+  Data Dependencies:      [ 38.24% ]
+  - Register Dependencies [ 38.24% ]
+  - Memory Dependencies   [ 0.00% ]
+
+Critical sequence based on the simulation:
+
+              Instruction                                 Dependency Information
+ +----< 0.    vaddsd	(%rbx,%rax,8), %xmm0, %xmm0
+ |
+ |    < loop carried > 
+ |
+ +----> 0.    vaddsd	(%rbx,%rax,8), %xmm0, %xmm0       ## REGISTER dependency:  %xmm0
+ |
+ |    < loop carried > 
+ |
+ +----> 0.    vaddsd	(%rbx,%rax,8), %xmm0, %xmm0       ## REGISTER dependency:  %xmm0
