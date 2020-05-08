@@ -1,0 +1,308 @@
+% !TEX root = main.tex
+
+\subsection{Basics of LLVM-MCA}
+
+
+\begin{frame}{Sum Reduction}
+\begin{block}{Algorithm}
+Given a vector $V = [v_1, v_2, \ldots v_N]$ we compute:\\
+\[
+x = \sum_{i=1}^{N}{v_i}
+\]
+\end{block}
+\begin{block}{Obvious Implementation}
+\cinput{listings/01_add_reduction_v1_cleaned.c}
+\end{block}
+\begin{itemize}
+\item Let's measure the performance we get with LLVM-MCA!
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Marking portions of code}
+\begin{itemize}
+\item We need to tell LLVM-MCA which portion of code we want to measure!
+\end{itemize}
+\bigskip
+Important things to know:
+\begin{enumerate}
+\item branch instructions are ignored
+\item every piece of code is assumed to be executed in a loop
+\item the behavior of memory accesses is not simulated
+\end{enumerate}
+\bigskip
+Consequences:
+\begin{itemize}
+\item We need to debug data locality issues \alert{first}
+\item The only thing that can be analyzed feasibly is straight-line code
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Marking portions of code}
+In this example there is not much possibility for data locality
+issues (only sequential reads...)\\
+\bigskip
+From what we said it's clear that the portion of code we are interested
+in is the \alert{body of the loop}\\
+\medskip
+To make LLVM-MCA analyze it we have to enclose it \alert{in the assembly code}
+with:\\
+\smallskip
+\begin{center}
+\large
+\texttt{\# LLVM-MCA-BEGIN }\textit{block\_name}\\
+\smallskip
+\texttt{\# LLVM-MCA-END }\textit{block\_name}\\
+\medskip
+{\footnotesize \textit{block\_name} is any string identifier you want}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Marking portions of code}
+If we are working in the C language, we can use \texttt{asm} blocks:
+\begin{block}{Obvious Implementation (annotated)}
+\cinput[\tt\small]{listings/01_add_reduction_v1.c}
+\end{block}
+\bigskip
+\alert{Warning:} Adding \texttt{asm} blocks can prevent optimizations!\\
+\smallskip
+{\footnotesize In this particular case, it prevents \alert{loop unrolling}.
+For the purpose of the example it's not a problem because we will talk about
+loop unrolling in a bit...}
+\end{frame}
+
+
+\begin{frame}{Marking portions of code}
+Let's compile with \texttt{-O3}...
+\begin{block}{Obvious Implementation (compiled)}
+\asminput[\tt\small]{listings/01_add_reduction_v1.s}
+\end{block}
+\bigskip
+\end{frame}
+
+
+\begin{frame}{Running LLVM-MCA}
+It's now time to actually run the analysis with LLVM-MCA.\\
+\medskip
+There are several kinds of options available:
+\begin{itemize}
+\item Machine type options (defaults autodetected from host)
+\smallskip
+\item Analysis configuration options
+	{\small
+	\begin{description}[\texttt{-bottleneck-analysis}]
+	\item[\texttt{-iterations}] Number of iterations to simulate
+	\item[\texttt{-register-file-size}] Size of the shadow register file
+	\item[\texttt{-bottleneck-analysis}] Enables bottleneck analysis
+	\end{description}
+	\smallskip
+	}
+\item Options for toggling \alert{views} of the analysis data:
+	{\small
+	\begin{description}[\texttt{-instruction-tables}]
+	\item[\texttt{-resource-pressure}] Enable the resource pressure view.
+	\item[\texttt{-instruction-info}] Enable the instruction info view.
+	\item[\texttt{-instruction-tables}] Prints resource pressure information based on the static information available from the processor model.
+	\end{description}
+	}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Running LLVM-MCA}
+We'll use the following options:
+\begin{itemize}
+\item \texttt{-timeline}
+\item \texttt{-all-stats}
+\item \texttt{-bottleneck-analysis}
+\end{itemize}
+\medskip
+The command line syntax is very simple.
+\begin{block}{LLVM-MCA invocation command}
+\tt \$ llvm-mca add\_reduction.c \textbackslash \\
+\hphantom{MMMM}-timeline -all-stats -bottleneck-analysis
+\end{block}
+\end{frame}
+
+
+\begin{frame}{The Views of LLVM-MCA}
+The output is partitioned for each \alert{code region} and for each \alert{data view}.\\
+\smallskip
+In our example there is just one region.\\
+\medskip
+The main view presents generic information about the simulation.
+%
+\begin{columns}[onlytextwidth]
+%
+\column{0.45\textwidth}
+\begin{block}{The Main View}
+\txtinput[\tt\small]{listings/01_add_reduction_v1_p01.txt}
+\end{block}
+%
+\column{0.5\textwidth}
+\begin{description}[ABC]
+\item[\texttt{Iterations}:] Number of iterations of the loop that have been simulated.
+\item[\texttt{Instructions}:] Total number of instructions simulated.
+\item[\texttt{Total Cycles}:] Number of clock cycles taken for performing the code.
+\item[\texttt{Total uOps}:] Number of CPU microcode instructions issued.
+\end{description}
+%
+\end{columns}
+%
+\end{frame}
+
+
+\begin{frame}{The Views of LLVM-MCA}
+\begin{columns}[onlytextwidth]
+%
+\column{0.45\textwidth}
+\begin{block}{The Main View}
+\txtinput[\tt\small]{listings/01_add_reduction_v1_p01.txt}
+\end{block}
+%
+\column{0.5\textwidth}
+\begin{description}[ABC]
+\item[\texttt{Dispatch Width}:] Maximum number of microinstructions that can be issued simultaneously
+\item[\texttt{uOps Per Cycle}:] Average number of microinstructions executed per clock cycle.
+\item[\texttt{IPC}:] Average number of instructions executed per clock cycle.
+\item[\texttt{Block RThroughput}:] Average \alert{reciprocal throughput} of the code block
+\end{description}
+%
+\end{columns}
+%
+\end{frame}
+
+
+\begin{frame}{Reciprocal Throughput}
+\begin{center}
+The \alert{throughput} is the \emph{amount of work done in a given time}\\
+\medskip
+The \alert{reciprocal throughput} is \emph{how much time is required to perform the unit of work}\\
+%
+\bigskip
+\begin{tabular}{>{\raggedleft}p{0.4\textwidth} c p{0.4\textwidth}}
+\emph{unit of work} & = & one iteration of the loop\\
+\emph{time} & = & clock cycles \\
+\end{tabular}\\
+\bigskip
+%
+The reciprocal throughput given by LLVM-MCA is \alert{theoretical}.\\
+It does not take into account data dependencies amongst multiple iterations.\\
+\medskip
+It depends from the resource usage of the block of code.
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Reciprocal Throughput}
+\begin{center}
+The IPC (Instructions per Cycle) estimation \alert{does} take into account data dependencies.\\
+\bigskip
+Since IPC (like MIPS) is a measure of \alert{throughput}, we can derive the \alert{maximum throughput} by computing the \alert{inverse of the RThroughput}\\
+\bigskip
+\[
+\textsf{IPC} \le \frac{N_{block}}{\textsf{Block RThroughput}}
+\]
+\[
+N_{block} = \frac{\textsf{Instructions}}{\textsf{Iterations}}
+\]
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Data dependencies are important!}
+Let's try calculating the maximum IPC for our example...
+\[
+\textsf{IPC}_{max} = \frac{N_{block}}{\textsf{Block RThroughput}} = \frac{1}{0.5} = 2
+\]
+The maximum IPC is much higher than the \alert{actual} IPC ($0.25$)!\\
+\medskip
+This is because \alert{every instruction executed depends on the result of the previous one}
+\end{frame}
+
+
+\begin{frame}{The Timeline View}
+We can verify visually if an instruction is waiting for another one using the \alert{timeline view}.
+\bigskip
+\begin{block}{Timeline View}
+\txtinput[\tt\fontsize{6.7pt}{8pt}\selectfont]{listings/01_add_reduction_v1_p02.txt}
+\end{block}
+\end{frame}
+
+
+\begin{frame}{The Timeline View}
+\begin{block}{Timeline View}
+\txtinput[\tt\fontsize{6.7pt}{8pt}\selectfont]{listings/01_add_reduction_v1_p02.txt}
+\end{block}
+On the \emph{left} the \alert{index} column contains the loop iteration counter and the index of the instruction in the block.\\
+\medskip
+On the \emph{right} the instructions are shown.\\
+\medskip
+In the \emph{middle} there is a \alert{timing graph} showing in which stage the instruction is in at each CPU cycle (from left to right). 
+\end{frame}
+
+
+\begin{frame}{The Timeline View}
+\begin{block}{Timeline View}
+\txtinput[\tt\fontsize{6.7pt}{8pt}\selectfont]{listings/01_add_reduction_v1_p02.txt}
+\end{block}
+\begin{description}
+\item[\texttt{D}] The instruction is \alert{dispatched}\\(allocated to a reservation station)
+\item[\texttt{e}] The instruction is being \alert{executed}
+\item[\texttt{E}] The instruction \alert{finishes execution}, the result is ready
+\item[\texttt{R}] The instruction is \alert{retired}\\(the reservation station is freed)
+\end{description}
+\end{frame}
+
+
+\begin{frame}{The Instruction Info View}
+\begin{block}{Instruction Info View}
+\txtinput[\tt\fontsize{6pt}{7pt}\selectfont]{listings/01_add_reduction_v1_p03.txt}
+\end{block}
+\begin{itemize}
+\item The dispatch width we saw earlier is \alert{6}
+\item In the timeline view, at most \alert{3} instructions are dispatched together
+\item In fact, can see in the \alert{instruction info view} that our instructions take 2 microinstructions to execute!
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{The Instruction Info View}
+\begin{block}{Instruction Info View}
+\txtinput[\tt\fontsize{6pt}{7pt}\selectfont]{listings/01_add_reduction_v1_p03.txt}
+\end{block}
+Other interesting information shown here:
+\begin{description}[\texttt{RThroughput}]
+\item[\texttt{Latency}] Number of cycles required to execute the instruction
+\item[\texttt{RThroughput}] Reciprocal of the number of such instructions that can execute simultaneously
+\end{description}
+\end{frame}
+
+
+\begin{frame}{The Timeline and Microinstructions}
+\begin{block}{Timeline View}
+\txtinput[\tt\fontsize{6.7pt}{8pt}\selectfont]{listings/01_add_reduction_v1_p02.txt}
+\end{block}
+These two microinstructions (presumably!) perform, in order:
+\begin{enumerate}
+\item the \alert{load from memory} of the next number to accumulate
+\item the \alert{sum} of the loaded number and the value in the register
+\end{enumerate}
+This is why the executions partially overlap --- only the \alert{sum} microinstruction is blocking.
+\end{frame}
+
+
+\begin{frame}{The Bottleneck Analysis}
+\begin{overprint}
+\onslide<1>
+LLVM-MCA is able to automatically digest all this information for us, producing an analysis of the instruction sequence which has the biggest impact on the execution.
+\onslide<2>
+We can see right away that there is a data dependency on the \texttt{\%xmm0} register.
+\end{overprint}
+\begin{block}{Bottleneck View}
+\txtinput[\tt\fontsize{5.7pt}{6pt}\selectfont]{listings/01_add_reduction_v1_p04.txt}
+\end{block}
+\end{frame}
+

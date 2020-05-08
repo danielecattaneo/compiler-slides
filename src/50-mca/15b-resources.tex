@@ -1,0 +1,248 @@
+% !TEX root = main.tex
+
+\subsection{Analyzing Resource Usage}
+
+
+\begin{frame}{Hold on a sec, you cheater bastard!}
+\begin{overprint}
+\onslide<1>
+Wait... weren't there \alert{some other instructions in the loop} apart from the sum!?
+\onslide<2>
+The results we looked at must have been completely wrong!
+\end{overprint}
+\begin{block}{Exhibit A}
+\asminput[\tt\small]{listings/01_add_reduction_v1.s}
+\end{block}
+\end{frame}
+
+
+\begin{frame}{I plead guilty!}
+I surrender! You are right! I apologize! Let's annotate all the instructions in the loop!
+\begin{block}{Remedial actions}
+\asminput[\tt\small]{listings/01_add_reduction_v1b.s}
+\end{block}
+\end{frame}
+
+
+\begin{frame}{I plead guilty!}
+\begin{center}
+Let's look at what's changed:
+%
+\begin{columns}
+
+\column{0.45\textwidth}
+\begin{block}{Before}
+\asminput[\tt\small]{listings/01_add_reduction_v1_p01.txt}
+\end{block}
+
+\column{0.45\textwidth}
+\begin{block}{After}
+\asminput[\tt\small]{listings/01_add_reduction_v1b_p01.txt}
+\end{block}
+
+\end{columns}
+\medskip
+IPC, \emph{uOps Per Cycle} and \emph{Block RThroughput} are much worse!\\
+\medskip
+{\footnotesize Mmmh, I wonder why the total number of cycles has stayed the same... Must be a bug.}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{I plead guilty!}
+\begin{center}
+\begin{block}{Bottleneck View}
+\txtinput[\tt\fontsize{5.7pt}{6pt}\selectfont]{listings/01_add_reduction_v1b_p04.txt}
+\end{block}
+\medskip
+\begin{overprint}
+\onslide<1>
+The bottleneck view unambiguosly says that the biggest issue here is the update of the induction variable of the loop!
+\onslide<2>
+The perfect cure to this horrible disease is a classic and ever-lasting optimization: \alert{loop unrolling}!
+\end{overprint}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{First Performance Improvement}
+\begin{block}{Now we're talking!}
+\asminput[\tt\small]{listings/01_add_reduction_v2.s}
+\end{block}
+\end{frame}
+
+
+\begin{frame}{First Performance Improvement}
+Let's run the old and the new modified program side by side to show to the world that I am the best programmer ever!\footnote{All experiments shown here were performed on a Intel Core i5-8259U CPU (Skylake microarchitecture) running at 2.30 GHz (peak 3.60 GHz).}
+\begin{block}{Speedup Speedup Speedup}
+\asminput[\tt\small]{listings/01_add_reduction_v1_vs_v2_spdup.txt}
+\end{block}
+\pause
+\alert{\centering WHAAAAAT!? The improvement is MINIMAL!\\}
+\end{frame}
+
+
+\begin{frame}{A closer look at the data}
+\begin{block}{Timeline Comparison}
+\asminput[\tt\fontsize{6.7pt}{7pt}\selectfont]{listings/01_add_reduction_v1_vs_v2_timeline.txt}
+\end{block}
+If we look at the timeline we can clearly see that LLVM-MCA \alert{correctly predicted} that the loop condition did not affect the sum operations, even without loop unrolling. 
+\end{frame}
+
+
+\begin{frame}{A closer look at the data}
+\begin{columns}
+
+\column{0.45\textwidth}
+\begin{block}{Before}
+\asminput[\tt\small]{listings/01_add_reduction_v1_p01.txt}
+\end{block}
+
+\column{0.45\textwidth}
+\begin{block}{After}
+\asminput[\tt\small]{listings/01_add_reduction_v1b_p01.txt}
+\end{block}
+
+\end{columns}
+\medskip
+In fact, the ratio between the total number of CPU cycles and the number of iterations was the same as well, regardless of whether we were including the loop condition.
+\end{frame}
+
+
+\begin{frame}{A closer look at the data}
+\begin{columns}
+
+\column{0.45\textwidth}
+\begin{block}{Before}
+\asminput[\tt\small]{listings/01_add_reduction_v1b_p01.txt}
+\end{block}
+
+\column{0.45\textwidth}
+\begin{block}{After}
+\asminput[\tt\small]{listings/01_add_reduction_v2_p01.txt}
+\end{block}
+
+\end{columns}
+\medskip
+The ratio between the total number of CPU cycles and the number of additions performed is the same even between the version with loop unrolling and the version without\\
+\smallskip
+{\footnotesize With loop unrolling each iteration performs 8 additions}
+\end{frame}
+
+
+\begin{frame}{The Resource Pressure View}
+The reason why the loop condition computation can run in parallel with respect to the sum is that they require \alert{different CPU resources}.\\
+\smallskip
+We can see in detail the pressure on each resource from the \alert{Resource Pressure View}.
+\bigskip
+\begin{block}{Resource Pressure View}
+\txtinput[\tt\fontsize{5.5pt}{6pt}\selectfont]{listings/01_add_reduction_v1b_p05.txt}
+\end{block}
+\end{frame}
+
+
+\begin{frame}{The Resource Pressure View}
+\begin{block}{Resource Pressure View}
+\txtinput[\tt\fontsize{5.5pt}{6pt}\selectfont]{listings/01_add_reduction_v1b_p05.txt}
+\end{block}
+For each resource, this view shows the average number of resource cycles consumed at every iteration by the instructions.\\
+\medskip
+The concept of resources roughly corresponds to \alert{reservation stations} and the number and type of resources depends on the microarchitecture which is target of analysis.
+\end{frame}
+
+
+\begin{frame}{The Resource Pressure View}
+
+\begin{columns}
+
+\column{0.45\textwidth}
+\begin{block}{Resource Pressure View: List of Resources}
+\txtinput{listings/list-of-resources.txt}
+\end{block}
+
+\column{0.45\textwidth}
+
+\begin{overprint}
+\onslide<1>
+\raggedright\bigskip
+In our example, the CPU microarchitecture is \alert{Intel Skylake}.\\
+We have \alert{7 \texttt{SKLPort} resources}.
+\begin{itemize}
+\item \emph{SKL} is a contraction of \emph{SKyLake}
+\item \emph{Port} means \emph{Reservation Station} in Intel's terminology
+\end{itemize}
+Each one of these resources serves different Functional Units.
+\vfill
+%
+\onslide<2>
+\begin{description}[\texttt{SKLPortM}]
+\item[\texttt{SKLPort0}] Integer/float vector/scalar ALU, integer mul. and div., branch
+\item[\texttt{SKLPort1}] Integer/float vector/scalar ALU
+\item[\texttt{SKLPort2}] Load
+\item[\texttt{SKLPort3}] Load
+\item[\texttt{SKLPort4}] Store
+\item[\texttt{SKLPort5}] Integer vector/scalar ALU
+\item[\texttt{SKLPort6}] Integer scalar, branch
+\item[\texttt{SKLPort7}] Store address
+\end{description}
+%
+\onslide<3>
+\raggedright\bigskip
+The \texttt{SKLDivider} and \texttt{SKLFPDivider} resources are 
+\alert{dummy resources}\\
+\bigskip
+They are used by the LLVM model to represent some complex
+behavior that cannot be represented with a simulation based on simple pipelining.\\
+\bigskip
+Hardware-wise they don't exist.
+\end{overprint}
+
+\end{columns}
+
+\end{frame}
+
+
+\begin{frame}{A closer look at the data}
+We can attempt to \alert{predict the execution time} using the total cycles / iteration count ratio.\\
+\smallskip
+Given that the actual program we are benchmarking executes $80\times10^{6}$ iterations:
+\[
+T_{exc} = \frac{N_{cycles}}{f_{ck}}
+\]
+\[
+N_{cycles} = \frac{\textsf{Total Cycles}}{\textsf{Iterations}}80\times10^{6} \approx \frac{400}{100}80\times10^{6} = 320\times10^{6}
+\]
+\[
+T_{exc} = \frac{320\times10^{6}}{3.6\times10^9 \si{\second}^{-1}} \approx \SI{0.088889}{\second}
+\]
+\end{frame}
+
+
+\begin{frame}{A closer look at the data}
+We measured an execution time of $0.10$ seconds, while LLVM-MCA estimates an execution time of $0.089$ seconds.
+\bigskip
+\begin{itemize}
+\item The prediction by LLVM-MCA is close but not identical to the real value
+\item The discrepancy can be attributed by the fact that LLVM-MCA does not simulate exactly every detail of the CPU, \emph{especially memory behavior}
+	\begin{itemize}
+	\item In fact, if we modify the program to always read from the same array element,
+	the execution time drops to $\approx \SI{0.093175}{\second}$
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{What does this tell us?}
+\large
+\begin{enumerate}
+\item Loop unrolling had a relatively insignificant effect because \emph{the loop condition and branching instructions use different CPU resources than FPU instructions}
+\bigskip
+\item Traditional measurements of performance based on the instruction as the unit of work \emph{are deceptive and useless}
+	\medskip
+	\begin{itemize}
+	\item Corollary: The performance numbers given by many CPU benchmarks are completely bogus and easy to manipulate
+	\item The problem is that not every instruction performs the same amount of work!
+	\end{itemize}
+\end{enumerate}
+\end{frame}
+
