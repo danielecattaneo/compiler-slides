@@ -5,6 +5,7 @@ LLVM_MCA_FLAGS ?=
 SRC := \
   01_add_reduction_v1.c\
   01_add_reduction_v2.c\
+  01_add_reduction_v2b.c\
   01_add_reduction_v3.c\
   01_add_reduction_v4.c\
   01_add_reduction_v5.c\

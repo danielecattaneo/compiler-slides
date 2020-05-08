@@ -1,0 +1,10 @@
+Resource pressure per iteration:
+[0]   [1]   [2]   [3]   [4]   [5]   [6]   [7]   [8]   [9]    
+ -     -    1.10  1.11  0.50  0.50   -    0.89  0.90   -     
+
+Resource pressure by instruction:
+[0]   [1]   [2]   [3]   [4]   [5]   [6]   [7]   [8]   [9]  Instructions:
+ -     -    0.24  0.76  0.50  0.50   -     -     -     -   vaddsd (%rbx,%rax,8), %xmm0, %xmm0
+ -     -    0.04  0.25   -     -     -    0.57  0.14   -   addq $1, %rax
+ -     -     -    0.10   -     -     -    0.32  0.58   -   cmpq $80000000, %rax
+ -     -    0.82   -     -     -     -     -    0.18   -   jne LBB0_2
