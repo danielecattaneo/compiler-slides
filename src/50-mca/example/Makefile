@@ -1,4 +1,4 @@
-LLVM_MCA ?= llvm-mca-mp-9.0
+LLVM_MCA ?= llvm-mca
 CLANG ?= clang
 CFLAGS ?= -O3 -march=native
 LLVM_MCA_FLAGS ?=
