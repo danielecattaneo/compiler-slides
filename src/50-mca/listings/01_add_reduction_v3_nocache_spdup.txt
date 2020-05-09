@@ -1,0 +1,5 @@
+$ ./add_reduction_v3_nocache
+...
+average time taken over 
+100 iterations: 0.014668 s
+$

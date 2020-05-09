@@ -1,0 +1,45 @@
+% !TEX root = main.tex
+
+\subsection{Recap}
+
+
+\begin{frame}{Recap}
+\begin{itemize}
+\item LLVM-MCA analyzes the CPU performance of your machine code quite accurately
+\item \alert{LLVM-MCA does not take into account the overhead of the memory hierarchy}
+\item Analyze the views provided by LLVM-MCA carefully! Do not get tricked by irrelevant metrics.
+\item Improve the code one bottleneck at a time
+\item Perform large improvements first
+\item When you find out that you are overfitting on your target machine, consider stopping
+\medskip
+\item {\footnotesize And it should go without saying, but...}\\
+	{\normalsize\alert{Start with a good algorithm before you even consider using LLVM-MCA!}}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Final Remarks}
+\begin{itemize}
+\item Most of the optimizations we made manually are applied automatically 
+by LLVM when you use the \texttt{-ffast-math} flag
+	\begin{itemize}
+	\item This does not mean the techniques we saw are useless!
+	\item It's just that our example was really simple
+	\end{itemize}
+\medskip
+\item A further optimization that can be made is \alert{vectorization}
+	\begin{itemize}
+	\item Try it at home!
+	\item Example code (alongside with all other examples shown here!):\\
+				\url{https://github.com/danielecattaneo/LLVM-intro/tree/master/src/50-mca/example}
+	\item We can lower the execution time to \SI{0.044824}{\second}
+	\end{itemize}
+\medskip
+\item Not all CPUs are supported by LLVM-MCA!
+	\begin{itemize}
+	\item Check if yours is supported or not
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+

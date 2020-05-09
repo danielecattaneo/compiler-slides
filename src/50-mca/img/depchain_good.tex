@@ -1,0 +1,44 @@
+\begin{tikzpicture}[
+		xscale=.45,yscale=0.7,
+		inp/.style = {->},
+		operation/.style = {circle, draw}
+	]
+	\node (b0) at ( 0,4) {b[0]};
+	\node (b1) at ( 2,4) {b[1]};
+	\node (b2) at ( 4,4) {b[2]};
+	\node (b3) at ( 6,4) {b[3]};
+	\node (b4) at ( 8,4) {b[4]};
+	\node (b5) at (10,4) {b[5]};
+	\node (b6) at (12,4) {b[6]};
+	\node (b7) at (14,4) {b[7]};
+	\node (sumL0I0) [operation] at (1,3) {$+$};
+	\node (sumL0I1) [operation] at (5,3) {$+$};
+	\node (sumL0I2) [operation] at (9,3) {$+$};
+	\node (sumL0I3) [operation] at (13,3) {$+$};
+	\node (sumL1I0) [operation] at (3,2) {$+$};
+	\node (sumL1I1) [operation] at (11,2) {$+$};
+	\node (sumL2I0) [operation] at (7,1) {$+$};
+	\node (sumNext) [operation] at (16,0) {$+$};
+	\node (dotsNextL1I0) at (15,1) {\ldots};
+	\node (dotsNextL1I1) at (17,1) {\ldots};
+	\node (dotsNextNext) at (18.5,0) {\ldots};
+	
+	\path [inp] (b0) edge (sumL0I0);
+	\path [inp] (b1) edge (sumL0I0);
+	\path [inp] (b2) edge (sumL0I1);
+	\path [inp] (b3) edge (sumL0I1);
+	\path [inp] (b4) edge (sumL0I2);
+	\path [inp] (b5) edge (sumL0I2);
+	\path [inp] (b6) edge (sumL0I3);
+	\path [inp] (b7) edge (sumL0I3);
+	\path [inp] (sumL0I0) edge (sumL1I0);
+	\path [inp] (sumL0I1) edge (sumL1I0);
+	\path [inp] (sumL0I2) edge (sumL1I1);
+	\path [inp] (sumL0I3) edge (sumL1I1);
+	\path [inp] (sumL1I0) edge (sumL2I0);
+	\path [inp] (sumL1I1) edge (sumL2I0);
+	\path [inp] (sumL2I0) edge (sumNext);
+	\path [inp] (dotsNextL1I0) edge (sumNext);
+	\path [inp] (dotsNextL1I1) edge (sumNext);
+	\path [inp] (sumNext) edge (dotsNextNext);
+\end{tikzpicture}

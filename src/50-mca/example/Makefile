@@ -7,6 +7,8 @@ SRC := \
   01_add_reduction_v2.c\
   01_add_reduction_v2b.c\
   01_add_reduction_v3.c\
+  01_add_reduction_v3_nocache.c\
+  01_add_reduction_v3b.c\
   01_add_reduction_v4.c\
   01_add_reduction_v5.c\
   02_mtx_mul_v1.c\

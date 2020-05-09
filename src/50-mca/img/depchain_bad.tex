@@ -1,0 +1,26 @@
+\begin{tikzpicture}[
+		xscale=.9,yscale=0.64,
+		inp/.style = {->},
+		operation/.style = {circle, draw}
+	]
+	\node (b0) at (1,1) {buffer[0]};
+	\node (b1) at (2,3) {buffer[1]};
+	\node (b2) at (4,3) {buffer[2]};
+	\node (b3) at (6,3) {buffer[3]};
+	\node (b4) at (8,3) {buffer[4]};
+	\node (sum0) [operation] at (3,1) {$+$};
+	\node (sum1) [operation] at (5,1) {$+$};
+	\node (sum2) [operation] at (7,1) {$+$};
+	\node (sum3) [operation] at (9,1) {$+$};
+	\node (dots) at (10.5,1) {\ldots};
+	
+	\path [inp] (b0) edge (sum0);
+	\path [inp] (b1) edge (sum0);
+	\path [inp] (b2) edge (sum1);
+	\path [inp] (sum0) edge (sum1);
+	\path [inp] (b3) edge (sum2);
+	\path [inp] (sum1) edge (sum2);
+	\path [inp] (b4) edge (sum3);
+	\path [inp] (sum2) edge (sum3);
+	\path [inp] (sum3) edge (dots);
+\end{tikzpicture}

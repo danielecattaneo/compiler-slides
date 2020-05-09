@@ -75,7 +75,7 @@ The perfect cure to this horrible disease is a classic and ever-lasting optimiza
 \begin{frame}{First Performance Improvement}
 Let's run the old and the new modified program side by side to show to the world that I am the best programmer ever!\footnote{All experiments shown here were performed on a Intel Core i5-8259U CPU (Skylake microarchitecture) running at 2.30 GHz (peak 3.60 GHz).}
 \begin{block}{Speedup Speedup Speedup}
-\asminput[\tt\small]{listings/01_add_reduction_v1_vs_v2_spdup.txt}
+\txtinput[\tt\small]{listings/01_add_reduction_v1_vs_v2_spdup.txt}
 \end{block}
 \pause
 \alert{\centering WHAAAAAT!? The improvement is MINIMAL!\\}
@@ -235,7 +235,12 @@ We measured an execution time of $0.10$ seconds, while LLVM-MCA estimates an exe
 \begin{frame}{What does this tell us?}
 \large
 \begin{enumerate}
-\item Loop unrolling had a relatively insignificant effect because \emph{the loop condition and branching instructions use different CPU resources than FPU instructions}
+\item We have to always pay attention to \alert{which} resources get used, not just how many are used
+	\medskip
+	\begin{itemize}
+	\item Corollary: the loop condition usually does not interfere with the body of the loop
+	\item We can mark just the body of the loop without too much worry!
+	\end{itemize}
 \bigskip
 \item Traditional measurements of performance based on the instruction as the unit of work \emph{are deceptive and useless}
 	\medskip

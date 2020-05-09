@@ -1,0 +1,10 @@
+Cycles with backend pressure increase [ 90.57% ]
+Throughput Bottlenecks: 
+  Resource Pressure       [ 90.57% ]
+  - SKLPort0  [ 43.63% ]
+  - SKLPort1  [ 43.63% ]
+  - SKLPort2  [ 90.57% ]
+  - SKLPort3  [ 90.57% ]
+  Data Dependencies:      [ 2.36% ]
+  - Register Dependencies [ 2.36% ]
+  - Memory Dependencies   [ 0.00% ]

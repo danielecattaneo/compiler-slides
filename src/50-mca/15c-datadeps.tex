@@ -3,3 +3,195 @@
 \subsection{Analyzing Data Dependencies}
 
 
+\begin{frame}{Next optimization!}
+Before we got sidetracked by the loop unrolling stuff, LLVM-MCA told us there was a \alert{data dependency} bottleneck
+\begin{block}{Bottleneck View}
+\txtinput[\tt\fontsize{5.7pt}{6pt}\selectfont]{listings/01_add_reduction_v1_p04.txt}
+\end{block}
+\end{frame}
+
+
+\begin{frame}{Next optimization!}
+The problem is that every sum we perform depends on the result of the previous one.
+\bigskip
+\begin{block}{Data Dependency Graph}
+\begin{center}
+\input{img/depchain_bad}
+\medskip
+\[
+\textsf{result} = \left(\left(\left(\textsf{buffer[0]} + \textsf{buffer[1]}\right) + \textsf{buffer[2]}\right) + \textsf{buffer[3]}\right) + \ldots
+\]
+\end{center}
+\end{block}
+\end{frame}
+
+
+\begin{frame}{Next optimization!}
+If we exploit the associativity of addition, we can shorten the depth of our dependency chain!
+\medskip
+\begin{block}{Data Dependency Graph}
+\small
+\begin{center}
+\input{img/depchain_good}
+\end{center}
+\[
+\textsf{result} = \left(\left(\textsf{b[0]} + \textsf{b[1]}\right) + \left(\textsf{b[2]} + \textsf{b[3]}\right)\right) + \left(\left(\textsf{b[4]} + \textsf{b[5]}\right) + \left(\textsf{b[6]} + \textsf{b[7]}\right)\right) + \ldots
+\]
+\end{block}
+\end{frame}
+
+
+\begin{frame}{Next optimization!}
+\begin{block}{Sum Reduction With Less Dependencies}
+\cinput{listings/01_add_reduction_v3.c}
+\end{block}
+\end{frame}
+
+
+\begin{frame}{Next optimization!}
+\begin{columns}[onlytextwidth]
+
+\column{0.7\textwidth}
+\begin{block}{Sum Reduction With Less Dependencies}
+\asminput[\tt\footnotesize]{listings/01_add_reduction_v3.s}
+\end{block}
+
+\column{0.25\textwidth}
+\centering
+LLVM is already helping the CPU scheduler by moving the access to \texttt{buffer[i+2]} before the access to \texttt{buffer[i+1]}!
+
+\end{columns}
+\end{frame}
+
+
+\begin{frame}{What LLVM-MCA says...}
+\begin{columns}
+
+\column{0.45\textwidth}
+\begin{block}{Before}
+\asminput[\tt\small]{listings/01_add_reduction_v2_p01.txt}
+\end{block}
+
+\column{0.45\textwidth}
+\begin{block}{After}
+\asminput[\tt\small]{listings/01_add_reduction_v3_p01.txt}
+\end{block}
+
+\end{columns}
+\medskip
+The amount of work per iteration has stayed the same, and the cycle count is massively reduced!
+\smallskip
+From these figures, we expect the computation to complete in just $\approx\SI{0.01}{\second}$
+instead than $\approx\SI{0.1}{\second}$!
+\end{frame}
+
+
+\begin{frame}{What the reality of facts says}
+\begin{block}{Let's run it!}
+\txtinput[\tt\small]{listings/01_add_reduction_v2_vs_v3_spdup.txt}
+\end{block}
+\medskip
+\begin{description}[Good:]
+\item[Good:] There is a huge improvement indeed!
+\item[Bad:] The improvement is \alert{much less} than what we expected.
+\end{description}
+\end{frame}
+
+
+\begin{frame}{The impact of memory accesses}
+\begin{columns}
+
+\column{0.55\textwidth}
+\begin{block}{add\_reduction\_v3\_nocache.c}
+\cinput[\tt\scriptsize]{listings/01_add_reduction_v3_nocache.c}
+\end{block}
+\begin{block}{Execution Time}
+\txtinput[\tt\scriptsize]{listings/01_add_reduction_v3_nocache_spdup.txt}
+\end{block}
+
+\column{0.45\textwidth}
+\begin{itemize}
+\item Experiment: let's reduce the impact of memory accesses as much as possible
+\item LLVM-MCA's analysis is the same even for the modified program
+\item The real execution time now matches LLVM-MCA's prediction!
+\end{itemize}
+
+\end{columns}
+\end{frame}
+
+
+\begin{frame}{The impact of memory accesses}
+\large
+\begin{itemize}
+\item Memory accesses are \alert{really slow}
+\item Once the code is reasonably optimized, it will spend \alert{more time waiting for data to arrive} than performing actual calculations
+\bigskip
+\normalsize
+\item This doesn't mean that, when it reaches that stage, the code cannot be optimized further.
+\item Simply, any improvement from now on will be \alert{marginal}, especially for an algorithm like this one where there is not much we can do to improve memory access patterns.
+\bigskip
+\footnotesize
+\item To solve the problem of memory access cost, some computer scientists have theorized computing systems where many small CPUs are embedded inside memory chips (\cite{MUTLU201928}).
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{What can we do}
+\begin{block}{Bottleneck View}
+\txtinput[\tt\small]{listings/01_add_reduction_v3_p04.txt}
+\end{block}
+\begin{itemize}
+\item We no longer have memory dependencies
+\item Now it seems that we have excessive resource pressure
+	\begin{itemize}
+	\item \texttt{SKLPort2} and \texttt{SKLPort3} are used by \alert{load instructions}
+	\item It seems we are issuing more loads than the CPU can perform 
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{What can we do}
+\begin{itemize}
+\item Let's scale back the ratio between memory accesses and add instructions a little bit...
+\item Note that we are actually \alert{lenghtening} the chain of data dependencies by doing this!
+\end{itemize}
+
+\begin{block}{Sum Reduction V3b}
+\cinput{listings/01_add_reduction_v3b.c}
+\end{block}
+\end{frame}
+
+
+\begin{frame}{Results}
+\begin{block}{Sum Reduction V3b}
+\txtinput{listings/01_add_reduction_v3_vs_v3b_spdup.txt}
+\end{block}
+\begin{itemize}
+\item The tradeoff was worthwhile! We squeezed out some residual speedup from the code.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{In conclusion...}
+We just made a piece of code \alert{worse} wrt. data dependencies... and there was a speedup!
+\smallskip
+\large
+\begin{itemize}
+\item You must always strike the right balance between different contrasting behaviors
+	\begin{itemize}
+	\item Data dependencies vs. resource usage
+	\item Loop overhead vs. code cache and branch prediction
+	\item Memory access patterns vs. algorithmic complexity
+	\end{itemize}
+\smallskip
+\item You cannot reach the highest possible computation speed without machine-specific optimizations
+	\begin{itemize}
+	\item On a CPU architecture with more than 2 load ports, the situation is reversed and the code with 4 additions per cycle is now slower
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+
+
