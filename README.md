@@ -1,9 +1,7 @@
-# LLVM-intro
-Introduction to LLVM compiler framework
+# compiler-slides
 
-## About
-This repository holds the source files for course material I used in a few
-talks introducing the LLVM compiler framework.
+Here you can find several slide decks about compilers that were made for
+the COT course at Politecnico di Milano.
 
-These slides are strongly based on material written by E. Speziale, M. Scandale,
+Some of these slides are based on material written by E. Speziale, M. Scandale,
 and S. Cherubin (https://github.com/skeru/LLVM-intro).
