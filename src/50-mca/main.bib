@@ -2,12 +2,67 @@
 %% http://bibdesk.sourceforge.net/
 
 
-%% Created for Daniele Cattaneo at 2020-05-09 9:42:43 PM +0200 
+%% Created for Daniele Cattaneo at 2020-05-10 2:16:12 AM +0200 
 
 
 %% Saved with string encoding Unicode (UTF-8) 
 
 
+
+@misc{mca-rfc,
+	Author = {Andrea di Biagio},
+	Date-Added = {2020-05-10 2:05:35 AM +0200},
+	Date-Modified = {2020-05-10 2:14:31 AM +0200},
+	Howpublished = {\url{https://lists.llvm.org/pipermail/llvm-dev/2018-March/121490.html}},
+	Title = {llvm-mca: a static performance analysis tool},
+	Urldate = {2018-03-01}}
+
+@misc{mca-docs,
+	Author = {{The LLVM Project}},
+	Date-Added = {2020-05-10 2:03:22 AM +0200},
+	Date-Modified = {2020-05-10 2:14:18 AM +0200},
+	Howpublished = {\url{https://llvm.org/docs/CommandGuide/llvm-mca.html}},
+	Title = {llvm-mca - LLVM Machine Code Analyzer}}
+
+@book{fog-insttbl,
+	Author = {Agner Fog},
+	Date-Added = {2020-05-10 2:02:41 AM +0200},
+	Date-Modified = {2020-05-10 2:15:37 AM +0200},
+	Lastchecked = {2020-05-09},
+	Publisher = {Technical University of Denmark},
+	Title = {Instruction tables},
+	Url = {https://www.agner.org/optimize/instruction_tables.pdf},
+	Year = {2020}}
+
+@book{fog-optasm,
+	Author = {Agner Fog},
+	Date-Added = {2020-05-10 2:02:06 AM +0200},
+	Date-Modified = {2020-05-10 2:16:02 AM +0200},
+	Lastchecked = {2020-05-09},
+	Publisher = {Technical University of Denmark},
+	Title = {Optimizing subroutines in assembly language},
+	Url = {https://www.agner.org/optimize/optimizing_assembly.pdf},
+	Year = {2020}}
+
+@book{fog-optim,
+	Author = {Agner Fog},
+	Date-Added = {2020-05-10 2:01:26 AM +0200},
+	Date-Modified = {2020-05-10 2:15:53 AM +0200},
+	Lastchecked = {2020-05-09},
+	Publisher = {Technical University of Denmark},
+	Title = {Optimizing software in C++},
+	Url = {https://www.agner.org/optimize/optimizing_cpp.pdf},
+	Year = {2020}}
+
+@book{fog-uarch,
+	Author = {Agner Fog},
+	Date-Added = {2020-05-10 1:58:55 AM +0200},
+	Date-Modified = {2020-05-10 2:16:12 AM +0200},
+	Lastchecked = {2020-05-09},
+	Publisher = {Technical University of Denmark},
+	Title = {The microarchitecture of Intel, AMD and VIA CPUs},
+	Url = {https://www.agner.org/optimize/microarchitecture.pdf},
+	Year = {2020}}
 
 @article{MUTLU201928,
 	Abstract = {Today's systems are overwhelmingly designed to move data to computation. This design choice goes directly against at least three key trends in systems that cause performance, scalability and energy bottlenecks: (1) data access from memory is already a key bottleneck as applications become more data-intensive and memory bandwidth and energy do not scale well, (2) energy consumption is a key constraint in especially mobile and server systems, (3) data movement is very expensive in terms of bandwidth, energy and latency, much more so than computation. These trends are especially severely-felt in the data-intensive server and energy-constrained mobile systems of today. At the same time, conventional memory technology is facing many scaling challenges in terms of reliability, energy, and performance. As a result, memory system architects are open to organizing memory in different ways and making it more intelligent, at the expense of higher cost. The emergence of 3D-stacked memory plus logic as well as the adoption of error correcting codes inside DRAM chips, and the necessity for designing new solutions to serious reliability and security issues, such as the RowHammer phenomenon, are an evidence of this trend. In this work, we discuss some recent research that aims to practically enable computation close to data. After motivating trends in applications as well as technology, we discuss at least two promising directions for processing-in-memory (PIM): (1) performing massively-parallel bulk operations in memory by exploiting the analog operational properties of DRAM, with low-cost changes, (2) exploiting the logic layer in 3D-stacked memory technology to accelerate important data-intensive applications. In both approaches, we describe and tackle relevant cross-layer research, design, and adoption challenges in devices, architecture, systems, and programming models. Our focus is on the development of in-memory processing designs that can be adopted in real computing platforms at low cost.},

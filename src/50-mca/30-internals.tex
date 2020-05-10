@@ -3,10 +3,65 @@
 \section{Internals of LLVM-MCA}
 
 
-\begin{frame}{TODO}
-*) MCSchedule.h \& MCSchedModel\\
-*) From where the MCSchedModel is read\\
-*) Latency / Throughput / Stages or Exec. Ports \\
-*) How it is used by MCA\\
-*) Example and comparison to real machine\\
+\let\OldFootnoterule\footnoterule
+\renewcommand*\footnoterule{}
+
+\begin{frame}{Quick look at how LLVM-MCA works}
+There are two main parts to LLVM-MCA:\\
+\smallskip
+\begin{itemize}
+\item The simulation code
+	\begin{itemize}
+	\item Frontend: \texttt{llvm/tools/llvm-mca}
+	\item Backend: \texttt{llvm/lib/MCA}
+	\item All simulated machines use \emph{the same model}, just with different parameters
+	\item You can include \texttt{llvm/MCA/Context.h} and link with LLVM to use LLVM-MCA as a library!
+	\end{itemize}
+\smallskip
+\item The machine models
+	\begin{itemize}
+	\item \texttt{llvm/lib/Target/XXX/XXXScheduleYYY.td}\\(naming convention may vary)
+		\begin{description}[XXXX]
+		\item[XXX] Platform (X86, ARM, PowerPC...)
+		\item[YYY] Microarchitecture (Skylake, [Cortex] A57, G5)
+		\end{description}
+	\item Determines instruction latency, reservation stations available, issue width...
+	\end{itemize}
+\end{itemize}
+
+\footnotetext[1]{\tiny For those who got their BSc at PoliMi: \alert{don't git-blame llvm-mca}}
 \end{frame}
+
+\let\footnoterule\OldFootnoterule
+
+
+\begin{frame}{What's a .td file?}
+LLVM scheduling models are defined in \alert{.td} files\\
+\medskip
+\begin{itemize}
+\item \texttt{.td} stands for \alert{Tablegen Definition}
+\item It's a \alert{standard syntax} of the LLVM project for \alert{domain-specific languages}
+\item These DSLs are compiled by a tool named \texttt{llvm-tblgen}
+\item The usual compilation output for these DSLs are \alert{data structures} (hence, \alert{tables}) containing parameters used by LLVM at runtime
+\medskip
+\item More info: \url{https://llvm.org/docs/TableGen/index.html}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Machine Scheduler Definitions}
+\begin{itemize}
+\item Root class of the scheduling model: \cppinline{llvm::MCSchedModel}
+	\begin{itemize}
+	\item See \texttt{llvm/MC/MCSchedule.h}
+	\end{itemize}
+\item The actual information is contained in \cppinline{llvm::SchedMachineModel}
+	subclasses auto-generated from the \texttt{.td} files
+
+\medskip
+\item More info in slides from previous LLVM developer meetings: \\\smallskip
+\url{https://llvm.org/devmtg/2014-10/Slides/Estes-MISchedulerTutorial.pdf}\\\smallskip
+\url{https://llvm.org/devmtg/2016-09/slides/Absar-SchedulingInOrder.pdf}
+\end{itemize}
+\end{frame}
+
