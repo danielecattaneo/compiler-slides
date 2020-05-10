@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 LLVM_MCA ?= llvm-mca
 CLANG ?= clang
 CFLAGS ?= -O3 -march=native
