@@ -11,3 +11,131 @@
 \item Presentation of topics
 \end{itemize}
 \end{frame}
+
+
+\begin{frame}{A normal day in a programmer's life}
+\begin{itemize}
+\item Imagine you are debugging a program and you can't find a bug...
+\item You decide to single-step it in a \alert{debugger}
+\item You get:
+	\begin{itemize}
+	\item Evaluation of variables and expressions
+	\item Examination of stack frames
+	\item Current instruction pointer shown in the source code
+	\end{itemize}
+\pause
+\item \textbf{How does it all work?}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Inside the debugger}
+Debuggers consist of 2 parts:
+\begin{enumerate}
+\item A \alert{monitor} component
+	\begin{itemize}
+	\normalsize
+	\item Implements controlling the program
+	\item Start, Stop, Restart
+	\item \alert{Breakpoints}, Single-Stepping...
+	\item Platform-dependent and operating-system dependent
+	\end{itemize}
+\item An \alert{analysis} component
+	\begin{itemize}
+	\normalsize
+	\item Collects information about where things are in the program
+	\item Memory layout, data types...
+	\item Memory address for each source code line
+	\end{itemize}
+\end{enumerate}
+\end{frame}
+
+
+\begin{frame}{Inside the debugger}
+\begin{center}
+The analysis components needs to get the information from somewhere...\\
+\bigskip
+And it cannot simply reimplement the compiler inside itself!\\
+\medskip
+The user may have compiled their code however they liked, reversing the transformations
+done by the compiler is next to impossible.\\
+\bigskip
+\large
+We need a \alert{data structure} that tells us where things are inside the compiled
+executable!
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Inside the debugger}
+This data structure should be:
+\begin{itemize}
+\item Extensible
+\item Language-independent
+\item Compact
+\item Self-contained within the executable, or optionally delivered separately
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Inside the debugger}
+\begin{center}
+We are talking about the \alert{debugging information}\\
+\smallskip
+Basically it's the data that the compiler adds when you specify the \texttt{-g} flag\\
+\bigskip
+\large
+The specification that describes this data structure is called \alert{DWARF}.\\
+\footnotesize
+\smallskip
+``Debugging With Attributed Record Formats''\\
+Yeaaah we all believe that...
+\end{center}
+\end{frame}
+
+
+\begin{frame}{DWARF}
+\begin{itemize}
+\item Originally developed at Bell Labs together with the ELF object file format in 1988
+\item Standardized in 1992, but takes its current form in 1992 (DWARF 2).
+	\begin{itemize}
+	\item Adoption is not istantaneous, DWARF coexists with a simpler format named ``stabs''
+	\end{itemize}
+\item Becomes an open standard roughly at the turn of the century, adoption continues to grow
+\item Nowadays DWARF is the most used debugging format
+	\begin{itemize}
+	\item All Unixes use DWARF as the standard debugging information format
+	\item Open-source compiler toolchains (GDB, LLVM) use DWARF in embedded development
+	\item DWARF is stored in standard sections in the executable, and it is loaded 
+		alongside the code: even OSes or binary formats
+		not explicitly designed for it can support its usage
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Other debugging formats}
+\begin{itemize}
+\item Windows uses the CodeView debugging format. It is usually stored in separate files (\texttt{.pdb} extension)
+\item ``stabs'' is still available for use in most Unixes but nobody uses it anymore
+\item Other debugging formats exist but are either outdated or nobody uses them
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Up next...}
+\begin{enumerate}
+\item We will see \alert{how DWARF models the structure of an object file} according to its internal model
+	\begin{itemize}
+	\item Where data is stored
+	\item Where the code is stored
+	\item Other miscellaneous information
+	\end{itemize}
+\item Then we will briefly go over how \alert{DWARF serializes this information inside the object files}
+\end{enumerate}
+\bigskip
+\centering Let's get started!\\
+
+\end{frame}
+
+
