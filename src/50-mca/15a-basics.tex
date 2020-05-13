@@ -249,10 +249,10 @@ In the \emph{middle} there is a \alert{timing graph} showing in which stage the 
 \txtinput[\tt\fontsize{6.7pt}{8pt}\selectfont]{listings/01_add_reduction_v1_p02.txt}
 \end{block}
 \begin{description}
-\item[\texttt{D}] The instruction is \alert{dispatched}\\(allocated to a reservation station)
+\item[\texttt{D}] The instruction is \alert{dispatched}.\\Reservation station and virtual register allocated.
 \item[\texttt{e}] The instruction is being \alert{executed}
-\item[\texttt{E}] The instruction \alert{finishes execution}, the result is ready
-\item[\texttt{R}] The instruction is \alert{retired}\\(the reservation station is freed)
+\item[\texttt{E}] The instruction \alert{finishes execution}.\\The result is ready and the reservation station is freed
+\item[\texttt{R}] The instruction is \alert{retired}\\The virtual register is freed.
 \end{description}
 \end{frame}
 
