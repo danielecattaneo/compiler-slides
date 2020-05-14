@@ -21,8 +21,8 @@ VERSION := $(shell \
 LATEXPARAM := "\def\VERSION{$(VERSION)} \def\DATE{$(DATE)} \input{$(MAIN)}"
 
 
-.PHONY: all
-all: $(OUTPUT)
+.PHONY: com-all
+com-all: $(MAIN).pdf
 
 .PHONY: $(MAIN).pdf
 $(MAIN).pdf:
@@ -44,7 +44,7 @@ $(MAIN).pdf:
 	  echo '\033[32mXRefs are satisfied\033[39m'; \
 	fi
 
-pub:	$(MAIN).pdf
+pdf-pub:	$(MAIN).pdf
 	cp -f $(MAIN).pdf $(OUTPUT)
 
 .PHONY: view
