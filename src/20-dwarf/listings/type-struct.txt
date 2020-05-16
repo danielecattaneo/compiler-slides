@@ -1,0 +1,24 @@
+typedef struct {
+  int struct_field_1;
+  float struct_field_2;
+  int struct_field_3[10];
+} some_complex_t;
+
+DW_TAG_structure_type
+  DW_AT_byte_size (0x30)
+  DW_AT_sibling (0x0000011a)
+
+  DW_TAG_member
+    DW_AT_name  ("struct_field_1")
+    DW_AT_type  (0x00000042 "int")
+    DW_AT_data_member_location  (0x00)
+
+  DW_TAG_member
+    DW_AT_name  ("struct_field_2")
+    DW_AT_type  (0x0000005e "float")
+    DW_AT_data_member_location  (0x04)
+
+  DW_TAG_member
+    DW_AT_name  ("struct_field_3")
+    DW_AT_type  (0x00000065 "int[10]")
+    DW_AT_data_member_location  (0x08)

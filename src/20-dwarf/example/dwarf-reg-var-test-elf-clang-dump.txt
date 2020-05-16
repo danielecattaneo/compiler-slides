@@ -1,0 +1,125 @@
+dwarf-reg-var-test-elf-clang.o:	file format ELF64-x86-64
+
+.debug_info contents:
+0x00000000: Compile Unit: length = 0x000000d8 version = 0x0004 abbr_offset = 0x0000 addr_size = 0x08 (next unit at 0x000000dc)
+
+0x0000000b: DW_TAG_compile_unit
+              DW_AT_producer	("clang version 9.0.0-2~ubuntu18.04.2 (tags/RELEASE_900/final)")
+              DW_AT_language	(DW_LANG_C99)
+              DW_AT_name	("dwarf-reg-var-test.c")
+              DW_AT_stmt_list	(0x00000000)
+              DW_AT_comp_dir	("/media/sf_example")
+              DW_AT_low_pc	(0x0000000000000000)
+              DW_AT_high_pc	(0x000000000000004b)
+
+0x0000002a:   DW_TAG_subprogram
+                DW_AT_low_pc	(0x0000000000000000)
+                DW_AT_high_pc	(0x000000000000004b)
+                DW_AT_frame_base	(DW_OP_reg7 RSP)
+                DW_AT_name	("main")
+                DW_AT_decl_file	("/media/sf_example/dwarf-reg-var-test.c")
+                DW_AT_decl_line	(6)
+                DW_AT_prototyped	(true)
+                DW_AT_type	(0x000000ab "int")
+                DW_AT_external	(true)
+
+0x00000043:     DW_TAG_formal_parameter
+                  DW_AT_location	(0x00000000
+                     [0x0000000000000000,  0x0000000000000009): DW_OP_reg5 RDI)
+                  DW_AT_name	("argc")
+                  DW_AT_decl_file	("/media/sf_example/dwarf-reg-var-test.c")
+                  DW_AT_decl_line	(6)
+                  DW_AT_type	(0x000000ab "int")
+
+0x00000052:     DW_TAG_formal_parameter
+                  DW_AT_location	(0x00000023
+                     [0x0000000000000000,  0x000000000000000e): DW_OP_reg4 RSI)
+                  DW_AT_name	("argv")
+                  DW_AT_decl_file	("/media/sf_example/dwarf-reg-var-test.c")
+                  DW_AT_decl_line	(6)
+                  DW_AT_type	(0x000000c5 "char**")
+
+0x00000061:     DW_TAG_variable
+                  DW_AT_location	(DW_OP_fbreg +16)
+                  DW_AT_name	("buf")
+                  DW_AT_decl_file	("/media/sf_example/dwarf-reg-var-test.c")
+                  DW_AT_decl_line	(8)
+                  DW_AT_type	(0x000000b2 "int[10]")
+
+0x0000006f:     DW_TAG_variable
+                  DW_AT_location	(0x00000046
+                     [0x0000000000000009,  0x000000000000000e): DW_OP_breg7 RSP+16, DW_OP_stack_value)
+                  DW_AT_name	("p")
+                  DW_AT_decl_file	("/media/sf_example/dwarf-reg-var-test.c")
+                  DW_AT_decl_line	(11)
+                  DW_AT_type	(0x000000d6 "int*")
+
+0x0000007e:     DW_TAG_variable
+                  DW_AT_location	(0x00000162
+                     [0x000000000000000e,  0x0000000000000016): DW_OP_consts +0, DW_OP_stack_value
+                     [0x0000000000000016,  0x0000000000000044): DW_OP_reg0 RAX)
+                  DW_AT_name	("a")
+                  DW_AT_decl_file	("/media/sf_example/dwarf-reg-var-test.c")
+                  DW_AT_decl_line	(12)
+                  DW_AT_type	(0x000000ab "int")
+
+0x0000008d:     DW_TAG_lexical_block
+                  DW_AT_low_pc	(0x000000000000000e)
+                  DW_AT_high_pc	(0x000000000000003f)
+
+0x0000009a:       DW_TAG_variable
+                    DW_AT_location	(0x0000006b
+                       [0x000000000000000e,  0x0000000000000012): DW_OP_consts +0, DW_OP_stack_value
+                       [0x0000000000000012,  0x0000000000000016): DW_OP_consts +1, DW_OP_stack_value
+                       [0x0000000000000016,  0x000000000000001a): DW_OP_consts +2, DW_OP_stack_value
+                       [0x000000000000001a,  0x000000000000001e): DW_OP_consts +3, DW_OP_stack_value
+                       [0x000000000000001e,  0x0000000000000022): DW_OP_consts +4, DW_OP_stack_value
+                       [0x0000000000000022,  0x0000000000000026): DW_OP_consts +5, DW_OP_stack_value
+                       [0x0000000000000026,  0x000000000000002a): DW_OP_consts +6, DW_OP_stack_value
+                       [0x000000000000002a,  0x000000000000002e): DW_OP_consts +7, DW_OP_stack_value
+                       [0x000000000000002e,  0x0000000000000032): DW_OP_consts +8, DW_OP_stack_value
+                       [0x0000000000000032,  0x0000000000000036): DW_OP_consts +9, DW_OP_stack_value
+                       [0x0000000000000036,  0x000000000000004b): DW_OP_consts +10, DW_OP_stack_value)
+                    DW_AT_name	("i")
+                    DW_AT_decl_file	("/media/sf_example/dwarf-reg-var-test.c")
+                    DW_AT_decl_line	(13)
+                    DW_AT_type	(0x000000ab "int")
+
+0x000000a9:       NULL
+
+0x000000aa:     NULL
+
+0x000000ab:   DW_TAG_base_type
+                DW_AT_name	("int")
+                DW_AT_encoding	(DW_ATE_signed)
+                DW_AT_byte_size	(0x04)
+
+0x000000b2:   DW_TAG_array_type
+                DW_AT_type	(0x000000ab "int")
+
+0x000000b7:     DW_TAG_subrange_type
+                  DW_AT_type	(0x000000be "__ARRAY_SIZE_TYPE__")
+                  DW_AT_count	(0x0a)
+
+0x000000bd:     NULL
+
+0x000000be:   DW_TAG_base_type
+                DW_AT_name	("__ARRAY_SIZE_TYPE__")
+                DW_AT_byte_size	(0x08)
+                DW_AT_encoding	(DW_ATE_unsigned)
+
+0x000000c5:   DW_TAG_pointer_type
+                DW_AT_type	(0x000000ca "char*")
+
+0x000000ca:   DW_TAG_pointer_type
+                DW_AT_type	(0x000000cf "char")
+
+0x000000cf:   DW_TAG_base_type
+                DW_AT_name	("char")
+                DW_AT_encoding	(DW_ATE_signed_char)
+                DW_AT_byte_size	(0x01)
+
+0x000000d6:   DW_TAG_pointer_type
+                DW_AT_type	(0x000000ab "int")
+
+0x000000db:   NULL

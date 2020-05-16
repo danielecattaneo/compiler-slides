@@ -10,3 +10,186 @@
 \item discussion of DIEs for the above structs
 \end{itemize}
 \end{frame}
+
+
+\begin{frame}{Describing Data}
+\begin{center}
+A debugger like \texttt{gdb} is capable of \alert{evaluating expressions}.\\
+\medskip
+To do that, the debugger must be able to resolve each symbol to its current memory location,
+in order to read its value.\\
+\bigskip
+\large
+This is not as simple as it sounds!
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Where is my data?}
+\begin{itemize}
+\item Programming language symbols $\ne$ symbols in executable!
+\medskip
+	\begin{itemize}
+	\normalsize
+	\item Even though ELF already includes symbol names for several objects, they are meant for the \alert{linker}, and are not useful to the debugger!
+	\item Names might have changed (some platform prepend an underscore to all symbol names)
+	\item \texttt{static} globals do not have a symbol name
+	\item Stack allocated variables are not symbolicated at all (the linker does not care about them)
+	\medskip
+	\item[$\Rightarrow$] DWARF must contain additional symbolication info!
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Where is my data?}
+\begin{itemize}
+\item The debugger does not have any intrinsic knowledge of the data types being used
+\medskip
+	\begin{itemize}
+	\normalsize
+	\item Obvious example: custom \texttt{struct}s
+	\item Non-obvious examples: floating point formats, big-endian vs. little-endian ints
+	\medskip
+	\item[$\Rightarrow$] DWARF must describe in detail all data types!
+	\end{itemize}
+\medskip
+\item A variable associated to a symbol may be moved to \alert{different locations} during the execution of the program!
+\medskip
+	\begin{itemize}
+	\normalsize
+	\item A frequently-used variable may be moved from the stack to a register, and then back to the stack
+	\medskip
+	\item[$\Rightarrow$] Each variable location must be relative to a certain region of code!
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Data Types in DWARF}
+To support all this, DWARF uses specific kinds of DIE:\\
+\medskip
+\begin{tabular}{ll}
+\texttt{DW\_TAG\_base\_type} & A base type (int, char, float...) \\
+\texttt{DW\_TAG\_unspecified\_type} & An unknown type (void) \\
+\texttt{DW\_TAG\_typedef} & A renamed type \\
+\texttt{DW\_TAG\_pointer\_type} & A pointer to another type \\
+\texttt{DW\_TAG\_array\_type} & An array \\
+\texttt{DW\_TAG\_structure} & A structure \\
+\texttt{DW\_TAG\_union} & An union \\
+... & ...\\
+\end{tabular}\\
+\bigskip
+Let's look at some examples...\\
+\end{frame}
+
+
+\begin{frame}{Data Types in DWARF}
+\begin{columns}
+
+\column{0.5\textwidth}
+\begin{block}{Integer scalar}
+\txtinput[\tt\scriptsize]{listings/type-int.txt}
+\end{block}
+\begin{block}{Integer pointer}
+\txtinput[\tt\scriptsize]{listings/type-ptr.txt}
+\end{block}
+
+\column{0.5\textwidth}
+\begin{block}{Integer array}
+\txtinput[\tt\scriptsize]{listings/type-array.txt}
+\end{block}
+
+\end{columns}
+\end{frame}
+
+
+\begin{frame}{Data Types in DWARF}
+\begin{centering}
+Additional attributes (\texttt{volatile}, \texttt{const}...)\\
+are represented by separate types\\
+\medskip
+These separate types always point to the base type\\
+(no parent-child relationships)\\
+\end{centering}
+\medskip
+\begin{block}{Constant integers}
+\txtinput[\tt\small]{listings/type-const-int.txt}
+\end{block}
+\end{frame}
+
+
+\begin{frame}{Variables in DWARF}
+As opposed to types, \alert{variables} \& co. are represented by just 3 DIE classes:\\
+\medskip
+\begin{tabular}{ l l }
+\texttt{DW\_TAG\_variable} & A variable \\
+\texttt{DW\_TAG\_formal\_parameter} & A function parameter \\
+	& (i.e. inside the function) \\
+\texttt{DW\_TAG\_constant} & A constant \\
+\end{tabular}\\
+\bigskip
+Conceptually, there's nothing special here as well...
+\end{frame}
+
+
+\begin{frame}{Variables in DWARF}
+\begin{columns}
+
+\column{0.5\textwidth}
+\begin{block}{Global integer scalar}
+\txtinput[\tt\scriptsize]{listings/var-g-int.txt}
+\end{block}
+\begin{block}{Local integer scalar}
+\txtinput[\tt\scriptsize]{listings/var-l-int.txt}
+\end{block}
+
+\column{0.5\textwidth}
+\begin{itemize}
+\item Apart from the obvious \texttt{name} and \texttt{type} attributes,
+the \texttt{external} and \texttt{location} attributes appeared
+\item \texttt{external} specifies if the symbol is visible from outside the compilation unit
+\item \texttt{\textbf{location}} specifies where the data is located using a \alert{DWARF expression}
+\end{itemize}
+
+\end{columns}
+\end{frame}
+
+
+\begin{frame}{DWARF expressions}
+\begin{itemize}
+\item DWARF expressions are composed of \alert{sequences of commands}
+\item They are interpreted by a simple \alert{stack-based evaluator}
+\smallskip
+\item Commands can optionally take parameters, use \alert{prefix notation}
+\item There are commands for branches, function calls...
+\item The values in the evaluator are either \alert{void pointers} or \alert{base types} supported by the target machine
+\item All results of commands are pushed on top of the stack
+\smallskip
+\item Commands are evaluated in the order they appear (bar jumps / calls)
+\item It's a mini assembly language!
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{DWARF expressions}
+DWARF expressions are powerful, but this power is seldom used or needed.\\
+\smallskip
+Most used commands:\\
+\medskip
+\begin{tabular}{ l l }
+\texttt{DW\_OP\_fbreg \textit{x}} & The value of the current frame pointer plus \textit{x} \\
+\texttt{DW\_OP\_reg\textit{n}} & The location of register \textit{n} \\
+& (0 to 31, represented in an opaque encoding) \\
+\texttt{DW\_OP\_addr \textit{x}} & The absolute address \textit{x} \\
+\end{tabular}\\
+\bigskip
+\begin{center}
+Remember: the DWARF data sections are\\\emph{linked together with the rest of the program}\\
+$\Downarrow$\\
+Any address that appears in them can be fixed up\\by a static or a dynamic linker!
+\end{center}
+\end{frame}
+
+
+

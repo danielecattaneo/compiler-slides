@@ -1,0 +1,6 @@
+int int_local;
+
+DW_TAG_variable
+  DW_AT_name  ("int_local")
+  DW_AT_type  (0x00000042 "int")
+  DW_AT_location  (DW_OP_fbreg -28)

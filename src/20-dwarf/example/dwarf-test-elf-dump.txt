@@ -1,0 +1,277 @@
+dwarf-test-elf.o:	file format ELF64-x86-64
+
+.debug_info contents:
+0x00000000: Compile Unit: length = 0x0000021b version = 0x0004 abbr_offset = 0x0000 addr_size = 0x08 (next unit at 0x0000021f)
+
+0x0000000b: DW_TAG_compile_unit
+              DW_AT_producer	("GNU C11 7.5.0 -mtune=generic -march=x86-64 -g -O1 -fstack-protector-strong")
+              DW_AT_language	(DW_LANG_C99)
+              DW_AT_name	("dwarf-test.c")
+              DW_AT_comp_dir	("/media/sf_example")
+              DW_AT_low_pc	(0x0000000000000000)
+              DW_AT_high_pc	(0x000000000000003d)
+              DW_AT_stmt_list	(0x00000000)
+
+0x0000002d:   DW_TAG_variable
+                DW_AT_name	("int_global")
+                DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                DW_AT_decl_line	(1)
+                DW_AT_type	(0x00000042 "int")
+                DW_AT_external	(true)
+                DW_AT_location	(DW_OP_addr 0x0)
+
+0x00000042:   DW_TAG_base_type
+                DW_AT_byte_size	(0x04)
+                DW_AT_encoding	(DW_ATE_signed)
+                DW_AT_name	("int")
+
+0x00000049:   DW_TAG_variable
+                DW_AT_name	("float_global")
+                DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                DW_AT_decl_line	(2)
+                DW_AT_type	(0x0000005e "float")
+                DW_AT_external	(true)
+                DW_AT_location	(DW_OP_addr 0x0)
+
+0x0000005e:   DW_TAG_base_type
+                DW_AT_byte_size	(0x04)
+                DW_AT_encoding	(DW_ATE_float)
+                DW_AT_name	("float")
+
+0x00000065:   DW_TAG_array_type
+                DW_AT_type	(0x00000042 "int")
+                DW_AT_sibling	(0x00000075)
+
+0x0000006e:     DW_TAG_subrange_type
+                  DW_AT_type	(0x00000075 "long unsigned int")
+                  DW_AT_upper_bound	(0x09)
+
+0x00000074:     NULL
+
+0x00000075:   DW_TAG_base_type
+                DW_AT_byte_size	(0x08)
+                DW_AT_encoding	(DW_ATE_unsigned)
+                DW_AT_name	("long unsigned int")
+
+0x0000007c:   DW_TAG_variable
+                DW_AT_name	("int_global_array")
+                DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                DW_AT_decl_line	(4)
+                DW_AT_type	(0x00000065 "int[10]")
+                DW_AT_external	(true)
+                DW_AT_location	(DW_OP_addr 0x0)
+
+0x00000091:   DW_TAG_array_type
+                DW_AT_type	(0x00000042 "int")
+                DW_AT_sibling	(0x000000a7)
+
+0x0000009a:     DW_TAG_subrange_type
+                  DW_AT_type	(0x00000075 "long unsigned int")
+                  DW_AT_upper_bound	(0x09)
+
+0x000000a0:     DW_TAG_subrange_type
+                  DW_AT_type	(0x00000075 "long unsigned int")
+                  DW_AT_upper_bound	(0x09)
+
+0x000000a6:     NULL
+
+0x000000a7:   DW_TAG_variable
+                DW_AT_name	("int_global_mtx")
+                DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                DW_AT_decl_line	(5)
+                DW_AT_type	(0x00000091 "int[10][10]")
+                DW_AT_external	(true)
+                DW_AT_location	(DW_OP_addr 0x0)
+
+0x000000bc:   DW_TAG_array_type
+                DW_AT_type	(0x00000042 "int")
+                DW_AT_sibling	(0x000000d8)
+
+0x000000c5:     DW_TAG_subrange_type
+                  DW_AT_type	(0x00000075 "long unsigned int")
+                  DW_AT_upper_bound	(0x09)
+
+0x000000cb:     DW_TAG_subrange_type
+                  DW_AT_type	(0x00000075 "long unsigned int")
+                  DW_AT_upper_bound	(0x09)
+
+0x000000d1:     DW_TAG_subrange_type
+                  DW_AT_type	(0x00000075 "long unsigned int")
+                  DW_AT_upper_bound	(0x09)
+
+0x000000d7:     NULL
+
+0x000000d8:   DW_TAG_variable
+                DW_AT_name	("int_global_cube")
+                DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                DW_AT_decl_line	(6)
+                DW_AT_type	(0x000000bc "int[10][10][10]")
+                DW_AT_external	(true)
+                DW_AT_location	(DW_OP_addr 0x0)
+
+0x000000ed:   DW_TAG_structure_type
+                DW_AT_byte_size	(0x30)
+                DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                DW_AT_decl_line	(8)
+                DW_AT_sibling	(0x0000011a)
+
+0x000000f5:     DW_TAG_member
+                  DW_AT_name	("struct_field_1")
+                  DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                  DW_AT_decl_line	(9)
+                  DW_AT_type	(0x00000042 "int")
+                  DW_AT_data_member_location	(0x00)
+
+0x00000101:     DW_TAG_member
+                  DW_AT_name	("struct_field_2")
+                  DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                  DW_AT_decl_line	(10)
+                  DW_AT_type	(0x0000005e "float")
+                  DW_AT_data_member_location	(0x04)
+
+0x0000010d:     DW_TAG_member
+                  DW_AT_name	("struct_field_3")
+                  DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                  DW_AT_decl_line	(11)
+                  DW_AT_type	(0x00000065 "int[10]")
+                  DW_AT_data_member_location	(0x08)
+
+0x00000119:     NULL
+
+0x0000011a:   DW_TAG_typedef
+                DW_AT_name	("some_complex_t")
+                DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                DW_AT_decl_line	(12)
+                DW_AT_type	(0x000000ed "structure ")
+
+0x00000125:   DW_TAG_variable
+                DW_AT_name	("complex_type_global_1")
+                DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                DW_AT_decl_line	(14)
+                DW_AT_type	(0x0000011a "some_complex_t")
+                DW_AT_external	(true)
+                DW_AT_location	(DW_OP_addr 0x0)
+
+0x0000013a:   DW_TAG_union_type
+                DW_AT_byte_size	(0x28)
+                DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                DW_AT_decl_line	(16)
+                DW_AT_sibling	(0x00000164)
+
+0x00000142:     DW_TAG_member
+                  DW_AT_name	("union_field_1")
+                  DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                  DW_AT_decl_line	(17)
+                  DW_AT_type	(0x00000042 "int")
+
+0x0000014d:     DW_TAG_member
+                  DW_AT_name	("union_field_2")
+                  DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                  DW_AT_decl_line	(18)
+                  DW_AT_type	(0x0000005e "float")
+
+0x00000158:     DW_TAG_member
+                  DW_AT_name	("union_field_3")
+                  DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                  DW_AT_decl_line	(19)
+                  DW_AT_type	(0x00000065 "int[10]")
+
+0x00000163:     NULL
+
+0x00000164:   DW_TAG_typedef
+                DW_AT_name	("another_complex_t")
+                DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                DW_AT_decl_line	(20)
+                DW_AT_type	(0x0000013a "union ")
+
+0x0000016f:   DW_TAG_variable
+                DW_AT_name	("complex_type_global_2")
+                DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                DW_AT_decl_line	(22)
+                DW_AT_type	(0x00000164 "another_complex_t")
+                DW_AT_external	(true)
+                DW_AT_location	(DW_OP_addr 0x0)
+
+0x00000184:   DW_TAG_subprogram
+                DW_AT_external	(true)
+                DW_AT_name	("main")
+                DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                DW_AT_decl_line	(28)
+                DW_AT_prototyped	(true)
+                DW_AT_type	(0x00000042 "int")
+                DW_AT_low_pc	(0x0000000000000000)
+                DW_AT_high_pc	(0x000000000000003d)
+                DW_AT_frame_base	(DW_OP_call_frame_cfa)
+                DW_AT_GNU_all_call_sites	(true)
+                DW_AT_sibling	(0x000001f7)
+
+0x000001a5:     DW_TAG_formal_parameter
+                  DW_AT_name	("argc")
+                  DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                  DW_AT_decl_line	(28)
+                  DW_AT_type	(0x00000042 "int")
+                  DW_AT_location	(0x00000000
+                     [0x0000000000000000,  0x0000000000000019): DW_OP_reg5 RDI
+                     [0x0000000000000019,  0x000000000000003d): DW_OP_GNU_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value)
+
+0x000001b4:     DW_TAG_formal_parameter
+                  DW_AT_name	("argv")
+                  DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                  DW_AT_decl_line	(28)
+                  DW_AT_type	(0x000001f7 "char**")
+                  DW_AT_location	(0x00000039
+                     [0x0000000000000000,  0x000000000000001d): DW_OP_reg4 RSI
+                     [0x000000000000001d,  0x000000000000003d): DW_OP_GNU_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value)
+
+0x000001c3:     DW_TAG_variable
+                  DW_AT_name	("int_local")
+                  DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                  DW_AT_decl_line	(30)
+                  DW_AT_type	(0x00000042 "int")
+                  DW_AT_location	(DW_OP_fbreg -28)
+
+0x000001d1:     DW_TAG_GNU_call_site
+                  DW_AT_low_pc	(0x000000000000001e)
+                  DW_AT_abstract_origin	(0x0000020a "use")
+                  DW_AT_sibling	(0x000001e9)
+
+0x000001e2:       DW_TAG_GNU_call_site_parameter
+                    DW_AT_location	(DW_OP_reg5 RDI)
+                    DW_AT_GNU_call_site_value	(DW_OP_fbreg -28)
+
+0x000001e8:       NULL
+
+0x000001e9:     DW_TAG_GNU_call_site
+                  DW_AT_low_pc	(0x000000000000003d)
+                  DW_AT_abstract_origin	(0x00000215 "__stack_chk_fail")
+
+0x000001f6:     NULL
+
+0x000001f7:   DW_TAG_pointer_type
+                DW_AT_byte_size	(0x08)
+                DW_AT_type	(0x000001fd "char*")
+
+0x000001fd:   DW_TAG_pointer_type
+                DW_AT_byte_size	(0x08)
+                DW_AT_type	(0x00000203 "char")
+
+0x00000203:   DW_TAG_base_type
+                DW_AT_byte_size	(0x01)
+                DW_AT_encoding	(DW_ATE_signed_char)
+                DW_AT_name	("char")
+
+0x0000020a:   DW_TAG_subprogram
+                DW_AT_external	(true)
+                DW_AT_declaration	(true)
+                DW_AT_linkage_name	("use")
+                DW_AT_name	("use")
+                DW_AT_decl_file	("/media/sf_example/dwarf-test.c")
+                DW_AT_decl_line	(25)
+
+0x00000215:   DW_TAG_subprogram
+                DW_AT_external	(true)
+                DW_AT_declaration	(true)
+                DW_AT_linkage_name	("__stack_chk_fail")
+                DW_AT_name	("__stack_chk_fail")
+
+0x0000021e:   NULL

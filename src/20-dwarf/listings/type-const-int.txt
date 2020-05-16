@@ -1,0 +1,9 @@
+const int int_const = 5;
+
+DW_TAG_base_type
+  DW_AT_byte_size (0x04)
+  DW_AT_encoding  (DW_ATE_signed)
+  DW_AT_name      ("int")
+
+DW_TAG_const_type
+  DW_AT_type  (0x00000042 "int")
