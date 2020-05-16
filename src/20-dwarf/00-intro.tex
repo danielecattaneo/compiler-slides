@@ -97,7 +97,7 @@ Yeaaah we all believe that...
 \begin{frame}{DWARF}
 \begin{itemize}
 \item Originally developed at Bell Labs together with the ELF object file format in 1988
-\item Standardized in 1992, but takes its current form in 1992 (DWARF 2).
+\item Standardized in 1992, but takes its current form in 1993 (DWARF 2).
 	\begin{itemize}
 	\item Adoption is not istantaneous, DWARF coexists with a simpler format named ``stabs''
 	\end{itemize}
@@ -123,9 +123,40 @@ Yeaaah we all believe that...
 \end{frame}
 
 
+\begin{frame}{The structure of DWARF}
+\begin{center}
+At the highest level of abstraction, DWARF consists of a \alert{tree} structure.\\
+\medskip
+Each \alert{node} in the tree corresponds to an element of the program.\\
+{\small General idea is similar to a compiler's AST.}\\
+\smallskip
+These nodes are named \alert{DIEs} (Debugging Information Entries).\\
+\end{center}
+
+\bigskip
+Every DIE has:
+\begin{enumerate}
+\item a \alert{type} (named \alert{tag})
+\item a set of \alert{key-value} pairs containing the debug information itself
+\end{enumerate}
+\end{frame}
+
+
+\begin{frame}{The structure of DWARF}
+\begin{center}
+You can examine the DIEs in an object file by using\\
+\texttt{\textbf{dwarfdump}}\\
+\bigskip
+In the following discussion we will often see output from \texttt{llvm-dwarfdump}\\
+\medskip
+{\footnotesize Same thing as normal GNU \texttt{dwarfdump}, but formats output in a clearer way}\\
+\end{center}
+\end{frame}
+
+
 \begin{frame}{Up next...}
 \begin{enumerate}
-\item We will see \alert{how DWARF models the structure of an object file} according to its internal model
+\item We will see \alert{how DWARF models the memory of the program} using DIEs
 	\begin{itemize}
 	\item Where data is stored
 	\item Where the code is stored
