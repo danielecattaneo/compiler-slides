@@ -1,0 +1,7 @@
+DW_TAG_variable
+  DW_AT_name      ("int_global")
+  DW_AT_decl_file ("/media/sf_example/dwarf-test.c")
+  DW_AT_decl_line (1)
+  DW_AT_type      (0x00000042 "int")
+  DW_AT_external  (true)
+  DW_AT_location  (DW_OP_addr 0x0)

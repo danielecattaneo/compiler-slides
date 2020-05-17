@@ -192,4 +192,58 @@ Any address that appears in them can be fixed up\\by a static or a dynamic linke
 \end{frame}
 
 
+\begin{frame}{DWARF Location Descriptors}
+Actually, \texttt{DW\_AT\_location} attributes can be associated to two kinds of values:\\
+\medskip
+\begin{enumerate}
+\item One DWARF expression describing where the data is allocated\\
+	(\emph{Single location descriptions})\\ \smallskip
+	Used when the data is always allocated in the same place
+\medskip
+\item A map between code ranges and DWARF expressions\\
+	(\emph{Location lists})\\ \smallskip
+	Used when the data changes its location during its lifetime
+\end{enumerate}
+\end{frame}
+
+
+\begin{frame}{DWARF Location Descriptors}
+\begin{columns}
+
+\column{0.5\textwidth}
+\begin{block}{C code}
+\cinput[\tt\scriptsize]{listings/var-l-move.c}
+\end{block}
+\begin{block}{Debug Info}
+\txtinput[\tt\scriptsize]{listings/var-l-move.txt}
+\end{block}
+
+\column{0.5\textwidth}
+\begin{block}{Assembly Code (-g -O2)}
+\asminput[\tt\scriptsize]{listings/var-l-move.s}
+\end{block}
+
+GCC optimized out the \texttt{i} variable and moved \texttt{p}
+to two different registers.
+
+\end{columns}
+\end{frame}
+
+
+\begin{frame}{DWARF Declaration Coordinates}
+All of these DIEs (along with many others) support specifying where each type is declared
+using specific attributes:\\
+\medskip
+\begin{tabular}{ l l }
+\texttt{DW\_AT\_decl\_file} & File where the declaration was found \\
+\texttt{DW\_AT\_decl\_line} & Line number (1-based) of the declaration \\
+\texttt{DW\_AT\_decl\_column} & Column number (1-based) \\
+\end{tabular}\\
+\medskip
+\begin{block}{Declaration Coordinates}
+\txtinput[\tt\small]{listings/var-l-int-declcoord.txt}
+\end{block}
+\end{frame}
+
+
 

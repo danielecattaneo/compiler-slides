@@ -1,0 +1,6 @@
+DW_TAG_variable
+  DW_AT_name     ("p")
+  DW_AT_type     (0x00000117 "int*")
+  DW_AT_location (0x00000072
+     [0x22,  0x2b): DW_OP_reg3 RBX
+     [0x2b,  0x3c): DW_OP_reg5 RDI)
