@@ -10,3 +10,213 @@
 \item Representing line number tbl
 \end{itemize}
 \end{frame}
+
+
+\begin{frame}{The physical reality (?) of DWARF}
+DWARF debug info is scattered in different sections, whose names all start with \texttt{.debug}:\\
+\bigskip
+\begin{tabular}{ l l }
+\texttt{.debug\_info}, \texttt{.debug\_abbrev} & DIE tree \\
+\texttt{.debug\_line} & Line number table\\
+\texttt{.debug\_frame} & Call Frame Information \\
+\texttt{.debug\_macro} & Macro information \\
+\texttt{.debug\_pubnames},\texttt{.debug\_pubtypes}  & Index \\
+\end{tabular}\\
+\end{frame}
+
+
+\begin{frame}{The physical reality (?) of DWARF}
+The information for some structures is \alert{scattered further} (for a mix of backwards
+compatibility and data compactness reasons) into \alert{more sections}:\\
+\bigskip
+\begin{tabular}{ l l }
+\texttt{.debug\_addr} & Constant pool for DWARF expressions\\
+\texttt{.debug\_aranges} & Address ranges for compilation units\\
+\texttt{.debug\_line\_str} & String pool for \texttt{.debug\_line}\\
+\texttt{.debug\_loc} & Location lists addressed by \texttt{.debug\_info}\\
+\texttt{.debug\_ranges} & Range list addressed by \texttt{.debug\_loc}\\
+\texttt{.debug\_str} & String pool for \texttt{.debug\_info}\\
+\ldots & \ldots
+\end{tabular}\\
+\end{frame}
+
+
+\begin{frame}{A simple and logical organization}
+\centering
+\includegraphics[height=0.75\textheight]{img/sec_relations.pdf}
+\end{frame}
+
+
+\begin{frame}{A simple and logical organization}
+We will focus on:
+\begin{itemize}
+\item Representation of the main DIE structure
+\item The line number table
+\end{itemize}
+\bigskip
+These two structures are the most important anyway.
+\end{frame}
+
+
+\begin{frame}{The \texttt{.debug\_info} section}
+This section contains the main structure of DWARF: the tree of Debug
+Information Entries.\\
+\medskip
+It contains:
+\begin{enumerate}
+\item An header
+\item The serialized DIEs, enumerated in depth-first order
+	\begin{itemize}
+	\normalsize
+	\item Each DIE has a flag specifying if it has children
+	\item A special flag marks the end of a chain of children
+	\end{itemize}
+\end{enumerate}
+\bigskip
+This structure is repeated for each compilation unit in the file
+(in the case of a non-linked object file there 
+is always just one compilation unit)
+\end{frame}
+
+
+\begin{frame}{The \texttt{.debug\_info} section}{The Header}
+The header of a \texttt{.debug\_info} is simple:\\
+\medskip
+\begin{tabular}{ l l }
+\texttt{uint32\_t length;} & Size of the info for this unit \\
+\texttt{uint16\_t version;} & DWARF version\\
+\texttt{uint32\_t abbrev\_offset;} & Offset in the \alert{abbreviation table} \\
+\texttt{uint8\_t address\_size;} & Size of a pointer (in bytes) \\
+\end{tabular}\\
+\bigskip
+Wait... what's an \alert{abbreviation table}?
+\end{frame}
+
+
+\begin{frame}{The \texttt{.debug\_abbrev} section}
+The \alert{abbreviation table} is the main element of the \alert{compression scheme}
+used by DWARF to represent DIEs.\\
+\medskip
+\begin{itemize}
+\item The typical DIEs produced by a compiler have similarities
+	\begin{itemize}
+	\item The same type of DIE often has the same type of attributes
+	\item Similarly structured DIEs will have different attributes values
+	\end{itemize}
+\item The format of a DIE may change in the future
+	\begin{itemize}
+	\item We need to allow old implementations to read new DWARF records without
+		getting confused
+	\end{itemize}
+\end{itemize}
+\medskip
+The abbreviation table \alert{decouples the tag, the attributes, the order of
+appearance of the attributes, and the type of each attribute in the DIE
+from the values of the attributes}
+\end{frame}
+
+
+\begin{frame}{The \texttt{.debug\_abbrev} section}
+The abbreviation table contains a flat list of DIE patterns, in the following format:
+
+\begin{columns}[onlytextwidth]
+
+\column{0.55\textwidth}
+\begin{block}{Abbreviation table in pseudo-C}
+\cinput{listings/abbrev-tbl.c}
+\end{block}
+
+\column{0.4\textwidth}
+\begin{itemize}
+\item M is the number of attribute-value pairs in the abbreviated DIE,
+	it changes for each abbreviation
+\item N is the total number of abbreviations
+\end{itemize}
+
+\end{columns}
+
+\end{frame}
+
+
+\begin{frame}{The \texttt{uleb128} format}
+\alert{uleb128} is a \alert{variable length numeric representation} used in DWARF
+for compactness.\\
+\medskip
+It reduces the number of leading zero bytes in the representation by using bit 7
+as a stop marker. Maximum length of 128 bits gives it its name.\\
+\medskip
+\begin{itemize}
+\item Bit 7 = 0 $\Rightarrow$ This is the last and most significant byte
+\item Bit 7 = 1 $\Rightarrow$ This is not the last byte, read another one
+\end{itemize}
+\medskip
+\begin{block}{uleb128 example}
+\tt
+0x0001 = 0b0000000\_0000000\_0000001 = 0x01\\
+0x007F = 0b0000000\_0000000\_1111111 = 0x7F\\
+0x0080 = 0b0000000\_0000001\_0000000 = 0x80 0x01\\
+0xAA55 = 0b0000010\_1010100\_1010101 = 0xD5 0xD4 0x02 \\
+\end{block}
+\end{frame}
+
+
+\begin{frame}{The \texttt{.debug\_info} section}{The Body}
+Back to the \texttt{.debug\_info} section...\\
+\medskip
+After the header, for each DIE the section contains:
+\begin{itemize}
+\item The identifier of the matching abbreviation, encoded as \texttt{uleb128}
+\item The values of the attributes, in the same order as in the abbreviation
+	\begin{itemize}
+	\item Not all attribute types use the same number of bytes! There is no alignment,
+	  and some types use \alert{zero bytes}.
+	\end{itemize}
+\end{itemize}
+\medskip
+Abbreviation number zero does not exist; zero is used as the \alert{end-of-children
+mark}.\\
+\smallskip
+Whether a DIE has children or not, it's specified in the abbreviation!
+\end{frame}
+
+
+\begin{frame}{The \texttt{.debug\_line} section}
+In constrast with the \texttt{.debug\_info} section, the \texttt{.debug\_line} section
+is much simpler. It encodes the \alert{line number table}.\\
+\medskip
+It begins with a header specifying:
+\begin{itemize}
+\item Length, version (like \texttt{.debug\_info})
+\item Whether by default each line contains a statement (usually true)
+\item The list of include directories used by the compiler
+\item The list of files that are referenced by the line number table
+\end{itemize}
+(not an exhaustive list)\\
+\medskip
+The list of files and include directories are specified as offsets of strings in
+the \texttt{.debug\_line\_str} section.
+\end{frame}
+
+
+\begin{frame}{The \texttt{.debug\_line} section}
+After the header, the \alert{line number program} begins.\\
+\medskip
+Every instruction can either:
+\begin{itemize}
+\item Modify a cell in the current row of the table
+	\begin{itemize}
+	\item Each opcode corresponds to a different column
+	\item \texttt{DW\_LNS\_advance\_pc}, \texttt{DW\_LNS\_advance\_line},
+		\texttt{DW\_LNS\_set\_file}, ... 
+	\end{itemize}
+\item Create the next row by (mostly) copying the next row
+	\begin{itemize}
+	\item \texttt{DW\_LNS\_copy}
+	\item The \textbf{Basic Block}, \textbf{Prologue End}, \textbf{Epilogue Begin} and \textbf{Discriminator} rows are set to zero regardless
+	\end{itemize}
+\medskip
+\item Instructions either take no operands, or a single \texttt{uleb128}.
+\end{itemize}
+\end{frame}
+
+

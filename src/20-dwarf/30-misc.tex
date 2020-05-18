@@ -10,3 +10,98 @@
 \item Accelerated Access
 \end{itemize}
 \end{frame}
+
+
+\begin{frame}{Other information in DWARF}
+DWARF also provides some extra useful but not essential information:
+\begin{itemize}
+\item Call Frame Information
+\item Macro information (!)
+\item Identifier index for faster lookups
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Call Frame Information}
+DWARF Call Frame Information (aka CFI) allows the debugger to reliably perform
+backtraces.\\
+\medskip
+Why we need it?\\
+\medskip
+\begin{enumerate}
+\item The ABI already provides a way to perform backtraces without it, but it
+	prevents optimizations like tail calls or (in the x86 architecture) using the
+	EBP register for other purposes
+\item DIEs by themselves do not contain any information about the size
+	of the activation record of each function, just how to access variable values
+\end{enumerate}
+\end{frame}
+
+
+\begin{frame}{Call Frame Information}
+DWARF defines an activation record as the following set of values:\\
+\medskip
+\begin{itemize}
+\item The return address (for past frames) or the current PC (for the current frame)
+\item The area of memory in the stack corresponding to the call frame of the function
+	(described as a single base pointer: the Canonical Frame Address)
+\item The set of registers that are preserved across the call correponding to the
+	activation record
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Call Frame Information}
+The CFI maps each instruction in the program to a table
+that specifies:\\
+\medskip
+\begin{itemize}
+\item how to reconstruct each register value from the activation record
+	alone, as it appears in that point of the subroutine
+\item where the Canonical Frame Address pointer is
+\end{itemize}
+\bigskip
+This information is compressed using a bytecode system similar to DWARF
+expressions and the line number table.\\
+\medskip
+The GNU assembler supports building this data inline (like the line number table)
+using specific \texttt{.cfi\_XXX} directives.\\
+\bigskip
+\textbf{Fun fact:} the same tables used by DWARF are used as a method for implementing
+stack unwinding for C++ exceptions (hence why they are so slow!)
+\end{frame}
+
+
+\begin{frame}{Macro Information}
+You wish you could \alert{debug your C macros}?\\
+\medskip
+DWARF includes a \alert{Macro Information} section which specifies to the debugger
+where a macro declaration can be found in the source.\\
+\medskip
+There is nothing else in there... which limits its usefulness. It's also
+100\% optional.\\
+\medskip
+The format of macro information has changed in DWARF 5.
+\end{frame}
+
+
+\begin{frame}{Accelerated Access}
+DWARF has a facility for building an index of symbols to make lookup of
+large DIE trees easier. It's implemented as a hashtable.\\
+\medskip
+The index can contain references to:
+\begin{itemize}
+\item Subprograms
+\item Labels
+\item Variables
+\item Types
+\item Namespaces
+\end{itemize}
+(we didn't see some of these DIEs earlier, but they exist)\\
+\medskip
+The index must be complete, this simplifies the lookup logic in case it exists
+(it's optional).\\
+\medskip
+Just like with macro information, the format of the index has changed in DWARF 5.
+\end{frame}
+

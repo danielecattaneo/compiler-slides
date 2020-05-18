@@ -10,3 +10,141 @@
 \item the line number tbl 
 \end{itemize}
 \end{frame}
+
+
+\begin{frame}{Describing Code}
+We have seen how DWARF describes \alert{data}.
+Of equal importance in a debugger is analyzing the \alert{code being executed}.\\
+\medskip
+Obvious requirements:\\
+\begin{itemize}
+\item Map to instruction to line of code in the source code
+	\begin{itemize}
+	\item Essential for breakpoints, single stepping
+	\end{itemize}
+\end{itemize}
+\medskip
+Less obvious requirements:
+\begin{itemize}
+\item Map from code spans to compilation units
+\item Map from code spans to functions
+\item Identification of every function call in a function
+	\begin{itemize}
+	\item Used for breakpoints on functions, to parse backtraces, to resolve imported functions
+	\end{itemize}
+\item Grouping of lexical blocks in a function
+	\begin{itemize}
+	\item Used to determine the scope of variables
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Describing Code}
+\begin{itemize}
+\item Compilation units, functions and function calls are part of the DIE tree
+	\begin{itemize}
+	\item Just like a compiler AST!
+	\end{itemize}
+\medskip
+\item The line number table is its own separate structure
+	\begin{itemize}
+	\item This helps saving space inside the executable, as DIEs are not as space-efficient
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Describing Code: Compilation Units}
+A compilation unit (\texttt{DW\_TAG\_compile\_unit}) represents the result of a single compilation process (duh).\\
+\medskip
+Common attributes:\\
+\medskip
+\begin{tabular}{ l l }
+\texttt{DW\_AT\_name} & File name that was compiled \\
+\texttt{DW\_AT\_comp\_dir} & Working directory where the compiler\\
+& was invoked \\
+\texttt{DW\_AT\_language} & Language of the source code file \\
+\texttt{DW\_AT\_stmt\_list} & Pointer to the line number table for this file \medskip \\
+
+\texttt{DW\_AT\_low\_pc} & Range of addresses of the \\
+\texttt{DW\_AT\_high\_pc} & compilation unit's code \\
+\end{tabular}\\
+\end{frame}
+
+
+\begin{frame}{Describing Code: Functions}
+A subprogram (\texttt{DW\_TAG\_subprogram}) represents a function. Function arguments are
+described by children \texttt{DW\_TAG\_formal\_parameter} DIEs.\\
+\medskip
+Common attributes:\\
+\medskip
+\begin{tabular}{ l l }
+\texttt{DW\_AT\_name} & Function name (as it appears in the source) \\
+\texttt{DW\_AT\_type} & Type of the return value \\
+\texttt{DW\_AT\_frame\_base} & Expression establishing the address of \\
+& the frame pointer (\texttt{DW\_OP\_fbreg}) \\
+\texttt{DW\_AT\_low\_pc} & \multirow{2}{*}{Range of addresses of the function's code} \\
+\texttt{DW\_AT\_high\_pc} &  \\
+\end{tabular}\\
+\end{frame}
+
+
+\begin{frame}{Describing Code: Blocks}
+\texttt{DW\_TAG\_lexical\_block}s DIEs represent a block, in languages that support
+this concept. Not strictly required, but helps the debugger in handling local variables
+with a restricted scope.\\
+\medskip
+Common attributes:\\
+\medskip
+\begin{tabular}{ l l }
+\texttt{DW\_AT\_low\_pc} & \multirow{2}{*}{Range of addresses of the function's code} \\
+\texttt{DW\_AT\_high\_pc} &  \\
+\end{tabular}\\
+\smallskip
+And that's it!\\
+\bigskip
+Note that every time the \texttt{DW\_AT\_low\_pc} and \texttt{DW\_AT\_high\_pc} attributes
+are used together, they can be replaced by a single \texttt{DW\_AT\_ranges} attribute.\\
+\smallskip
+\texttt{DW\_AT\_ranges} supports describing multiple discontiguous ranges.
+\end{frame}
+
+
+\begin{frame}{Describing Code: Line Numbers}
+The \alert{line number table} is its own data structure.\\
+\begin{itemize}
+\item Maps each instruction to a line number and more
+\item Consecutive instructions mapping to the same line number are
+	represented by just the first instruction
+\item Internal representation consists of a \alert{line number program} 
+	that builds the table (and allows for compact representation of
+	similar rows)
+	\begin{itemize}
+	\item We will enter into details about this representation later
+	\end{itemize}
+\end{itemize}
+\medskip
+The GNU assembler supports building this data automatically using specific 
+\texttt{.loc} directives.
+\end{frame}
+
+
+\begin{frame}{Describing Code: Line Numbers}
+%The columns in the table are:
+\begin{description}[Epilogue Begin]
+\item[Address] Address of the instruction
+\item[Op. Index] 0 for non-VLIW architectures
+\item[File] File where the line is found (index in a list of files)
+\item[Line] Line in the file (1-based)
+\item[Column] Column in the file (1-based)
+\item[Is Statement] True if position is at the beginning of a statement
+\item[Basic Block] True if at the beginning of a basic block
+\item[End Sequence] True in the last row of the table (ending marker)
+\item[Prologue End] True in the last instruction of a function prologue
+\item[Epilogue Begin] True in the first instruction of a function epilogue
+\item[ISA] The instruction set of the code
+\item[Discriminator] Disambiguates multiple blocks on the same line
+\end{description}
+\end{frame}
+

@@ -9,3 +9,57 @@
 \end{itemize}
 \end{frame}
 
+
+\begin{frame}{Conclusion}
+We have seen:
+\begin{itemize}
+\item A brief history of debugging formats, why they are needed, what DWARF is
+\item What is the big idea behind DWARF
+\item How DWARF is actually represented inside an object file
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Conclusion}
+With this knowledge you could:
+
+\begin{itemize}
+\item Build your own compiler from scratch with debugging info support
+\item Build your own source-level debugger
+\item Improve debugging support in other compilers
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{One last note!}
+If you are a LLVM user... the implementation details are \alert{abstracted} from you!\\
+\medskip
+LLVM represents debug information using a more generic data structure known
+as \alert{metadata}.\\
+\medskip
+Debug information is important, and it is \alert{up to the passes} to mantain its
+correctness, so keep this in mind when you work with LLVM.\\
+\bigskip
+LLVM documentation about debugging information: \url{https://llvm.org/docs/SourceLevelDebugging.html}
+\end{frame}
+
+
+\begin{frame}{I want to know more about dwarves!}
+\Large
+\centering
+\vfill
+\url{http://dwarfstd.org}\\
+\vfill
+\scriptsize
+Or get in contact with your local DM \texttt{;)}
+\end{frame}
+
+
+\begin{frame}{}
+\begin{center}
+\Huge
+Thank you!
+\end{center}
+\end{frame}
+
+
