@@ -1,0 +1,45 @@
+% !TEX root = ../main.tex
+% class-hier: core class hierarchy of LLVM
+
+\begin{tikzpicture}
+[
+  every node/.style={
+    font=\tt\scriptsize,
+    text depth=0pt
+  },
+  extends/.style={
+    draw,
+    open triangle 90-
+  },
+  level distance=10mm,
+  sibling distance=25mm,
+  level 3/.style={
+    sibling distance=29mm
+  },
+  level 4/.style={
+    sibling distance=36mm
+  },
+]
+
+\node{llvm::Value}
+  [edge from parent fork down,
+   edge from parent/.style={extends}]
+
+  child{ node{\cppinline{llvm::Argument}} }
+  child{ node{\cppinline{llvm::BasicBlock}} }
+  child{ node{\cppinline{llvm::User}}
+  	child{ node{\cppinline{llvm::Constant}}
+			child{ node{\cppinline{llvm::ConstantData}} }
+			child{ node{\cppinline{llvm::ConstantExpr}} }
+			child{ node{\cppinline{llvm::GlobalValue}} 
+				child{ node{\cppinline{llvm::GlobalObject}} 
+					child{ node{\cppinline{llvm::Function}} }
+					child{ node{\cppinline{llvm::GlobalVariable}} }
+				}
+				child{ node{\cppinline{llvm::GlobalIndirectSymbol}} }
+			}
+		}
+		child{ node{\cppinline{llvm::Instruction}} }
+		child{ node{\cppinline{llvm::Operator}} }
+  };
+\end{tikzpicture}

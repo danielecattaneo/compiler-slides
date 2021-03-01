@@ -1,57 +1,46 @@
 % !TEX root = main.tex
 
-\section{LLVM-IR language}
+\section{Inside a Pass}
 
 
-\begin{frame}{LLVM IR}
-The LLVM IR~\cite{LOCAL:www/llvmLanguageRef} language is RISC-based:
-
+\begin{frame}{Even deeper into the rabbit hole...}
 \begin{itemize}
-\item instructions operates on \alert{variables}
+\item The \alert{user} invokes the \alert{compiler}
+\item The \alert{compiler} is made of three \alert{stages}
+\item Each \alert{stage} is made of \alert{passes}
+\end{itemize}
+\medskip
+If you want things done, you want to work on a \alert{pass}.\\
+\medskip
 \begin{itemize}
-\item aka virtual registers, temporary values
+\item Edit an existing pass
+\item Create a new pass
 \end{itemize}
-\item only \llvminline{load} and \llvminline{store} access memory
-\item \llvminline{alloca} used to reserve memory on the stack
-\end{itemize}
-\vfill
-There are also a few \alert{high level instructions}:
-\begin{itemize}
-\item function call -- \llvminline{call}
-\item pointer arithmetics -- \llvminline{getelementptr}
-\item \ldots
-\end{itemize}
+\medskip
+But the question now becomes: how do passes work?
 \end{frame}
 
 
-\begin{frame}{LLVM IR}{Types \& Variables}
-LLVM IR is \alert{strongly typed}:
-
-\begin{itemize}
-\item e.g. you cannot assign a floating point value to an integer variable
-without an explicit cast
-\end{itemize}
-
-\alert{Almost everything} is \alert{typed}:\\
-\smallskip
-\begin{tabular}{>{\RaggedLeft\arraybackslash}p{5.5em}lcl}
-\textbf{functions} & \llvminline{@fact} & $\rightarrow$ & \llvminline{i32 (i32)} \\
-\textbf{statements} & \llvminline{\%3 = icmp eq i32 \%2, 0} & $\rightarrow$ & \llvminline{i1}
-\end{tabular}\\
-\smallskip
-A variable can be:\\
-\smallskip
-\begin{tabular}{>{\RaggedLeft\arraybackslash}p{5.5em}l}
-\textbf{global} & \llvminline{@var = common global i32 0, align 4} \\
-\textbf{argument} & \llvminline{define i32 @fact(i32 \%n)} \\
-\textbf{local} & \llvminline{\%2 = load i32, i32* \%1, align 4} \\
-\end{tabular}\\
+\begin{frame}{How passes work}
+\centering
+A \alert{pass} is a \alert{subroutine} that \\programmatically
+transforms a piece of code.\\
 \bigskip
-Local variables are defined by statements
+The code to be transformed \\is represented in a language 
+called \alert{LLVM-IR}.\\
+\bigskip
+The code of the pass operates on the LLVM-IR \\using a set of
+\alert{object-oriented APIs}.
+\vfill
+Let's talk about LLVM-IR~\cite{LOCAL:www/llvmLanguageRef}, 
+first by looking at its \alert{human-readable} form.
 \end{frame}
 
 
-\begin{frame}{LLVM IR}{Example: factorial}
+\subsection{The LLVM-IR language}
+
+
+\begin{frame}{LLVM-IR}{Example: factorial}
 \begin{center}
 \begin{varwidth}{20cm}
 \llvminput[\ttfamily\fontsize{7pt}{5pt}\selectfont]{snippet/fact.ll}
@@ -60,11 +49,92 @@ Local variables are defined by statements
 \end{frame}
 
 
-\begin{frame}{LLVM IR Language}{Static Single Assignment}
-LLVM IR is SSA-based:
+\begin{frame}{LLVM-IR}{Top Level}
+From top to bottom:
+\begin{itemize}
+\item The topmost object of a LLVM-IR program is the \alert{Module}.
+\item \alert{Modules} contain a list of \alert{Globals}.
+	\begin{itemize}
+	\item {Globals} can be either \alert{Functions} or \alert{Global Variables}.
+	\item A global can be a \alert{Forward declaration}.
+	\end{itemize}
+\item \alert{Functions} contain a list of \alert{Basic Blocks} + \alert{Arguments}.
+\item \alert{Basic Blocks} are a list of \alert{Instructions}.
+\end{itemize}
+\begin{block}{The in-memory representation}
+All these parts will correspond directly to \alert{C++ objects}.\\
+The abundance of lists guarantees low overhead and scalability to very large programs.
+\end{block}
+\end{frame}
+
+
+\begin{frame}{LLVM-IR}{Instructions}
+LLVM-IR looks a lot like a RISC assembly language:\\
 
 \begin{itemize}
-\item every variable is \alert{statically assigned} exactly \alert{once}
+\item Few instructions, all perfectly orthogonal
+	\begin{itemize}
+	\item There are infinite registers
+	\item There are no special-purpose registers
+	\item No implicit flags register
+	\end{itemize}
+\item Basic block boundaries are denoted by \alert{labels}
+\item Only \llvminline{load} and \llvminline{store} access memory
+\end{itemize}
+
+\vfill
+There are also a few CISC-like \alert{high level instructions}:
+
+\begin{itemize}
+\item Reserve memory on the stack -- \llvminline{alloca}
+\item Function call -- \llvminline{call}
+	\begin{itemize}
+	\item The calling convention is abstracted away
+	\item There is an implicit call stack
+	\end{itemize}
+\item Pointer arithmetics -- \llvminline{getelementptr}
+\item \ldots
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{LLVM-IR}{Values \& Types}
+LLVM-IR is \alert{strongly typed}:
+
+\begin{itemize}
+\item e.g. you cannot assign a floating point value to an integer register
+without an explicit cast
+\end{itemize}
+\medskip
+\alert{Almost everything} is \alert{typed}:\\
+\medskip
+\begin{tabular}{>{\RaggedLeft\arraybackslash}p{5.5em}lcl}
+\textbf{functions} & \llvminline{@fact} & $\rightarrow$ & \llvminline{i32 (i32)} \\
+\textbf{registers} & \llvminline{\%3 = icmp eq i32 \%2, 0} & $\rightarrow$ & \llvminline{i1} \\
+\textbf{globals var.} & \llvminline{@var = common global i32 0} & $\rightarrow$ & \llvminline{i32} \\
+\end{tabular}\\
+\medskip
+These objects that have a type are called (somewhat confusingly)\\\alert{LLVM Values}.
+\begin{block}{The in-memory representation}
+\cppinline{llvm::Value} is the \alert{base class} of almost all interesting LLVM-IR objects!
+\end{block}
+\end{frame}
+
+
+\begin{frame}{LLVM-IR}{Hierarchy}
+\centering
+\input{img/class-hier}\\
+\pause
+\bigskip
+Something is missing...
+\end{frame}
+
+
+\begin{frame}{LLVM-IR}{Static Single Assignment}
+LLVM-IR is SSA-based:
+
+\begin{itemize}
+\item every register is \alert{statically assigned} exactly \alert{once}
 \end{itemize}
 \bigskip
 Statically means that:
@@ -129,7 +199,8 @@ Why is it \alert{wrong}?
 
 
 \begin{frame}{Static Single Assignment}{Use \llvminline{phi} to Avoid Troubles}
-The \llvminline{\%2} variable must be statically assigned once!
+The \llvminline{\%2} variable must be statically assigned once!\\
+How do we handle conditional assignments then?
 
 \begin{block}{LLVM Max}
 \llvminput[\ttfamily\footnotesize]{snippet/good-max.ll}
@@ -170,6 +241,24 @@ can be erased from the CFG without altering program semantics.
 \end{frame}
 
 
+\begin{frame}{SSA \& LLVM-IR}{Static Single Assignment}
+\large
+\begin{block}{\centering Important observation}
+\centering
+SSA means that\\
+\alert{there is always a 1:1 correspondence}\\
+\alert{between a register and the instruction that assigns it}.
+\end{block}
+\bigskip
+\begin{block}{\centering Consequence}
+\centering
+As a result, in LLVM-IR\\
+\alert{registers are not separate objects}\\
+but \alert{every LLVM Instruction\\is the output ``register'' of itself}.
+\end{block}
+\end{frame}
+
+
 \begin{frame}{Static Single Assignment}{Rationale}
 Old compilers are not SSA-based:
 
@@ -186,10 +275,14 @@ New compilers are SSA-based:
 \item SSA-based analysis/optimizations are faster
 \end{itemize}
 
-\vfill
+%\vfill
 %All modern compilers are SSA-based:
 %
 %\begin{itemize}
 %\item exception are old version of the HotSpot Client compiler
 %\end{itemize}
 \end{frame}
+
+
+\input{50.2-cfg}
+
