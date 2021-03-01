@@ -170,3 +170,26 @@ Specializations come with restrictions:
 % Hint: take the LLVM pass writing tutorial~\cite{LOCAL:www/llvmWritingAPass}
 % \end{frame}
 
+
+\begin{frame}{Recap}
+\begin{itemize}
+\item The \alert{user} invokes the \alert{compiler}
+\item The \alert{compiler} is made of three \alert{stages}
+\item Each \alert{stage} is made of \alert{passes}
+\end{itemize}
+\medskip
+If you want things done, you want to work on a \alert{pass}.\\
+\medskip
+\begin{itemize}
+\item Edit an existing pass
+\item Create a new pass
+\end{itemize}
+\medskip
+But the question now becomes: how do passes work?
+\end{frame}
+
+
+\input{40.1-ir}
+\input{40.2-cfg}
+
+

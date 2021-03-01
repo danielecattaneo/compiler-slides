@@ -1,24 +1,6 @@
 % !TEX root = main.tex
 
-\section{Inside a Pass}
-
-
-\begin{frame}{Even deeper into the rabbit hole...}
-\begin{itemize}
-\item The \alert{user} invokes the \alert{compiler}
-\item The \alert{compiler} is made of three \alert{stages}
-\item Each \alert{stage} is made of \alert{passes}
-\end{itemize}
-\medskip
-If you want things done, you want to work on a \alert{pass}.\\
-\medskip
-\begin{itemize}
-\item Edit an existing pass
-\item Create a new pass
-\end{itemize}
-\medskip
-But the question now becomes: how do passes work?
-\end{frame}
+\subsection{The LLVM-IR language}
 
 
 \begin{frame}{How passes work}
@@ -35,9 +17,6 @@ The code of the pass operates on the LLVM-IR \\using a set of
 Let's talk about LLVM-IR~\cite{LOCAL:www/llvmLanguageRef}, 
 first by looking at its \alert{human-readable} form.
 \end{frame}
-
-
-\subsection{The LLVM-IR language}
 
 
 \begin{frame}{LLVM-IR}{Example: factorial}
@@ -283,6 +262,4 @@ New compilers are SSA-based:
 %\end{itemize}
 \end{frame}
 
-
-\input{50.2-cfg}
 
