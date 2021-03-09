@@ -22,6 +22,24 @@ Complexity lies on \alert{chaining} together stages.
 \end{frame}
 
 
+\begin{frame}{Frontends and Drivers}{C Language Family Front-end}
+The external interface to LLVM is provided by the \alert{compiler driver}.\\
+\bigskip
+The \alert{compiler driver} is the program that:
+\begin{itemize}
+\item Provides the interface to the user
+\item Performs setup of the frontend and LLVM itself. 
+\end{itemize}
+\bigskip
+The driver invokes the \alert{first stage of the pipeline}, the \alert{frontend}.
+\begin{example}
+\alert{Clang}\cite{LOCAL:www/clang} is the frontend for the C language family.\\
+The driver of \emph{Clang} is the \texttt{clang} executable (compatible with GCC).\\
+\smallskip % why does \cite screw up the f*ing height of my block!?
+\end{example}
+\end{frame}
+
+
 \begin{frame}{Compiler pipeline}{Internal pipelines}
 \begin{center}
 High-level pipeline structure of a compiler:\\
@@ -45,18 +63,71 @@ There are three main components:
 
 \begin{frame}{The LLVM compiler pipeline}
 \begin{center}
-We will consider only the \emph{middle-end}.\\
+We will focus on the \emph{middle-end}.\\
 {\small Same concepts are valid also for \{front,back\}-end.}\\
+\end{center}
+\bigskip
+\begin{itemize}
+\item The \emph{front-end} is completely language-specific
+	\begin{itemize}
+	\item There are no special facilities in LLVM for parsing and AST generation
+	\item This is slowly changing: \alert{MLIR}
+	\end{itemize}
+\item The \emph{back-end} uses its own machine-specific IR
+	\begin{itemize}
+	\item As opposed to the frontend, in LLVM there are generalized facilities for implementing a backend
+	\item Complex topic, not enough time...
+	\item Most optimizations happen in the middle-end anyway
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{The LLVM compiler pipeline}
+\begin{center}
+The lingua franca of LLVM is its \alert{Intermediate Representation} called\\
+\medskip
+{\large LLVM-IR}\\
+\end{center}
+\bigskip
+The LLVM-IR is:
+\begin{itemize}
+\item \alert{Produced} by the \alert{front-end}
+\item \alert{Transformed and optimized} by the \alert{middle-end}
+\item \alert{Consumed} by the \alert{back-end}
+\end{itemize}
+\bigskip
+Understanding LLVM-IR is the key to hacking within LLVM.
+\end{frame}
+
+
+\begin{frame}{Remember...}
+\begin{center}
+LLVM is a \alert{compiler construction framework}\\
+It operates on the \alert{LLVM-IR} language.\\
+\bigskip
+$\Downarrow$\\
+\bigskip
+Using LLVM \emph{by itself} does not make much sense!\\
+Writing LLVM-IR by hand is unfeasible.
+\end{center}
+\end{frame}
+
+
+\begin{frame}{The Middle End}
+\centering
+The middle-end is not a monolithic block,\\but it is a pipeline in and of itself.\\
+\raggedright
 \bigskip
 \begin{description}[Pass Manager]
-\item[IR] (a.k.a. Intermediate Representation) the \alert{language} used in the
-          middle-end
+\item[LLVM-IR] the \alert{language} used in the middle-end
 \item[Pass] a \alert{pipeline stage}\\
 a Pass may have \alert{dependencies} on other Passes.
 \item[Pass Manager] component that \alert{schedules} passes according to their \alert{dependencies} and \alert{executes} them\\
 \emph{(builds the pipeline)}
 \end{description}
-\end{center}
+\bigskip\centering
+Our focus: \alert{writing a pass}
 \end{frame}
 
 

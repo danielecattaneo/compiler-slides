@@ -3,20 +3,7 @@
 \section{Inside LLVM}
 
 
-\begin{frame}{Using LLVM}
-\begin{center}
-LLVM is a \alert{compiler construction framework}\\
-It operates on the \alert{LLVM-IR} language.\\
-\bigskip
-$\Downarrow$\\
-\bigskip
-Using LLVM \emph{by itself} does not make much sense!\\
-Writing LLVM-IR by hand is unfeasible.
-\end{center}
-\end{frame}
-
-
-\begin{frame}{Terminology}{Speaking About LLVM IR}
+\begin{frame}{LLVM-IR is like a box of chocolates}{You never know what you're gonna get}
 \begin{center}
 LLVM-IR comes in 3 different flavours:
 \end{center}
@@ -34,26 +21,7 @@ All formats have the same expressiveness!
 \end{frame}
 
 
-\begin{frame}{Frontends and Drivers}{C Language Family Front-end}
-The LLVM-IR input to LLVM is provided by \alert{frontends}.
-\begin{example}
-\alert{Clang}\cite{LOCAL:www/clang} is the frontend for the C language family
-\smallskip % why does \cite screw up the f*ing height of my block!?
-\end{example}
-
-The \alert{compiler driver} is the program that:
-\begin{itemize}
-\item Provides the interface to the user
-\item Performs setup of the front end and LLVM itself. 
-\end{itemize}
-
-\begin{example}
-The driver of \emph{Clang} is the \texttt{clang} executable (compatible with GCC)
-\end{example}
-\end{frame}
-
-
-\begin{frame}{Frontends and Drivers}{Using the driver to produce LLVM-IR}
+\begin{frame}{Using the driver to produce LLVM-IR}
 \begin{center}
 \vfill
 We can generate LLVM-IR assembly using the \texttt{clang} driver:\\
@@ -73,7 +41,7 @@ LLVM-IR assembly\\
 \end{frame}
 
 
-\begin{frame}{Tools}{Playing with LLVM Passes}
+\begin{frame}{Playing with LLVM Passes}
 Run one or more passes on the LLVM-IR on-demand by using \texttt{opt}:
 
 \begin{itemize}
@@ -173,9 +141,9 @@ Specializations come with restrictions:
 
 \begin{frame}{Recap}
 \begin{itemize}
-\item The \alert{user} invokes the \alert{compiler}
-\item The \alert{compiler} is made of three \alert{stages}
-\item Each \alert{stage} is made of \alert{passes}
+\item The \alert{user} invokes the \alert{compiler} via the \alert{driver}
+\item The \alert{compiler} is made of three \alert{stages}\\(front-end, middle-end, back-end)
+\item The \alert{middle-end} is made of \alert{passes}
 \end{itemize}
 \medskip
 If you want things done, you want to work on a \alert{pass}.\\
@@ -185,7 +153,9 @@ If you want things done, you want to work on a \alert{pass}.\\
 \item Create a new pass
 \end{itemize}
 \medskip
-But the question now becomes: how do passes work?
+To design a pass, you must follow the principle of \alert{conservativeness}.\\
+\bigskip\centering\large
+Next step: how to actually code a pass!
 \end{frame}
 
 

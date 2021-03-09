@@ -25,26 +25,7 @@ first by looking at its \alert{human-readable} form.
 \end{frame}
 
 
-\begin{frame}{LLVM-IR}{Top Level}
-From top to bottom:
-\begin{itemize}
-\item The topmost object of a LLVM-IR program is the \alert{Module}.
-\item \alert{Modules} contain a list of \alert{Globals}.
-	\begin{itemize}
-	\item {Globals} can be either \alert{Functions} or \alert{Global Variables}.
-	\item A global can be a \alert{Forward declaration}.
-	\end{itemize}
-\item \alert{Functions} contain a list of \alert{Basic Blocks} + \alert{Arguments}.
-\item \alert{Basic Blocks} are a list of \alert{Instructions}.
-\end{itemize}
-\begin{block}{The in-memory representation}
-All these parts will correspond directly to \alert{C++ objects}.\\
-The abundance of lists guarantees low overhead and scalability to very large programs.
-\end{block}
-\end{frame}
-
-
-\begin{frame}{LLVM-IR}{Instructions}
+\begin{frame}{LLVM-IR}{What it looks like}
 LLVM-IR looks a lot like a RISC assembly language:\\
 
 \begin{itemize}
@@ -74,6 +55,25 @@ There are also a few CISC-like \alert{high level instructions}:
 \end{frame}
 
 
+\begin{frame}{LLVM-IR}{How it is actually structured}
+In reality LLVM-IR is much more high-level than assembly.
+\begin{itemize}
+\item The topmost object of a LLVM-IR program is the \alert{Module}.
+\item \alert{Modules} contain a list of \alert{Globals}.
+	\begin{itemize}
+	\item {Globals} can be either \alert{Functions} or \alert{Global Variables}.
+	\item A global can be a \alert{Forward declaration}.
+	\end{itemize}
+\item \alert{Functions} contain a list of \alert{Basic Blocks} + \alert{Arguments}.
+\item \alert{Basic Blocks} are a list of \alert{Instructions}.
+\end{itemize}
+\begin{block}{The in-memory representation}
+All these parts will correspond directly to \alert{C++ objects}.\\
+The abundance of lists guarantees low overhead and scalability to very large programs.
+\end{block}
+\end{frame}
+
+
 \begin{frame}{LLVM-IR}{Values \& Types}
 LLVM-IR is \alert{strongly typed}:
 
@@ -100,9 +100,9 @@ These objects that have a type are called (somewhat confusingly)\\\alert{LLVM Va
 \begin{frame}{LLVM-IR}{Hierarchy}
 \centering
 \input{img/class-hier}\\
-\pause
-\bigskip
-Something is missing...
+%\pause
+%\bigskip
+%Something is missing...
 \end{frame}
 
 
@@ -243,7 +243,7 @@ Old compilers are not SSA-based:
 \item cost must be amortized
 \end{itemize}
 
-\vfill
+\bigskip
 New compilers are SSA-based:
 
 \begin{itemize}
