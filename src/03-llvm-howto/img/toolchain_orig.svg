@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -14,10 +12,40 @@
    viewBox="0 0 671.69734 388.28541"
    id="svg2"
    version="1.1"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="toolchain.svg">
+   inkscape:version="1.0.2 (e86c8708, 2021-01-15)"
+   sodipodi:docname="toolchain_orig.svg">
   <defs
      id="defs4">
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1097"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path1095"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1087"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         id="path1085"
+         inkscape:connector-curvature="0" />
+    </marker>
     <marker
        inkscape:isstock="true"
        style="overflow:visible"
@@ -40,7 +68,8 @@
        refX="0"
        id="marker9740"
        style="overflow:visible"
-       inkscape:isstock="true">
+       inkscape:isstock="true"
+       inkscape:collect="always">
       <path
          id="path9742"
          d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
@@ -306,10 +335,11 @@
      fit-margin-right="10"
      fit-margin-bottom="10"
      inkscape:window-width="1920"
-     inkscape:window-height="1022"
+     inkscape:window-height="997"
      inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1" />
+     inkscape:window-y="23"
+     inkscape:window-maximized="1"
+     inkscape:document-rotation="0" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -330,7 +360,7 @@
     <flowRoot
        xml:space="preserve"
        id="flowRoot4136"
-       style="font-style:normal;font-weight:normal;font-size:15px;line-height:114.99999762%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        transform="translate(-2.1428571,-26.428571)"><flowRegion
          id="flowRegion4138"><rect
            id="rect4140"
@@ -339,9 +369,10 @@
            x="30"
            y="98.076492" /></flowRegion><flowPara
          id="flowPara4142"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor'">.c source</flowPara></flowRoot>    <flowRoot
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:1.15;font-family:'Recursive Mono Casual Static';-inkscape-font-specification:'Recursive Mono Casual Static';">.c source</flowPara></flowRoot>
+    <flowRoot
        transform="translate(36.08411,-0.11724814)"
-       style="font-style:normal;font-weight:normal;font-size:15px;line-height:114.99999762%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        id="flowRoot4144"
        xml:space="preserve"><flowRegion
          id="flowRegion4146"><rect
@@ -350,12 +381,13 @@
            height="22.806385"
            width="192.752"
            id="rect4148" /></flowRegion><flowPara
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor'"
-         id="flowPara4150">clang <flowSpan
-   style="-inkscape-font-specification:'TeX Gyre Cursor';font-family:'TeX Gyre Cursor';font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal"
-   id="flowSpan4548">-emit-llvm</flowSpan></flowPara></flowRoot>    <flowRoot
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:1.15;font-family:'Recursive Mono Casual Static';-inkscape-font-specification:'Recursive Mono Casual Static';"
+         id="flowPara4150"><flowSpan
+   style="-inkscape-font-specification:'Recursive Mono Casual Static Ultra-Bold';font-family:'Recursive Mono Casual Static';font-weight:800;font-style:normal;font-stretch:normal;font-variant:normal;"
+   id="flowSpan1083">clang</flowSpan> -emit-llvm</flowPara></flowRoot>
+    <flowRoot
        transform="translate(68.521071,26.430873)"
-       style="font-style:normal;font-weight:normal;font-size:15px;line-height:114.99999762%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        id="flowRoot4152"
        xml:space="preserve"><flowRegion
          id="flowRegion4154"><rect
@@ -364,11 +396,12 @@
            height="20.714289"
            width="102.85714"
            id="rect4156" /></flowRegion><flowPara
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor'"
-         id="flowPara4158">.bc / .ll</flowPara></flowRoot>    <flowRoot
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:1.15;font-family:'Recursive Mono Casual Static';-inkscape-font-specification:'Recursive Mono Casual Static';"
+         id="flowPara4158">.bc / .ll</flowPara></flowRoot>
+    <flowRoot
        xml:space="preserve"
        id="flowRoot4160"
-       style="font-style:normal;font-weight:normal;font-size:15px;line-height:114.99999762%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        transform="translate(106.31304,52.577254)"><flowRegion
          id="flowRegion4162"><rect
            id="rect4164"
@@ -377,10 +410,11 @@
            x="30"
            y="98.076492" /></flowRegion><flowPara
          id="flowPara4166"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor'">llvm-link</flowPara></flowRoot>    <flowRoot
+         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:15px;line-height:1.15;font-family:'Recursive Mono Casual Static';-inkscape-font-specification:'Recursive Mono Casual Static Ultra-Bold';">llvm-link</flowPara></flowRoot>
+    <flowRoot
        xml:space="preserve"
        id="flowRoot4168"
-       style="font-style:normal;font-weight:normal;font-size:15px;line-height:114.99999762%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        transform="translate(233.12438,27.405873)"><flowRegion
          id="flowRegion4170"><rect
            id="rect4172"
@@ -389,10 +423,11 @@
            x="30"
            y="98.076492" /></flowRegion><flowPara
          id="flowPara4174"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor'">libWhatever.a</flowPara></flowRoot>    <flowRoot
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:1.15;font-family:'Recursive Mono Casual Static';-inkscape-font-specification:'Recursive Mono Casual Static';">libWhatever.a</flowPara></flowRoot>
+    <flowRoot
        xml:space="preserve"
        id="flowRoot4176"
-       style="font-style:normal;font-weight:normal;font-size:15px;line-height:114.99999762%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        transform="translate(139.18501,78.00034)"><flowRegion
          id="flowRegion4178"><rect
            id="rect4180"
@@ -401,9 +436,10 @@
            x="30"
            y="98.076492" /></flowRegion><flowPara
          id="flowPara4182"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor'">.bc / .ll</flowPara></flowRoot>    <flowRoot
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:1.15;font-family:'Recursive Mono Casual Static';-inkscape-font-specification:'Recursive Mono Casual Static';">.bc / .ll</flowPara></flowRoot>
+    <flowRoot
        transform="translate(177.27698,102.24168)"
-       style="font-style:normal;font-weight:normal;font-size:15px;line-height:114.99999762%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        id="flowRoot4184"
        xml:space="preserve"><flowRegion
          id="flowRegion4186"><rect
@@ -412,10 +448,11 @@
            height="27.857145"
            width="132.14285"
            id="rect4188" /></flowRegion><flowPara
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor'"
-         id="flowPara4190">opt</flowPara></flowRoot>    <flowRoot
+         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:15px;line-height:1.15;font-family:'Recursive Mono Casual Static';-inkscape-font-specification:'Recursive Mono Casual Static Ultra-Bold';"
+         id="flowPara4190">opt</flowPara></flowRoot>
+    <flowRoot
        transform="translate(209.84893,129.56985)"
-       style="font-style:normal;font-weight:normal;font-size:15px;line-height:114.99999762%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        id="flowRoot4192"
        xml:space="preserve"><flowRegion
          id="flowRegion4194"><rect
@@ -424,11 +461,12 @@
            height="20.714289"
            width="102.85714"
            id="rect4196" /></flowRegion><flowPara
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor'"
-         id="flowPara4198">.bc / .ll</flowPara></flowRoot>    <flowRoot
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:1.15;font-family:'Recursive Mono Casual Static';-inkscape-font-specification:'Recursive Mono Casual Static';"
+         id="flowPara4198">.bc / .ll</flowPara></flowRoot>
+    <flowRoot
        xml:space="preserve"
        id="flowRoot4200"
-       style="font-style:normal;font-weight:normal;font-size:15px;line-height:114.99999762%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        transform="translate(247.64088,155.47614)"><flowRegion
          id="flowRegion4202"><rect
            id="rect4204"
@@ -437,10 +475,11 @@
            x="30"
            y="98.076492" /></flowRegion><flowPara
          id="flowPara4206"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor'">llc</flowPara></flowRoot>    <flowRoot
+         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:15px;line-height:1.15;font-family:'Recursive Mono Casual Static';-inkscape-font-specification:'Recursive Mono Casual Static Ultra-Bold';">llc</flowPara></flowRoot>
+    <flowRoot
        xml:space="preserve"
        id="flowRoot4208"
-       style="font-style:normal;font-weight:normal;font-size:15px;line-height:114.99999762%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        transform="translate(280.51287,179.84927)"><flowRegion
          id="flowRegion4210"><rect
            id="rect4212"
@@ -449,9 +488,10 @@
            x="30"
            y="98.076492" /></flowRegion><flowPara
          id="flowPara4214"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor'">.s</flowPara></flowRoot>    <flowRoot
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:1.15;font-family:'Recursive Mono Casual Static';-inkscape-font-specification:'Recursive Mono Casual Static';">.s</flowPara></flowRoot>
+    <flowRoot
        transform="translate(318.30484,206.85063)"
-       style="font-style:normal;font-weight:normal;font-size:15px;line-height:114.99999762%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        id="flowRoot4216"
        xml:space="preserve"><flowRegion
          id="flowRegion4218"><rect
@@ -460,12 +500,11 @@
            height="25.000004"
            width="185"
            id="rect4220" /></flowRegion><flowPara
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor'"
-         id="flowPara4222">llvm-mc <flowSpan
-   style="font-weight:normal"
-   id="flowSpan11732">/</flowSpan> as</flowPara></flowRoot>    <flowRoot
+         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:15px;line-height:1.15;font-family:'Recursive Mono Casual Static';-inkscape-font-specification:'Recursive Mono Casual Static Ultra-Bold';"
+         id="flowPara4222">llvm-mc / as</flowPara></flowRoot>
+    <flowRoot
        transform="translate(351.1768,231.45669)"
-       style="font-style:normal;font-weight:normal;font-size:15px;line-height:114.99999762%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        id="flowRoot4232"
        xml:space="preserve"><flowRegion
          id="flowRegion4234"><rect
@@ -474,11 +513,12 @@
            height="20.714289"
            width="102.85714"
            id="rect4236" /></flowRegion><flowPara
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor'"
-         id="flowPara4238">.o</flowPara></flowRoot>    <flowRoot
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:1.15;font-family:'Recursive Mono Casual Static';-inkscape-font-specification:'Recursive Mono Casual Static';"
+         id="flowPara4238">.o</flowPara></flowRoot>
+    <flowRoot
        xml:space="preserve"
        id="flowRoot4240"
-       style="font-style:normal;font-weight:normal;font-size:15px;line-height:114.99999762%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        transform="translate(388.96878,258.63008)"><flowRegion
          id="flowRegion4242"><rect
            id="rect4244"
@@ -487,14 +527,11 @@
            x="30"
            y="98.076492" /></flowRegion><flowPara
          id="flowPara4246"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor'">lld<flowSpan
-   style="-inkscape-font-specification:'TeX Gyre Cursor';font-family:'TeX Gyre Cursor';font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal"
-   id="flowSpan4550"> / </flowSpan><flowSpan
-   id="flowSpan4554"
-   style="-inkscape-font-specification:'TeX Gyre Cursor Bold';font-family:'TeX Gyre Cursor';font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal">ld</flowSpan></flowPara></flowRoot>    <flowRoot
+         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:15px;line-height:1.15;font-family:'Recursive Mono Casual Static';-inkscape-font-specification:'Recursive Mono Casual Static Ultra-Bold';">lld / ld</flowPara></flowRoot>
+    <flowRoot
        xml:space="preserve"
        id="flowRoot4248"
-       style="font-style:normal;font-weight:normal;font-size:15px;line-height:114.99999762%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        transform="translate(424.28571,284.28571)"><flowRegion
          id="flowRegion4250"><rect
            id="rect4252"
@@ -503,7 +540,8 @@
            x="30"
            y="98.076492" /></flowRegion><flowPara
          id="flowPara4254"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor'">executable</flowPara></flowRoot>    <path
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:1.15;font-family:'Recursive Mono Casual Static';-inkscape-font-specification:'Recursive Mono Casual Static';">executable</flowPara></flowRoot>
+    <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
        d="m 42.357143,92.362203 0,18.392857 13.214286,0"
        id="path4256"
@@ -571,7 +609,7 @@
        sodipodi:nodetypes="cc" />
     <flowRoot
        transform="translate(446.24626,225.45669)"
-       style="font-style:normal;font-weight:normal;font-size:15px;line-height:114.99999762%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        id="flowRoot9598"
        xml:space="preserve"><flowRegion
          id="flowRegion9600"><rect
@@ -580,120 +618,131 @@
            height="21.846994"
            width="169.31546"
            id="rect9602" /></flowRegion><flowPara
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor'"
-         id="flowPara9604">dynLibWhatever.o</flowPara></flowRoot>    <path
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:1.15;font-family:'Recursive Mono Casual Static';-inkscape-font-specification:'Recursive Mono Casual Static'"
+         id="flowPara9604">dynLibWhatever.so</flowPara></flowRoot>
+    <path
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"
        id="path9606"
        d="m 478.28692,339.25541 -32.82996,15.65737"
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker4354)" />
-    <g
-       id="g11694"
-       transform="translate(-301.51268,180)">
-      <flowRoot
-         transform="translate(392.4844,78.342034)"
-         style="font-style:normal;font-weight:normal;font-size:15px;line-height:114.99999762%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         id="flowRoot4224"
-         xml:space="preserve"><flowRegion
-           id="flowRegion4226"><rect
-             y="98.076492"
-             x="30"
-             height="25.000004"
-             width="185"
-             id="rect4228" /></flowRegion><flowPara
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor'"
-           id="flowPara4230">llvm-as</flowPara></flowRoot>      <flowRoot
-         transform="translate(323.94389,78.235436)"
-         style="font-style:normal;font-weight:normal;font-size:15px;line-height:114.99999762%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         id="flowRoot9608"
-         xml:space="preserve"><flowRegion
-           id="flowRegion9610"><rect
-             y="98.076492"
-             x="30"
-             height="20.714289"
-             width="102.85714"
-             id="rect9612" /></flowRegion><flowPara
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor'"
-           id="flowPara9614">.ll</flowPara></flowRoot>      <path
-         inkscape:connector-curvature="0"
-         id="path9616"
-         d="m 391.42679,185.55335 20.20305,0"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker9618)" />
-      <flowRoot
-         xml:space="preserve"
-         id="flowRoot9724"
-         style="font-style:normal;font-weight:normal;font-size:15px;line-height:114.99999762%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         transform="translate(498.82652,78.227936)"><flowRegion
-           id="flowRegion9726"><rect
-             id="rect9728"
-             width="102.85714"
-             height="20.714289"
-             x="30"
-             y="98.076492" /></flowRegion><flowPara
-           id="flowPara9730"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor'">.bc</flowPara></flowRoot>      <path
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker9740)"
-         d="m 500.22885,185.55335 20.20305,0"
-         id="path9738"
-         inkscape:connector-curvature="0" />
-    </g>
     <rect
-       style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:8,8;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:8, 8;stroke-dashoffset:0;stroke-opacity:1"
        id="rect11710"
        width="222.10487"
        height="41.792633"
        x="44.528919"
-       y="353.99741"
+       y="350.24741"
        ry="5.993597" />
     <g
-       transform="translate(-301.51268,196)"
-       id="g4518">
-      <flowRoot
-         xml:space="preserve"
-         id="flowRoot4520"
-         style="font-style:normal;font-weight:normal;font-size:15px;line-height:114.99999762%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         transform="translate(388.4844,78.342034)"><flowRegion
-           id="flowRegion4522"><rect
-             id="rect4524"
-             width="185"
-             height="25.000004"
-             x="30"
-             y="98.076492" /></flowRegion><flowPara
-           id="flowPara4526"
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor'">llvm-dis</flowPara></flowRoot>      <flowRoot
-         xml:space="preserve"
-         id="flowRoot4528"
-         style="font-style:normal;font-weight:normal;font-size:15px;line-height:114.99999762%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         transform="translate(323.94389,78.235436)"><flowRegion
-           id="flowRegion4530"><rect
-             id="rect4532"
-             width="102.85714"
-             height="20.714289"
-             x="30"
-             y="98.076492" /></flowRegion><flowPara
-           id="flowPara4534"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor'">.bc</flowPara></flowRoot>      <path
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker9618)"
-         d="m 391.42679,185.55335 20.20305,0"
-         id="path4536"
-         inkscape:connector-curvature="0" />
-      <flowRoot
-         transform="translate(498.82652,78.227936)"
-         style="font-style:normal;font-weight:normal;font-size:15px;line-height:114.99999762%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         id="flowRoot4538"
-         xml:space="preserve"><flowRegion
-           id="flowRegion4540"><rect
-             y="98.076492"
-             x="30"
-             height="20.714289"
-             width="102.85714"
-             id="rect4542" /></flowRegion><flowPara
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'TeX Gyre Cursor';-inkscape-font-specification:'TeX Gyre Cursor'"
-           id="flowPara4544">.ll</flowPara></flowRoot>      <path
-         inkscape:connector-curvature="0"
-         id="path4546"
-         d="m 500.22885,185.55335 20.20305,0"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker9740)" />
+       id="g1287"
+       transform="translate(-0.16530958,-0.62799084)">
+      <g
+         id="g11694"
+         transform="translate(-301.51268,180)">
+        <flowRoot
+           transform="translate(392.4844,78.342034)"
+           style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           id="flowRoot4224"
+           xml:space="preserve"><flowRegion
+             id="flowRegion4226"><rect
+               y="98.076492"
+               x="30"
+               height="25.000004"
+               width="185"
+               id="rect4228" /></flowRegion><flowPara
+             style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:15px;line-height:1.15;font-family:'Recursive Mono Casual Static';-inkscape-font-specification:'Recursive Mono Casual Static Ultra-Bold'"
+             id="flowPara4230">llvm-as</flowPara></flowRoot>
+        <flowRoot
+           transform="translate(323.94389,78.235436)"
+           style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           id="flowRoot9608"
+           xml:space="preserve"><flowRegion
+             id="flowRegion9610"><rect
+               y="98.076492"
+               x="30"
+               height="20.714289"
+               width="102.85714"
+               id="rect9612" /></flowRegion><flowPara
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:1.15;font-family:'Recursive Mono Casual Static';-inkscape-font-specification:'Recursive Mono Casual Static'"
+             id="flowPara9614">.ll</flowPara></flowRoot>
+        <path
+           inkscape:connector-curvature="0"
+           id="path9616"
+           d="m 391.42679,185.55335 h 20.20305"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker1087)" />
+        <flowRoot
+           xml:space="preserve"
+           id="flowRoot9724"
+           style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           transform="translate(498.82652,78.227936)"><flowRegion
+             id="flowRegion9726"><rect
+               id="rect9728"
+               width="102.85714"
+               height="20.714289"
+               x="30"
+               y="98.076492" /></flowRegion><flowPara
+             id="flowPara9730"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:1.15;font-family:'Recursive Mono Casual Static';-inkscape-font-specification:'Recursive Mono Casual Static'">.bc</flowPara></flowRoot>
+        <path
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker1097)"
+           d="M 500.22885,185.55335 H 520.4319"
+           id="path9738"
+           inkscape:connector-curvature="0" />
+      </g>
+      <g
+         transform="translate(-301.51268,196)"
+         id="g4518">
+        <flowRoot
+           xml:space="preserve"
+           id="flowRoot4520"
+           style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           transform="translate(388.4844,78.342034)"><flowRegion
+             id="flowRegion4522"><rect
+               id="rect4524"
+               width="185"
+               height="25.000004"
+               x="30"
+               y="98.076492" /></flowRegion><flowPara
+             id="flowPara4526"
+             style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:15px;line-height:1.15;font-family:'Recursive Mono Casual Static';-inkscape-font-specification:'Recursive Mono Casual Static Ultra-Bold'">llvm-dis</flowPara></flowRoot>
+        <flowRoot
+           xml:space="preserve"
+           id="flowRoot4528"
+           style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           transform="translate(323.94389,78.235436)"><flowRegion
+             id="flowRegion4530"><rect
+               id="rect4532"
+               width="102.85714"
+               height="20.714289"
+               x="30"
+               y="98.076492" /></flowRegion><flowPara
+             id="flowPara4534"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:1.15;font-family:'Recursive Mono Casual Static';-inkscape-font-specification:'Recursive Mono Casual Static'">.bc</flowPara></flowRoot>
+        <path
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker9618)"
+           d="m 391.42679,185.55335 h 20.20305"
+           id="path4536"
+           inkscape:connector-curvature="0" />
+        <flowRoot
+           transform="translate(498.82652,78.227936)"
+           style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:1px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           id="flowRoot4538"
+           xml:space="preserve"><flowRegion
+             id="flowRegion4540"><rect
+               y="98.076492"
+               x="30"
+               height="20.714289"
+               width="102.85714"
+               id="rect4542" /></flowRegion><flowPara
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:1.15;font-family:'Recursive Mono Casual Static';-inkscape-font-specification:'Recursive Mono Casual Static'"
+             id="flowPara4544">.ll</flowPara></flowRoot>
+        <path
+           inkscape:connector-curvature="0"
+           id="path4546"
+           d="M 500.22885,185.55335 H 520.4319"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker9740)" />
+      </g>
     </g>
   </g>
 </svg>
