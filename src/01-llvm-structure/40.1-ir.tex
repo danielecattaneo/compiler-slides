@@ -84,10 +84,10 @@ without an explicit cast
 \medskip
 \alert{Almost everything} is \alert{typed}:\\
 \medskip
-\begin{tabular}{>{\RaggedLeft\arraybackslash}p{5.5em}lcl}
+\begin{tabular}{>{\RaggedLeft\arraybackslash}p{5.55em}lcl}
 \textbf{functions} & \llvminline{@fact} & $\rightarrow$ & \llvminline{i32 (i32)} \\
 \textbf{registers} & \llvminline{\%3 = icmp eq i32 \%2, 0} & $\rightarrow$ & \llvminline{i1} \\
-\textbf{globals var.} & \llvminline{@var = common global i32 0} & $\rightarrow$ & \llvminline{i32} \\
+\textbf{global vars.} & \llvminline{@var = common global i32 0} & $\rightarrow$ & \llvminline{i32} \\
 \end{tabular}\\
 \medskip
 These objects that have a type are called (somewhat confusingly)\\\alert{LLVM Values}.
