@@ -107,9 +107,9 @@ Inside the LLVM-IR:
 \end{description}
 
 \vfill
-The \texttt{mem2reg} pass focus on:
+The \texttt{mem2reg} pass focuses on:
 \begin{itemize}
-\item eliminating \llvminline{alloca} used only by \llvminline{load} and
+\item eliminating \llvminline{alloca}s used only by \llvminline{load} and
       \llvminline{store} instructions
 \end{itemize}
 
@@ -130,7 +130,7 @@ Also available as a utility function:
 \llvminput[\tt\footnotesize]{snippet/saxpy.ll}
 \end{block}
 
-(copy propagation is performed transparently by the compiler)
+Copy propagation is automatic: \cppinline{replaceAllUsesWith} (RAUW) method
 
 \column{.45\textwidth}
 \begin{block}{Promoting \llvminline{alloca}}
@@ -205,7 +205,7 @@ Loops are defined starting from the back-edges:
 
 \column{.59\textwidth}
 \begin{description}
-\item[back-edge] edge entering loop header: $(3,1)$
+\item[back-edge] edge going back to the loop header: $(3,1)$
 \item[header] loop entry node: $1$
 \item[body] nodes that can reach back-edge source node ($3$) without passing
             from back-edge target node ($1$) plus back-edge target node:
