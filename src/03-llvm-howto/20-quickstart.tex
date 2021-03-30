@@ -56,14 +56,32 @@ We need to customize the build process a bit...
 -DLLVM\_LINK\_LLVM\_DYLIB=ON} \\
 -DLLVM\_OPTIMIZED\_TABLEGEN=ON \\
 -DLLVM\_INCLUDE\_EXAMPLES=OFF \\
--DCMAKE\_INSTALL\_PREFIX=/opt/llvm-9.0-d \\
+-DCMAKE\_INSTALL\_PREFIX=/opt/llvm-10.0-d \\
 \textbf{-DLLVM\_USE\_LINKER=lld \\
--DCMAKE\_C\_COMPILER=clang-9 \\
--DCMAKE\_CXX\_COMPILER=clang++-9} \\
+-DCMAKE\_C\_COMPILER=clang-10 \\
+-DCMAKE\_CXX\_COMPILER=clang++-10} \\
 }
 \item Building with LLVM itself solves the RAM usage problem!
+	\begin{itemize}
+	\item Not required on macOS or *BSD: they already ship LLVM as default
+	\end{itemize}
 \item Using \alert{shared libraries} drops the disk usage to \alert{10 GB}.\\
 {\footnotesize The build products alone will still take 20 GB of disk space...}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Last notes on building}
+You can add other projects to the LLVM build by modifying the value of the \texttt{LLVM\_ENABLE\_PROJECTS} flag\\
+\bigskip
+Good practice: \alert{always include clang}
+\begin{itemize}
+	\item You can easily see on a production quality compiler the impact of changes you made on your local copy of LLVM
+\end{itemize}
+\bigskip
+To install cutting-edge release LLVM if your Linux distribution does not provide it:\\
+\begin{itemize}
+	\item \url{https://apt.llvm.org}
 \end{itemize}
 \end{frame}
 

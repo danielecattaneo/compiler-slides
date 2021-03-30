@@ -17,19 +17,17 @@
 
 
 \begin{frame}{Getting LLVM}
-\begin{itemize}
-	\item ``old'' git mirrors
+All work on LLVM goes to the \alert{monorepo} on GitHub\\
+\bigskip
+%\begin{itemize}
+%	\item git monorepo
 		\begin{itemize}
-			\item only llvm repo (subprojects in separated repos, can be added later)
-			\item \texttt{git clone -b release\_90 --single-branch git@github.com:llvm-mirror/llvm.git}
+			\item It contains LLVM + major subprojects handled by the LLVM project
+			\item \texttt{git clone -b release/10.x --single-branch git@github.com:llvm/llvm-project.git}
 		\end{itemize}
-	\vfill
-	\item ``new'' git monorepo
-		\begin{itemize}
-			\item all in one repo (llvm + major subprojects)
-			\item \texttt{git clone -b release/9.x --single-branch git@github.com:llvm/llvm-project.git}
-		\end{itemize}
-\end{itemize}
+%\end{itemize}
+\bigskip
+{\small A few years ago they used a private SVN repository, the switch to GitHub is recent}
 \end{frame}
 
 
@@ -37,35 +35,18 @@
 \begin{itemize}
 	\item C++ libraries
 		\begin{itemize}
-			\item \texttt{src/include/llvm/...}
-			\item \texttt{src/lib/...}
+			\item \texttt{llvm/include/llvm/...}
+			\item \texttt{llvm/lib/...}
 		\end{itemize}
 		\vfill
 	\item small application (tools)
 		\begin{itemize}
-			\item \texttt{src/tools/...}
-			\item \texttt{src/utils/...}
+			\item \texttt{llvm/tools/...}
+			\item \texttt{llvm/utils/...}
 		\end{itemize}
 \end{itemize}
 \vfill
-You can find binaries of them in the installation directory under \texttt{root/bin/...}
-\end{frame}
-
-
-\begin{frame}{clang}
-\begin{itemize}
-	\item \texttt{clang} is a compiler based on LLVM
-	\item It compiles all major C-like languages
-	\vfill
-	\item It is part of the git monorepo
-	\item It can be added as a tool in the LLVM framework but must be manually cloned in the tool directory
-	\begin{enumerate}
-		\item \texttt{cd src/tools}
-		\item \texttt{git clone http://llvm.org/git/clang} (git mirror version)
-	\end{enumerate}
-	\vfill
-	\item You can easily see on a production quality compiler the impact of changes you made on your local copy of LLVM
-\end{itemize}
+Binaries installed under \texttt{bin/...}
 \end{frame}
 
 
