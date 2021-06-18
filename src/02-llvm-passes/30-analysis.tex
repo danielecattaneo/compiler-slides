@@ -381,12 +381,7 @@ Alias analysis tries to answer the question:
 \end{description}
 
 \vfill
-Different algorithms are available for alias analysis:
-
-\begin{itemize}
-\item common interface: \cppinline{llvm::AAResults}
-\item base implementation: basic alias analysis (\texttt{basicaa})
-\end{itemize}
+Interface of the system: \cppinline{llvm::AAResults}
 
 \begin{block}{Requiring Alias Analysis}
 \centering
@@ -395,7 +390,22 @@ Different algorithms are available for alias analysis:
 \end{frame}
 
 
-\begin{frame}{Alias Analysis}{Memory Representation}
+\begin{frame}{Chained Analysis}
+AA is actually a chain of multiple analyses, executed in sequence:
+\medskip
+\begin{description}[XXXXlast.]
+\item[1.] Basic Alias Analysis (\texttt{basicaa})
+\item[] ...
+\item[n$^{\textsf{th}}$.] Type Based Alias Analysis (\texttt{tbaa})\footnote{AKA the evil alias analysis}
+\item[] ...
+\item[last.] Dummy Alias Analysis (\texttt{noaa})
+\end{description}
+\medskip
+Every analysis in the chain \emph{fills the gap} left by the previous analyses.
+\end{frame}
+
+
+\begin{frame}{Memory Representation}
 \begin{columns}
 \column{.45\textwidth}
 \begin{block}{Source}
@@ -449,7 +459,7 @@ Given two memory locations $X$, $Y$, the alias analyzer classifies them:\\
 \vfill
 \item \texttt{\textbf{llvm::AliasResult::MayAlias}}\\
 			\alert{unable to compute}
-      aliasing information -- i.e. $X$ and $Y$ can be different locations,
+      aliasing information yet -- i.e. $X$ and $Y$ can be different locations,
       or $X$ can be a complete/partial alias of $Y$
 \end{itemize}
 
