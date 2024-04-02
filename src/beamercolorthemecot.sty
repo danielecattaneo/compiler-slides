@@ -1,0 +1,54 @@
+\mode<presentation>
+
+\providecommand*{\beamer@bftext@only}{%
+  \relax
+  \ifmmode
+    \expandafter\beamer@bftext@warning
+  \else
+    \expandafter\bfseries
+  \fi
+}
+\providecommand*{\beamer@bftext@warning}{%
+  \ClassWarning{beamer}
+    {Cannot use bold for alerted text in math mode}%
+}
+
+\definecolor{mainAccent}{Hsb}{347, 0.54, 0.83}
+\definecolor{exampleAccent}{Hsb}{216, 0.31, 0.65}
+\definecolor{dangerAccent}{Hsb}{0, 0.43, 0.70}
+
+\setbeamercolor*{palette primary}{fg=mainAccent}
+\setbeamercolor*{palette secondary}{fg=mainAccent!15!white}
+\setbeamercolor*{palette tertiary}{bg=mainAccent!10!white}
+\setbeamercolor*{palette quaternary}{fg=mainAccent!5!white}
+
+\setbeamercolor{frametitle}{fg=black}
+%\setbeamercolor{titlelike}{parent=palette primary}
+\setbeamercolor{titlelike}{fg=black}
+
+\setbeamercolor*{sidebar}{bg=mainAccent}
+
+\setbeamercolor{normal text}{fg=black,bg=white}
+\setbeamercolor{alerted text}{fg=black}
+\setbeamerfont{alerted text}{series=\beamer@bftext@only}
+\setbeamercolor{example text}{fg=exampleAccent}
+\setbeamercolor*{structure}{fg=mainAccent}
+
+\setbeamercolor{block title}{bg=mainAccent, fg=white}
+\setbeamercolor{block body}{bg=mainAccent!10!white, fg=black}
+
+\setbeamercolor{block title alerted}{bg=dangerAccent, fg=white}
+\setbeamercolor{block body alerted}{bg=dangerAccent!10!white, fg=black}
+
+\setbeamercolor{block title example}{bg=exampleAccent, fg=white}
+\setbeamercolor{block body example}{bg=exampleAccent!10!white, fg=black}
+
+\setbeamercolor{itemize item}{fg=mainAccent}
+\setbeamercolor{itemize subitem}{fg=mainAccent}
+
+\setbeamercolor{section in head/foot}{bg=mainAccent!50!white}
+\setbeamercolor{section in toc}{fg=black}
+\setbeamercolor{subsection in toc}{fg=black}
+\setbeamercolor{section number projected}{bg=mainAccent}
+
+\setbeamercolor{page number in head/foot}{fg=white}

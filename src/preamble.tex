@@ -1,61 +1,14 @@
+\PassOptionsToPackage{rgb}{xcolor}
 \documentclass[10pt,usenames,dvipsnames]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage[english]{babel}
+
+%%
+%% FONTS
+%%
 \usepackage{euler}
-
-\usetheme{boxes}
-%\useoutertheme{essential}
-\usecolortheme{seagull}
-\usefonttheme{professionalfonts}
-\usefonttheme{structurebold}
-\setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{frametitle}
-{
-	\begin{centering}
-		\vspace{1.5em}
-		\LARGE
-    \insertframetitle
-    \par
-    %\vspace{0.5em}
-  \end{centering}
-}
-\setbeamerfont{title}{size=\huge}
-\setbeamerfont{subtitle}{size=\Large}
-\renewcommand{\thefootnote}{\textsf{\fnsymbol{footnote}}}
-
-% footnote refs per frame
-\AtBeginEnvironment{frame}{\setcounter{footnote}{0}}
-
 \usepackage[no-math]{fontspec}
-
-\usepackage{multirow}
-\usepackage{tikz}
-\usepackage{tikz-qtree}
-\usepackage{listings}
-\usepackage{relsize}
-\usepackage{array}
-\usepackage{booktabs}
-\usepackage{ragged2e}
-\usepackage{varwidth}
-\usepackage{multicol}
-\usepackage{amsmath}
-\usepackage{soul}
-
-\usepackage{siunitx}
-\sisetup{inter-unit-product = \ensuremath{{}\cdot{}}}
-\sisetup{math-rm=\mathnormal}
-
-\makeatletter
-\newlength{\negph@width}%
-\newcommand{\negphantom}[1]{%
-\settowidth{\negph@width}{#1}%
-\hspace{-\negph@width}%
-}
-\makeatother
-
-\newcommand{\aligntext}[2]{%
-#2\negphantom{#2}\hphantom{#1}%
-}
-
 \setmainfont{texgyretermes}[
   Path=../fonts/,
   Extension=.otf,
@@ -70,12 +23,122 @@
   BoldFont=*-bold,
   ItalicFont=*-italic,
   BoldItalicFont=*-bolditalic]
-\setmonofont{RecMono-Casual}[
+%\setmonofont{CourierPrime}[
+%  Path=../fonts/,
+%  Extension=.ttf,
+%  BoldFont=*Bold,
+%  ItalicFont=*Italic,
+%  BoldItalicFont=*BoldItalic]
+\setmonofont{LetterGothicCode}[
   Path=../fonts/,
   Extension=.ttf,
-  BoldFont=*Bold,
-  ItalicFont=*Italic,
-  BoldItalicFont=*BoldItalic]
+  UprightFont=*-R,
+  BoldFont=*-B,
+  ItalicFont=*-I,
+  BoldItalicFont=*-BI]
+%\setmonofont{HelveticaMonospacedW06}[
+%  Path=../fonts/,
+%  Extension=.ttf,
+%  UprightFont=*Rg,
+%  BoldFont=*Bold,
+%  ItalicFont=*Italic,
+%  BoldItalicFont=*BdIt]
+%\setmonofont{RecMono-Casual}[
+%  Path=../fonts/,
+%  Extension=.ttf,
+%  BoldFont=*Bold,
+%  ItalicFont=*Italic,
+%  BoldItalicFont=*BoldItalic]
+
+%%
+%% PACKAGE IMPORTS
+%%
+\usepackage{multirow}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\usepackage{listings}
+\usepackage{relsize}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{ragged2e}
+\usepackage{varwidth}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{soul}
+\usepackage{siunitx}
+
+%%
+%% OUTER THEME
+%%
+\useoutertheme{default}
+%\usetheme{Singapore}
+\setbeamercolor{section in head/foot}{use=structure,bg=structure.fg!25!bg}
+%\useoutertheme[subsection=false]{miniframes}
+\setbeamertemplate{frametitle}[default][center]
+\AtBeginDocument{%
+  {\usebeamercolor{section in head/foot}}
+  \pgfdeclareverticalshading{beamer@headfade}{\paperwidth}
+  {%
+    color(0cm)=(bg);
+    color(1.25cm)=(section in head/foot.bg)%
+  }
+  \setbeamercolor{section in head/foot}{bg=}
+}
+\setbeamertemplate{headline}{\pgfuseshading{beamer@headfade}\vskip-0.9cm}
+%\setbeamertemplate{title page}
+%{
+%\centering\Large \textbf{Code Optimization and Transformation}\\
+%\huge\vspace{35pt}\textbf{\inserttitle}\\
+%\huge\vspace{10pt}{\insertsubtitle}\\
+%\bigskip\vspace{20pt}\large{\insertauthor}\\
+%\vspace{20pt}\\
+%\addtocounter{framenumber}{-1}
+%}
+\setbeamertemplate{navigation symbols}{}
+\AtBeginSection[]
+{
+\begin{frame}{Contents}
+\tableofcontents[currentsection,subsectionstyle=show/shaded/hide]
+\end{frame}
+}
+\AtBeginSubsection[]
+{
+\begin{frame}{Contents}
+\tableofcontents[currentsection,subsectionstyle=show/shaded/hide]
+\end{frame}
+}
+
+%%
+%% INNER THEME
+%%
+\useinnertheme{circles}
+\setbeamertemplate{blocks}[rounded][shadow=false]
+\setbeamertemplate{sections/subsections in toc}[rounded]
+% footnote config
+\renewcommand{\thefootnote}{\textsf{\fnsymbol{footnote}}}
+\AtBeginEnvironment{frame}{\setcounter{footnote}{0}}
+
+%%
+%% COLOR THEME
+%%
+%\usecolortheme{polimi}
+\usepackage{../beamercolorthemecot}
+\colorlet{code-highlight}{green!20}
+%\colorlet{code-highlight}{Cerulean!20}
+
+%%
+%% FONT THEME
+%%
+\usefonttheme{professionalfonts}
+\usefonttheme{structurebold}
+\setbeamerfont{frametitle}{parent=structure,size=\LARGE}
+\setbeamerfont{framesubtitle}{parent=frametitle,size=\normalsize}
+\setbeamerfont{title}{size=\huge}
+\setbeamerfont{subtitle}{size=\Large}
+
+% siunitx config
+\sisetup{inter-unit-product = \ensuremath{{}\cdot{}}}
+\sisetup{math-rm=\mathnormal}
 
 \usetikzlibrary{arrows}
 \usetikzlibrary{backgrounds}
@@ -87,6 +150,18 @@
 \usetikzlibrary{automata}
 \usetikzlibrary{positioning}
 \usetikzlibrary{shapes.multipart}
+
+\makeatletter
+\newlength{\negph@width}%
+\newcommand{\negphantom}[1]{%
+\settowidth{\negph@width}{#1}%
+\hspace{-\negph@width}%
+}
+\makeatother
+
+\newcommand{\aligntext}[2]{%
+#2\negphantom{#2}\hphantom{#1}%
+}
 
 \lstset{basicstyle=\ttfamily}
 \newcommand{\txtinput}[2][\ttfamily]{\lstinputlisting[language=none,basicstyle=#1]{#2}}

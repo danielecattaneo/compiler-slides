@@ -46,8 +46,8 @@ Run one or more passes on the LLVM-IR on-demand by using \texttt{opt}:
 
 \begin{itemize}
 \item Syntax is like \texttt{clang} (supports even \texttt{-O1}, \texttt{-O2}...)
-\item One command line argument per pass to run
-\item Order of execution is the same as the argument order
+\item \texttt{-passes} argument specifies which passes to run
+\item Order of execution is as specified!
 \begin{itemize}
 \item Different order, different results! (\alert{phase/stage ordering})
 \end{itemize}
@@ -58,9 +58,8 @@ Some useful passes for debugging (they do not transform anything):
 
 {\small
 \begin{description}[print dominator tree]
-\item[print CFG] \texttt{opt -view-cfg input.ll}
-\item[print dominator tree] \texttt{opt -view-dom input.ll}
-\item[print current IR] \texttt{opt -print-module input.ll}
+\item[print CFG] \texttt{opt -passes='view-cfg' input.ll}
+\item[print dominator tree] \texttt{opt -passes='view-dom' input.ll}
 \end{description}
 }
 
@@ -69,7 +68,7 @@ Some useful passes for debugging (they do not transform anything):
 \begin{itemize}
 \item Run \emph{mem2reg}, then view the CFG:
 \begin{itemize}
-\item \texttt{opt -mem2reg -view-cfg input.ll}
+\item \texttt{opt -passes='mem2reg,view-cfg' input.ll}
 \end{itemize}
 \end{itemize}
 \end{example}
@@ -80,11 +79,11 @@ Some useful passes for debugging (they do not transform anything):
 LLVM provides a lot of passes...
 
 \begin{itemize}
-\item Try \texttt{opt -help}!
+\item Try \texttt{opt -print-passes}!
 \end{itemize}
 
 \vfill
-For performance reasons there are different kind of passes:
+There are different kind of passes:
 
 \begin{block}{LLVM Passes}
 \input{img/llvm-passes.tex}
@@ -111,7 +110,7 @@ Specializations come with restrictions:
 
 \begin{itemize}
 \item e.g. a \alert{FunctionPass} cannot add or delete functions
-\item refer to ``Writing a LLVM Pass''~\cite{LOCAL:www/llvmWritingAPass}
+\item refer to ``Writing a LLVM Pass''~\cite{LOCAL:www/llvmWritingAPass,LOCAL:www/llvmWritingAPassNew}
       for documentation on features and limitations of each kind of pass
 \end{itemize}
 \end{frame}
