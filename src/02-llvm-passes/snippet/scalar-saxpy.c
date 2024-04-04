@@ -1,3 +1,4 @@
 float saxpy(float a, float x, float y) {
-    return a * x + y;
+    float t = a * x;
+    return t + y;
 } 

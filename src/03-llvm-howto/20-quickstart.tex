@@ -4,7 +4,34 @@
 
 
 \begin{frame}{Simulating a LLVM driver manually}
-	\noindent\hspace{-1.2cm}\includegraphics[width=13cm]{img/toolchain}
+%	\noindent\hspace{-1.2cm}\includegraphics[width=13cm]{img/toolchain}
+\begin{center}
+\begin{tikzpicture}[yscale=0.55,xscale=0.6]
+\node[anchor=west] (step0) at (0,0) {\texttt{.c} source};
+\node[anchor=west] (step1) at (1,-1) {\texttt{\textbf{clang} -emit-llvm}};
+\node[anchor=west] (step2) at (2,-2) {\texttt{.bc}/\texttt{.ll}};
+\node[anchor=west] (step3) at (3,-3) {\texttt{\textbf{llvm-link}}};
+\node[anchor=west] (step4) at (4,-4) {\texttt{.bc}/\texttt{.ll}};
+\node[anchor=west] (step5) at (5,-5) {\texttt{\textbf{opt}}};
+\node[anchor=west] (step6) at (6,-6) {\texttt{.bc}/\texttt{.ll}};
+\node[anchor=west] (step7) at (7,-7) {\texttt{\textbf{llc}}};
+\node[anchor=west] (step8) at (8,-8) {\texttt{.s}};
+\node[anchor=west] (step9) at (9,-9) {\textbf{\texttt{llvm-mc}/\texttt{as}}};
+\node[anchor=west] (step10) at (10,-10) {\texttt{.o}};
+\node[anchor=west] (step11) at (11,-11) {\textbf{\texttt{lld}/\texttt{ld}}};
+\node[anchor=west] (step12) at (12,-12) {executable};
+\foreach \i in {0,...,11}{
+  \draw[->] ($(\i+0.5,-\i-0.5)$) |- ($(\i+1,-\i-1)$);
+}
+%\node[anchor=south west, above right=0.2ex and 1.5em of step3.north east] (note0) {\texttt{libWhatever.a}};
+%\draw[->] ($(note0.south west)+(0.5em,0.5ex)$) -- (step3.east);
+\node[anchor=south west, above right=0.2ex and -1em of step11.north east] (note1) {\texttt{libWhatever.a}};
+\draw[->] ($(note1.south west)+(0.5em,0.5ex)$) -- ($(step11.north)+(-0.5em,0)$);
+\node[anchor=south west,draw,dashed,very thick,rounded corners=5pt,align=center] at (0,-12) 
+  {\texttt{.ll} $\rightarrow$ \texttt{\textbf{llvm-as}} $\rightarrow$ \texttt{.bc}\\
+  \texttt{.bc} $\rightarrow$ \texttt{\textbf{llvm-dis}} $\rightarrow$ \texttt{.ll}};
+\end{tikzpicture}
+\end{center}
 \end{frame}
 
 
@@ -12,7 +39,7 @@
 	There are a lot of tutorials available:
 	\vfill
 	\begin{itemize}
-		\item Official developer guide\\ \href{http://llvm.org/docs/WritingAnLLVMPass.html}{\url{llvm.org/docs/WritingAnLLVMPass}}
+		\item Official developer guide\\ \href{https://llvm.org/docs/WritingAnLLVMNewPMPass.html}{\url{https://llvm.org/docs/WritingAnLLVMNewPMPass.html}}
 		\vfill
 		\item Out-of-source pass\\ \href{https://github.com/quarkslab/llvm-dev-meeting-tutorial-2015}{\url{github.com/quarkslab/llvm-dev-meeting-tutorial-2015}}
 	\end{itemize}
@@ -50,16 +77,17 @@ We need to customize the build process a bit...
 \begin{itemize}
 \item The build flags I like to use:\\
 \smallskip\texttt{\small-GNinja \\
--DLLVM\_ENABLE\_PROJECTS='clang' \\
+-DCMAKE\_BUILD\_TYPE=Debug\\
+-DLLVM\_ENABLE\_PROJECTS='clang;compiler-rt' \\
 -DLLVM\_INSTALL\_UTILS=ON \\
 \textbf{-DLLVM\_BUILD\_LLVM\_DYLIB=ON \\
 -DLLVM\_LINK\_LLVM\_DYLIB=ON} \\
 -DLLVM\_OPTIMIZED\_TABLEGEN=ON \\
 -DLLVM\_INCLUDE\_EXAMPLES=OFF \\
--DCMAKE\_INSTALL\_PREFIX=/opt/llvm-10.0-d \\
+-DCMAKE\_INSTALL\_PREFIX=/opt/llvm-18-d \\
 \textbf{-DLLVM\_USE\_LINKER=lld \\
--DCMAKE\_C\_COMPILER=clang-10 \\
--DCMAKE\_CXX\_COMPILER=clang++-10} \\
+-DCMAKE\_C\_COMPILER=clang-18 \\
+-DCMAKE\_CXX\_COMPILER=clang++-18} \\
 }
 \item Building with LLVM itself solves the RAM usage problem!
 	\begin{itemize}

@@ -13,44 +13,48 @@
 
 
 \begin{frame}[t]{A lot of documentation...}
+\vfill
   \href{http://llvm.org/docs}{llvm.org/docs} links to:
   \begin{itemize}
     \item \texttt{\ 4} references about \textit{Design \& Overview}
-    \item \texttt{\ 6} references about \textit{Getting Started / Tutorials}
-    \item \texttt{35} references about \textit{User Guides}
-    \item \texttt{15} references about \textit{Programming Documentation}
-    \item \texttt{40} references about \textit{Reference Documentation}
-    \item \texttt{\ 7} references about \textit{Development Process Documentation}
-    \item \texttt{\ 5} Mailing Lists
-    \item \texttt{\ 4} IRC bots
+    \item \texttt{\ 7} references about \textit{Getting Started / Tutorials}
+    \item \texttt{53} references about \textit{User Guides}
+    \item \texttt{41} references about \textit{Reference Documentation}
+    \item \texttt{\ 5} references about \textit{Development Process}
+    \item \texttt{\ 4} Forums and Mailing Lists
+    \item ...
   \end{itemize}
-  \vfill
+  \bigskip
   Most of the above references are \alert{outdated}!\\
   \medskip
   You probably need documentation \emph{about the documentation}.
-  \vfill
+\vfill
 \end{frame}
 
 
 \begin{frame}[t]{Essential documentation}
 \vfill
-	\begin{tabular}{>{\RaggedLeft\arraybackslash}p{0.22\columnwidth}>{\RaggedRight\arraybackslash}p{0.68\columnwidth}}
-	{\textbf{Intro to LLVM}\par\cite{LOCAL:www/llvmIntro}}
-		& Quick and clear introduction to the compiler infrastructure.
-       Mostly up-to-date.\footnote{At the time I am writing!} \\ \addlinespace[0.6em]
-  \textbf{Writing an LLVM pass}\par\cite{LOCAL:www/llvmWritingAPass}
-		& Explains step by step how to implement a Pass
-       for those who never did anything like that.\par
-       (We will see this tutorial later in the course) \\ \addlinespace[0.6em]
-  \textbf{Doxygen}\par\cite{LOCAL:www/llvmDoxygen}
-		& \textit{The best code documentation is the code itself.}
+\raggedright
+\textbf{Intro to LLVM}~\cite{LOCAL:www/llvmIntro}\\
+\begin{itemize}
+\item Quick and clear introduction. Details are a bit outdated.
+\end{itemize}
+\textbf{Writing an LLVM pass}~\cite{LOCAL:www/llvmWritingAPass}\\
+\begin{itemize}
+\item Explains step by step how to implement a Pass
+      for those who never did anything like that.\\
+      {\footnotesize (We will see this tutorial later in the course)}
+\end{itemize}
+\textbf{Doxygen}~\cite{LOCAL:www/llvmDoxygen}\\
+\begin{itemize}
+\item \textit{The best code documentation is the code itself.}
        Sometimes the generated doxygen documentation is enough.
-       Updated to the latest development branch, refer to github branches 
-       for documentation about the stable versions. \\ \addlinespace[0.6em]
-  \textbf{llvm-dev}\par\cite{LOCAL:www/llvmDoxygen}
-  	& Mailing List. Last resource: ask other developers.
-       Warning: It has very high traffic.\\ \addlinespace[0.6em]
-	\end{tabular}
-	\vfill
+       Available for development and stable branches.
+\end{itemize}
+\textbf{LLVM Discourse}~\cite{LOCAL:www/llvmDiscourse}\\
+\begin{itemize}
+\item Discourse forum. Last resource: ask other developers.
+\end{itemize}
+\vfill
 \end{frame}
 

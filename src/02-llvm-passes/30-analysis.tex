@@ -1,6 +1,6 @@
 % !TEX root = main.tex
 
-\section{Analysis Passes}
+\section{LLVM Analyses}
 
 
 \begin{frame}{Checking Input Properties}
@@ -31,7 +31,7 @@ We will see the following passes:\\
 \toprule
 
 \multicolumn{1}{c}{\textbf{Pass}}        &
-\multicolumn{1}{c}{\textbf{Switch}}      &
+\multicolumn{1}{c}{\textbf{Name}}      &
 \multicolumn{1}{c}{\textbf{Transitive}} \\
 
 \midrule
@@ -66,26 +66,29 @@ Yes               \\
 \end{frame}
 
 
-\begin{frame}{Requesting an Analysis}
-\begin{center}
-Your pass needs to tell the pass manager which analyses it needs!
-
-\vfill
-Transitive analyses:\\
-\cppinline{llvm::AnalysisUsage::addRequiredTransitive<T>()}\\
-\medskip
-Non-transitive analyses: \\
-\cppinline{llvm::AnalysisUsage::addRequired<T>()}\\
-
-\vfill
-For \alert{chained analyses}\footnote{Analyses that use the result of another analysis}, the \texttt{addRequiredTransitive} method
-should be used instead of the \texttt{addRequired} method.\\
-\medskip
-{\small
-This informs the PassManager that the transitively required pass
-should be alive as long as the requiring pass is.}
-\end{center}
-\end{frame}
+%With new pass manager this topic doesn't fit in a single slide
+%People need to read: https://llvm.org/docs/NewPassManager.html
+%
+%\begin{frame}{Requesting an Analysis}
+%\begin{center}
+%Your pass needs to tell the pass manager which analyses it needs!
+%
+%\vfill
+%Transitive analyses:\\
+%\cppinline{llvm::AnalysisUsage::addRequiredTransitive<T>()}\\
+%\medskip
+%Non-transitive analyses: \\
+%\cppinline{llvm::AnalysisUsage::addRequired<T>()}\\
+%
+%\vfill
+%For \alert{chained analyses}\footnote{Analyses that use the result of another analysis}, the \texttt{addRequiredTransitive} method
+%should be used instead of the \texttt{addRequired} method.\\
+%\medskip
+%{\small
+%This informs the PassManager that the transitively required pass
+%should be alive as long as the requiring pass is.}
+%\end{center}
+%\end{frame}
 
 
 \subsection{Dominance Trees}
@@ -127,8 +130,9 @@ The interfaces of these two trees is mostly the same:
 By using \texttt{opt}, it is possible to show the trees:
 
 \begin{itemize}
-\item \aligntext{\texttt{-view-postdom},}{\texttt{-view-dom},} \texttt{-dot-dom}
-\item \aligntext{\texttt{-view-postdom},}{\texttt{-view-postdom},} \texttt{-dot-postdom}
+%\item \aligntext{\texttt{-view-postdom},}{\texttt{-view-dom},} \texttt{-dot-dom}
+%\item \aligntext{\texttt{-view-postdom},}{\texttt{-view-postdom},} \texttt{-dot-postdom}
+\item \texttt{print<domtree>}, \texttt{print<postdomtree>}
 \end{itemize}
 \end{frame}
 
@@ -281,6 +285,8 @@ The scalar evolution framework manages \alert{any scalar expression}:
 \centering
 \llvminput[\tt\footnotesize]{snippet/nested-scev-pointer.ll}
 \end{block}
+%nsw = No Signed Wrap
+%nuw = No Unsigned Wrap
 
 \vfill
 SCEV is an analysis used by many common optimizations
@@ -383,10 +389,10 @@ Alias analysis tries to answer the question:
 \vfill
 Interface of the system: \cppinline{llvm::AAResults}
 
-\begin{block}{Requiring Alias Analysis}
-\centering
-\cppinput{snippet/requiring-alias-analysis.cpp}
-\end{block}
+%\begin{block}{Requiring Alias Analysis}
+%\centering
+%\cppinput{snippet/requiring-alias-analysis.cpp}
+%\end{block}
 \end{frame}
 
 
