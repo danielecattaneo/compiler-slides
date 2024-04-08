@@ -1,0 +1,1 @@
+add_llvm_pass_plugin(MiniMem2Reg MiniMem2Reg.cpp PassPluginInfo.cpp)

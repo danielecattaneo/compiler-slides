@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20.0) # like llvm
 
-project(llvm-pass-demo)
+project(minimem2reg)
 
 find_package(LLVM REQUIRED CONFIG)
 
@@ -15,4 +15,4 @@ include(HandleLLVMOptions)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_subdirectory(LLVMHello)
+add_subdirectory(MiniMem2Reg)
