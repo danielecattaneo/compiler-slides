@@ -19,12 +19,8 @@ static bool checkIfPromotable(AllocaInst *Alloca) {
 
   // Check all the users
   for (auto U: Alloca->users()) {
-    // All users must be instructions
-    Instruction *UI = dyn_cast<Instruction>(U);
-    if (!UI)
-      return false;
     // All users must be loads or stores
-    if (StoreInst *Store = dyn_cast<StoreInst>(UI)) {
+    if (StoreInst *Store = dyn_cast<StoreInst>(U)) {
       // Our alloca must be the pointer operand, otherwise bail out.
       // If the pointer is stored somewhere else, then we can't tell where it
       // is loaded back from there later and then dereferenced.
@@ -34,12 +30,15 @@ static bool checkIfPromotable(AllocaInst *Alloca) {
       NumStores++;
       if (NumStores > 1)
         return false;
-    } else if (LoadInst *Load = dyn_cast<LoadInst>(UI)) {
-      if (Alloca != Load->getPointerOperand())
-        return false;
-    } else {
-      return false;
+      // All OK, next one
+      continue;
     }
+    if (isa<LoadInst>(U)) {
+      // If it's a load it's OK, next one
+      continue;
+    }
+    // Not a load or a store, bail out
+    return false;
   }
 
   // Checks passed!
@@ -47,12 +46,11 @@ static bool checkIfPromotable(AllocaInst *Alloca) {
 }
 
 static void findAllocas(Function &F, SmallVectorImpl<AllocaInst *> &Res) {
-  // Allocas usually appear in the entry block
+  // Allocas only appear in the entry block
   BasicBlock &Entry = F.getEntryBlock();
   // Iterate through all instructions, if they are promotable allocas add them
   // to the list
-  for (auto I = Entry.begin(); I != Entry.end(); I++) {
-    Instruction &Inst = *I;
+  for (auto &Inst: Entry) {
     if (AllocaInst *Alloca = dyn_cast<AllocaInst>(&Inst)) {
       LLVM_DEBUG(dbgs() << "Found " << *Alloca << "\n");
       if (checkIfPromotable(Alloca))

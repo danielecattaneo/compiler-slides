@@ -1,8 +1,10 @@
-# llvm-pass-demo
+# mini-mem2reg
 
-This is basically the LLVMHello pass you can find in the sources of LLVM
-(https://github.com/llvm/llvm-project/tree/master/llvm/lib/Transforms/Hello)
-except with more comments and ported to be an out-of-tree pass.
+This is an example LLVM pass that re-implements a simplified version of
+mem2reg for illustration purposes.
+
+It does not try to promote allocas to registers in all conditions, but only
+when there is only one single store to the allocated memory.
 
 ## How to build
 
@@ -20,5 +22,5 @@ If you want to run the pass on a C file called "test.c":
 ```sh
 $ cd build # if you are not already there
 $ clang-18 -o test.ll -S -emit-llvm -Xclang -disable-O0-optnone test.c
-$ opt -load-pass-plugin=LLVMHello/MyHelloPass.dylib -passes='hello' -disable-output test.ll
+$ opt -load-pass-plugin=MiniMem2Reg/MiniMem2Reg.dylib -passes='minimem2reg' -S test.ll
 ```

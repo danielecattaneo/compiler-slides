@@ -5,7 +5,7 @@
 
 \begin{frame}{Simulating a LLVM driver manually}
 %	\noindent\hspace{-1.2cm}\includegraphics[width=13cm]{img/toolchain}
-\begin{center}
+\begin{centering}
 \begin{tikzpicture}[yscale=0.55,xscale=0.6]
 \node[anchor=west] (step0) at (0,0) {\texttt{.c} source};
 \node[anchor=west] (step1) at (1,-1) {\texttt{\textbf{clang} -emit-llvm}};
@@ -23,15 +23,15 @@
 \foreach \i in {0,...,11}{
   \draw[->] ($(\i+0.5,-\i-0.5)$) |- ($(\i+1,-\i-1)$);
 }
-%\node[anchor=south west, above right=0.2ex and 1.5em of step3.north east] (note0) {\texttt{libWhatever.a}};
-%\draw[->] ($(note0.south west)+(0.5em,0.5ex)$) -- (step3.east);
-\node[anchor=south west, above right=0.2ex and -1em of step11.north east] (note1) {\texttt{libWhatever.a}};
-\draw[->] ($(note1.south west)+(0.5em,0.5ex)$) -- ($(step11.north)+(-0.5em,0)$);
+\node[anchor=south west, above right=0.2ex and 1.5em of step3.north east] (note0) {\texttt{otherModule.ll/.bc}};
+\draw[->] ($(note0.south west)+(0.5em,0.5ex)$) -- (step3.east);
+\node[anchor=south west, above right=0.2ex and 1em of step11.north east] (note1) {\texttt{libFoo.a/.so}};
+\draw[->] ($(note1.south west)+(0.5em,0.5ex)$) -- (step11.east);
 \node[anchor=south west,draw,dashed,very thick,rounded corners=5pt,align=center] at (0,-12) 
   {\texttt{.ll} $\rightarrow$ \texttt{\textbf{llvm-as}} $\rightarrow$ \texttt{.bc}\\
   \texttt{.bc} $\rightarrow$ \texttt{\textbf{llvm-dis}} $\rightarrow$ \texttt{.ll}};
-\end{tikzpicture}
-\end{center}
+\end{tikzpicture}\\
+\end{centering}
 \end{frame}
 
 
@@ -41,7 +41,7 @@
 	\begin{itemize}
 		\item Official developer guide\\ \href{https://llvm.org/docs/WritingAnLLVMNewPMPass.html}{\url{https://llvm.org/docs/WritingAnLLVMNewPMPass.html}}
 		\vfill
-		\item Out-of-source pass\\ \href{https://github.com/quarkslab/llvm-dev-meeting-tutorial-2015}{\url{github.com/quarkslab/llvm-dev-meeting-tutorial-2015}}
+		\item Out-of-source pass (outdated!)\\ \href{https://github.com/quarkslab/llvm-dev-meeting-tutorial-2015}{\url{github.com/quarkslab/llvm-dev-meeting-tutorial-2015}}
 	\end{itemize}
 	\vfill
 	We will follow the first one, with a few adjustments.
@@ -75,8 +75,9 @@ We need to customize the build process a bit...
 
 \begin{frame}{Building LLVM}
 \begin{itemize}
-\item The build flags I like to use:\\
-\smallskip\texttt{\small-GNinja \\
+\item The build flags I recommend:\\
+\begin{itemize}
+\item[]\texttt{\small-GNinja \\
 -DCMAKE\_BUILD\_TYPE=Debug\\
 -DLLVM\_ENABLE\_PROJECTS='clang;compiler-rt' \\
 -DLLVM\_INSTALL\_UTILS=ON \\
@@ -85,16 +86,23 @@ We need to customize the build process a bit...
 -DLLVM\_OPTIMIZED\_TABLEGEN=ON \\
 -DLLVM\_INCLUDE\_EXAMPLES=OFF \\
 -DCMAKE\_INSTALL\_PREFIX=/opt/llvm-18-d \\
-\textbf{-DLLVM\_USE\_LINKER=lld \\
--DCMAKE\_C\_COMPILER=clang-18 \\
--DCMAKE\_CXX\_COMPILER=clang++-18} \\
+%\textbf{-DLLVM\_USE\_LINKER=lld \\
+%-DCMAKE\_C\_COMPILER=clang-18 \\
+%-DCMAKE\_CXX\_COMPILER=clang++-18} \\
+\textbf{-DLLVM\_PARALLEL\_LINK\_JOBS=1}\\
 }
-\item Building with LLVM itself solves the RAM usage problem!
-	\begin{itemize}
-	\item Not required on macOS or *BSD: they already ship LLVM as default
-	\end{itemize}
+\end{itemize}
+%\item Building with LLVM itself solves the RAM usage problem!
+%	\begin{itemize}
+%	\item Not required on macOS or *BSD: they already ship LLVM as default
+%	\end{itemize}
 \item Using \alert{shared libraries} drops the disk usage to \alert{10 GB}.\\
 {\footnotesize The build products alone will still take 20 GB of disk space...}
+\item \texttt{-DLLVM\_PARALLEL\_LINK\_JOBS=1} mitigates GNU \texttt{ld} RAM usage\\
+{\footnotesize Or you could use \texttt{clang}+\texttt{lld}...}
+	\begin{itemize}
+	\item Not required on macOS or *BSD: they don't use GNU \texttt{ld}
+	\end{itemize}
 \end{itemize}
 \end{frame}
 

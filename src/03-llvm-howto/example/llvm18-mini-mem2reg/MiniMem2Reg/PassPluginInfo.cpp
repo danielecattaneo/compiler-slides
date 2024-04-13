@@ -9,7 +9,7 @@ extern "C" ::llvm::PassPluginLibraryInfo LLVM_ATTRIBUTE_WEAK llvmGetPassPluginIn
 {
   return {
       LLVM_PLUGIN_API_VERSION,
-      "Hello",
+      "MiniMem2Reg",
       "1.0",
       [](PassBuilder &PB) {
         PB.registerPipelineParsingCallback(
